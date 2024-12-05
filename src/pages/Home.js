@@ -1,17 +1,42 @@
-import { BrowserRouter } from "react-router-dom";
-import AppRoutes from "./Routes";
+import { useEffect, useState } from "react";
 
-function App() {
+const Home = () => {
+  const [goals, setGoals] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://127.0.0.1:5000/api/goals/");
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setGoals(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchData();
+  }, []);
+
   return (
-    <div className="App">
-      <BrowserRouter>
-        <AppRoutes />
-      </BrowserRouter>
+    <div>
+      <h1>Home</h1>
+      <h2>Goals:</h2>
+      <ul>
+        {goals.map((goal) => (
+          <li>
+            Id: {goal.id}, Name: {goal.name}, Target amount:{" "}
+            {goal.target_amount}, Current amount: {goal.current_amount},
+            Deadline: {goal.end_date}
+          </li>
+        ))}
+      </ul>
     </div>
   );
-}
+};
 
-export default App;
+export default Home;
 
 // function App() {
 //   const [goals, setGoals] = useState([]);
