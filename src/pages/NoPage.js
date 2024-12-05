@@ -1,3 +1,5 @@
+//Page not found
+
 const NoPage = () => {
   return (
     <div>

@@ -1,3 +1,5 @@
+//Social feed page
+
 const Social = () => {
   return (
     <div>

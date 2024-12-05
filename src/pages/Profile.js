@@ -1,3 +1,5 @@
+//Profile page
+
 const Profile = () => {
   return (
     <div>
