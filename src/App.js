@@ -3,7 +3,7 @@ import "./App.css";
 import { useEffect, useState } from "react";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [goals, setGoals] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -13,7 +13,7 @@ function App() {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        setMessage(data.message);
+        setGoals(data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -25,18 +25,16 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <p>API message: {message}</p>
+        <h1>Goals</h1>
+        <ul>
+          {goals.map((goal) => (
+            <li>
+              Id: {goal.id}, Name: {goal.name}, Target amount:{" "}
+              {goal.target_amount}, Current amount: {goal.current_amount},
+              Deadline: {goal.end_date}
+            </li>
+          ))}
+        </ul>
       </header>
     </div>
   );
