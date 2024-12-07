@@ -17,3 +17,14 @@ export const fetchData = async (endpoint, callback) => {
     throw error;
   }
 };
+
+//Function to post data to the backend server
+export const postData = async (endpoint, data) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}${endpoint}`, data);
+    return response.data;
+  } catch (error) {
+    console.error("Error posting data:", error);
+    throw error;
+  }
+};
