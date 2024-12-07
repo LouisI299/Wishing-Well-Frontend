@@ -2,6 +2,7 @@
 
 import React, { useRef, useState, useEffect } from "react";
 import { postData } from "../utils/api";
+import { Link } from "react-router-dom";
 
 const NAME_REGEX = /^[a-zA-Z\s]*$/;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -175,7 +176,9 @@ const Register = () => {
               Register
             </button>
             <span className="line">
-              <a href="#">Log In</a>
+              <p>
+                <Link to={"/Login"}>Log In</Link>
+              </p>
             </span>
           </form>
         </div>

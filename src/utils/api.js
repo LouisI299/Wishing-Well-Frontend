@@ -28,3 +28,22 @@ export const postData = async (endpoint, data) => {
     throw error;
   }
 };
+
+//Function to check Login data
+export const checkLogin = async (email, password) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/users/login`,
+      { email, password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error checking login data:", error);
+    throw error;
+  }
+};
