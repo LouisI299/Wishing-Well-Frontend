@@ -2,11 +2,10 @@
 
 //Imports
 import { useEffect, useState } from "react";
-import { fetchData } from "../utils/api";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthProvider";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+import { fetchData } from "../utils/api";
 
 const Home = () => {
   //State
