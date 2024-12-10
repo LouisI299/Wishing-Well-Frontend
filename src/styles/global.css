@@ -1,0 +1,38 @@
+/* global.css */
+html, body {
+    height: 100%;
+    margin: 0;
+  }
+  
+  .wrapper {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .content {
+    flex: 1;
+  }
+  
+  footer {
+    background-color: #38008C;
+    color: white;
+    text-align: center;
+    padding: 10px;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+  }
+  
+  footer div {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+  }
+  
+  footer a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+  }
+  

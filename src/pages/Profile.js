@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from "react";
 import { fetchCurrentUser } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -26,6 +28,7 @@ const Profile = () => {
 
   return (
     <div>
+      <Header />
       <h1>Profile</h1>
       <p>First Name: {profileData.first_name}</p>
       <p>Last Name: {profileData.last_name}</p>
@@ -33,6 +36,7 @@ const Profile = () => {
       <p>Join Date: {profileData.join_date}</p>
       <p>Points: {profileData.points}</p>
       <p>Level: {profileData.level}</p>
+      <Footer />
     </div>
   );
 };
