@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { fetchData } from "../utils/api";
 import { Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 const Home = () => {
   //State
@@ -17,6 +19,7 @@ const Home = () => {
 
   return (
     <div>
+      <Header />  
       <h1>Home</h1>
       {/* Display each goal */}
       <ul>
@@ -30,6 +33,7 @@ const Home = () => {
         ))}
       </ul>
       <Link to="/Profile">Profile</Link>
+      <Footer />
     </div>
   );
 };
