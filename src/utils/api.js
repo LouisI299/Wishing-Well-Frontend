@@ -32,18 +32,35 @@ export const postData = async (endpoint, data) => {
 //Function to check Login data
 export const checkLogin = async (email, password) => {
   try {
-    const response = await axios.post(
-      `${API_BASE_URL}/api/users/login`,
-      { email, password },
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
+    const response = await axios.post(`${API_BASE_URL}/api/users/login`, {
+      email,
+      password,
+    });
+
     return response.data;
   } catch (error) {
     console.error("Error checking login data:", error);
     throw error;
+  }
+};
+
+//Function to get current user data
+export const fetchCurrentUser = async (token) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/api/users/current`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("Response received from backend:", response.data);
+    return response.data;
+  } catch (error) {
+    if (error.response) {
+      console.error(
+        "Error response from backend:",
+        error.response.status,
+        error.response.data
+      );
+    }
   }
 };

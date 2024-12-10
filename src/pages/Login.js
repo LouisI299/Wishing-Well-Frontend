@@ -20,7 +20,8 @@ const Login = () => {
     try {
       const data = await checkLogin(email, password);
       if (data.success) {
-        login();
+        console.log(data.access_token);
+        login(data.access_token);
         setRedirectToDashboard(true);
       } else {
         alert("Invalid email or password");
