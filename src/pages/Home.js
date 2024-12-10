@@ -2,8 +2,8 @@
 
 //Imports
 import { useEffect, useState } from "react";
-import { fetchData } from "../utils/api";
 import { Link } from "react-router-dom";
+import { fetchData } from "../utils/api";
 
 const Home = () => {
   //State
@@ -27,6 +27,8 @@ const Home = () => {
         ))}
       </ul>
       <Link to="/Profile">Profile</Link>
+      <br />
+      <Link to="/add-goal">Add Goal</Link>
     </div>
   );
 };
