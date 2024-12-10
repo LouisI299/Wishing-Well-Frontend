@@ -1,12 +1,13 @@
 //Page to register a new account
 
+// Imports
 import React, { useRef, useState, useEffect } from "react";
 import { postData } from "../utils/api";
 import { Link } from "react-router-dom";
 
-const NAME_REGEX = /^[a-zA-Z\s]*$/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+const NAME_REGEX = /^[a-zA-Z\s]*$/; // Regex for name input
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex for email input
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Regex for password input
 
 const Register = () => {
   //Refs
@@ -36,6 +37,7 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
+  //UseEffects to validate inputs
   useEffect(() => {
     const result = NAME_REGEX.test(firstName);
     setValidFirstName(result);
@@ -65,6 +67,7 @@ const Register = () => {
     setErrorMessage("");
   }, [firstName, lastName, email, password, confirmPassword]);
 
+  //Function to handle form submission and post data
   const handleSubmit = (e) => {
     e.preventDefault();
     const t1 = NAME_REGEX.test(firstName);

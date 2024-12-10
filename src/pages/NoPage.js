@@ -1,4 +1,4 @@
-//Page not found
+//When user navigates to a page that does not exist
 
 const NoPage = () => {
   return (

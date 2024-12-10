@@ -1,3 +1,4 @@
+// Page where the user can add a new goal
 const AddGoal = () => {
   return (
     <div>

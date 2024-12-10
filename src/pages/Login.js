@@ -1,15 +1,20 @@
+// Login page
+
+// Imports
 import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { checkLogin } from "../utils/api";
 
+// Login component
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [redirectToDashboard, setRedirectToDashboard] = useState(false);
+  const [email, setEmail] = useState(""); // State for email
+  const [password, setPassword] = useState(""); // State for password
+  const [redirectToDashboard, setRedirectToDashboard] = useState(false); // State to redirect to the dashboard
 
-  const { login } = useAuth();
+  const { login } = useAuth(); // Get the login function from the AuthProvider
 
+  // Function to handle login when form is submitted
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -25,6 +30,7 @@ const Login = () => {
     }
   };
 
+  // If the user is logged in, redirect to the dashboard/home page
   if (redirectToDashboard) {
     return <Navigate to="/Home" />;
   }
