@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import Header from "../components/Header";
 
@@ -144,8 +144,10 @@ const AddGoal = () => {
           <p>Saving Method: {savingMethod}</p>
           <p>
             {savingMethod === "end_date" && `End Date: ${savingValue}`}
-            {savingMethod === "monthly_amount" && `Monthly Amount: ${savingValue}`}
-            {savingMethod === "weekly_amount" && `Weekly Amount: ${savingValue}`}
+            {savingMethod === "monthly_amount" &&
+              `Monthly Amount: ${savingValue}`}
+            {savingMethod === "weekly_amount" &&
+              `Weekly Amount: ${savingValue}`}
           </p>
           <button onClick={handleBack}>Back</button>
           <button onClick={handleSubmit}>Submit</button>
