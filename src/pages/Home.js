@@ -11,10 +11,11 @@ import Footer from "../components/Footer";
 const Home = () => {
   //State
   const [goals, setGoals] = useState([]);
+  const { token } = useAuth();
 
   //Get goals from api.js
   useEffect(() => {
-    fetchData("/api/goals/", setGoals);
+    fetchData("/api/goals/user", setGoals, token);
   }, []);
 
   return (
