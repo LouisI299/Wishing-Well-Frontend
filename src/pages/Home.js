@@ -3,6 +3,9 @@
 //Imports
 import { useEffect, useState } from "react";
 import { fetchData } from "../utils/api";
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+import "../styles/global.css";
 
 const Home = () => {
   //State
@@ -15,6 +18,7 @@ const Home = () => {
 
   return (
     <div>
+      <Header />
       <h1>Home</h1>
       {/* Display each goal */}
       <ul>
@@ -25,6 +29,7 @@ const Home = () => {
           </li>
         ))}
       </ul>
+      <Footer />
     </div>
   );
 };
