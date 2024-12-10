@@ -79,3 +79,45 @@ export const fetchCurrentUser = async (token) => {
     }
   }
 };
+
+//Put request to update goal
+
+export const updateDataById = async (url, id, data, token) => {
+  const response = await fetch(`${url}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to update data");
+  }
+  return response.json();
+};
+
+// Add the updateGoalData function
+export const updateGoalData = async (url, data, token) => {
+  try {
+    const response = await fetch(url, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to update goal');
+    }
+
+    const updatedGoal = await response.json();
+    return updatedGoal;  // Return the updated goal object
+  } catch (error) {
+    console.error("Error updating goal:", error);
+    throw error;
+  }
+};

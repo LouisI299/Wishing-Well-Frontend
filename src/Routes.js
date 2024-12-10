@@ -12,11 +12,14 @@ import Settings from "./pages/Settings";
 import NoPage from "./pages/NoPage";
 import GoalSummary from "./pages/GoalSummary";
 import PrivateRoute from "./components/PrivateRoute";
+import EditGoal from "./pages/EditGoal";
 
 const AppRoutes = () => {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+        <Route path="/edit-goal/:goalId" element={<EditGoal />} />
+        <Route path="/edit-goal/:id" element={<PrivateRoute element={<EditGoal/>} />} />
+        <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/" element={<PrivateRoute element={<Home />} />} />
       <Route path="/home" element={<PrivateRoute element={<Home />} />} />

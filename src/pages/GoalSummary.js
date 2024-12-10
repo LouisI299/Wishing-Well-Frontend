@@ -1,5 +1,5 @@
 // Summary page for the goal
-
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
@@ -33,17 +33,22 @@ const GoalSummary = () => {
     return <div>Loading...</div>;
   }
 
-  return (
-    <div>
-      <h1>Goal Summary</h1>
-      <p>Name: {goal.name}</p>
-      <p>Status: {goal.status}</p>
-      <p>Target Amount: {goal.target_amount}</p>
-      <p>Current Amount: {goal.current_amount}</p>
-      <p>Start Date: {goal.start_date}</p>
-      <p>End Date: {goal.end_date}</p>
-    </div>
-  );
+    return (
+        <div>
+            <h1>Goal Summary</h1>
+            <p>Name: {goal.name}</p>
+            <p>Status: {goal.status}</p>
+            <p>Target Amount: {goal.target_amount}</p>
+            <p>Current Amount: {goal.current_amount}</p>
+            <p>Start Date: {goal.start_date}</p>
+            <p>End Date: {goal.end_date}</p>
+            <button>
+                <Link to={`/edit-goal/${goal.id}`}>Edit Goal</Link>
+            </button>
+        </div>
+    );
+
 };
+
 
 export default GoalSummary;
