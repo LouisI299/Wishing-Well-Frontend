@@ -7,9 +7,15 @@ import axios from "axios";
 const API_BASE_URL = "http://127.0.0.1:5000";
 
 //Function to fetch data from the backend server
-export const fetchData = async (endpoint, callback) => {
+export const fetchData = async (endpoint, callback, token) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${endpoint}`);
+    const response = await axios.get(`${API_BASE_URL}${endpoint}`,
+      {
+        headers:{
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
     callback(response.data);
   } catch (error) {
     console.error("Error fetching data:", error);

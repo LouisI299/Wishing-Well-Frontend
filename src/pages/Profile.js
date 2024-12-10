@@ -5,6 +5,7 @@ import { useAuth } from "../contexts/AuthProvider";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
+
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const { token } = useAuth();
@@ -22,6 +23,11 @@ const Profile = () => {
     fetchProfileData();
   }, [token]);
 
+  const logout = () => {
+    localStorage.removeItem('authToken');
+    window.location.href = '/login';
+  };
+
   if (!profileData) {
     return <div>Loading...</div>;
   }
@@ -36,6 +42,7 @@ const Profile = () => {
       <p>Join Date: {profileData.join_date}</p>
       <p>Points: {profileData.points}</p>
       <p>Level: {profileData.level}</p>
+      <button onClick={logout}>Log out</button>
       <Footer />
     </div>
   );

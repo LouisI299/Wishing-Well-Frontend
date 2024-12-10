@@ -2,24 +2,25 @@
 
 //Imports
 import { useEffect, useState } from "react";
-import { fetchData } from "../utils/api";
 import { Link } from "react-router-dom";
-import { useAuth } from "../contexts/AuthProvider";
-import Header from "../components/Header";
 import Footer from "../components/Footer";
+import Header from "../components/Header";
+import { fetchData } from "../utils/api";
+import { useAuth } from "../contexts/AuthProvider";
 
 const Home = () => {
   //State
   const [goals, setGoals] = useState([]);
+  const { token } = useAuth();
 
   //Get goals from api.js
   useEffect(() => {
-    fetchData("/api/goals/", setGoals);
+    fetchData("/api/goals/user", setGoals, token);
   }, []);
 
   return (
     <div>
-      <Header />  
+      <Header />
       <h1>Home</h1>
       {/* Display each goal */}
       <ul>
