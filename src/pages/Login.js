@@ -58,6 +58,7 @@ const Login = () => {
           />
         </label>
         <button type="submit">Login</button>
+        <Link to="/Register">Register</Link>
       </form>
     </div>
   );

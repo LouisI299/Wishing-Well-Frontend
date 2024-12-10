@@ -96,7 +96,7 @@ const Register = () => {
         <div>
           <h1>Success</h1>
           <p>Account created successfully</p>
-          <a href="#">Log In</a>
+          <Link to="/Login">Log In</Link>
         </div>
       ) : (
         <div>
