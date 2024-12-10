@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import { fetchData } from "../utils/api";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider";
 
 const Home = () => {
   //State
@@ -21,8 +22,10 @@ const Home = () => {
       <ul>
         {goals.map((goal) => (
           <li key={goal.id}>
-            {goal.name}: {goal.status}. Target amount: {goal.target_amount},
-            Current amount: {goal.current_amount}
+            <Link to={`/goal-summary/${goal.id}`}>
+              {goal.name}: {goal.status}. Target amount: {goal.target_amount},
+              Current amount: {goal.current_amount}
+            </Link>
           </li>
         ))}
       </ul>
