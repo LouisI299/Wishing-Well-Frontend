@@ -29,6 +29,21 @@ export const postData = async (endpoint, data) => {
   }
 };
 
+//Function to fetch data by ID
+export const fetchDataById = async (endpoint, id, token) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}${endpoint}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error fetching data by ID:", error);
+    throw error;
+  }
+};
+
 //Function to check Login data
 export const checkLogin = async (email, password) => {
   try {
@@ -52,7 +67,7 @@ export const fetchCurrentUser = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    console.log("Response received from backend:", response.data);
+
     return response.data;
   } catch (error) {
     if (error.response) {

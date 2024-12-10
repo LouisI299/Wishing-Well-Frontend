@@ -10,6 +10,7 @@ import AddGoal from "./pages/AddGoal";
 import Social from "./pages/Social";
 import Settings from "./pages/Settings";
 import NoPage from "./pages/NoPage";
+import GoalSummary from "./pages/GoalSummary";
 import PrivateRoute from "./components/PrivateRoute";
 
 const AppRoutes = () => {
@@ -20,6 +21,10 @@ const AppRoutes = () => {
       <Route path="/" element={<PrivateRoute element={<Home />} />} />
       <Route path="/home" element={<PrivateRoute element={<Home />} />} />
       <Route path="/profile" element={<PrivateRoute element={<Profile />} />} />
+      <Route
+        path="/goal-summary/:goalId"
+        element={<PrivateRoute element={<GoalSummary />} />}
+      />
       <Route
         path="/add-goal"
         element={<PrivateRoute element={<AddGoal />} />}

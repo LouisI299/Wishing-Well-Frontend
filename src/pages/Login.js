@@ -20,7 +20,6 @@ const Login = () => {
     try {
       const data = await checkLogin(email, password);
       if (data.success) {
-        console.log(data.access_token);
         login(data.access_token);
         setRedirectToDashboard(true);
       } else {

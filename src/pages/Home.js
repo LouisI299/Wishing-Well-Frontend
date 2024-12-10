@@ -3,6 +3,8 @@
 //Imports
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 import { fetchData } from "../utils/api";
 
 const Home = () => {
@@ -16,19 +18,21 @@ const Home = () => {
 
   return (
     <div>
+      <Header />  
       <h1>Home</h1>
       {/* Display each goal */}
       <ul>
         {goals.map((goal) => (
           <li key={goal.id}>
-            {goal.name}: {goal.status}. Target amount: {goal.target_amount},
-            Current amount: {goal.current_amount}
+            <Link to={`/goal-summary/${goal.id}`}>
+              {goal.name}: {goal.status}. Target amount: {goal.target_amount},
+              Current amount: {goal.current_amount}
+            </Link>
           </li>
         ))}
       </ul>
       <Link to="/Profile">Profile</Link>
-      <br />
-      <Link to="/add-goal">Add Goal</Link>
+      <Footer />
     </div>
   );
 };
