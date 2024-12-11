@@ -18,8 +18,15 @@ const Home = () => {
     fetchData("/api/goals/user", setGoals, token);
   }, []);
 
-  if (!goals) {
-    return <div>No goals yet! Click "Add goal" to start saving now.</div>;
+  if (goals == null || goals.length === 0) {
+    return (
+      <div>
+        <Header />
+        <h1>Home</h1>
+        <div>No goals yet! Click "Add goal" to start saving now.</div>
+        <Footer />
+      </div>
+    );
   }
 
   return (
@@ -37,7 +44,7 @@ const Home = () => {
           </li>
         ))}
       </ul>
-      <Link to="/profile">Profile</Link>
+
       <Footer />
     </div>
   );
