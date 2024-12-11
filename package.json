@@ -17,6 +17,7 @@
     "react-jwt": "^1.2.2",
     "react-router-dom": "^7.0.2",
     "react-scripts": "5.0.1",
+    "styled-components": "^6.1.13",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
