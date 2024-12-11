@@ -47,12 +47,12 @@ const Settings = () => {
   };
 
   // Handle save account settings
-  const handleSaveAccount = () => {
-    axios
-      .put(`/api/users/${token.sub}`, user)
-      .then((response) => console.log("User updated:", response.data))
-      .catch((error) => console.error("Error updating user:", error));
-  };
+  //   const handleSaveAccount = () => {
+  //     axios;
+  //   .put(`/api/users/${token.sub}`, user)
+  //   .then((response) => console.log("User updated:", response.data))
+  //   .catch((error) => console.error("Error updating user:", error));
+  //   };
 
   // Handle save display settings
   const handleSaveDisplay = () => {
@@ -107,7 +107,7 @@ const Settings = () => {
           onChange={handleAccountChange}
         />
 
-        <button onClick={handleSaveAccount}>Save Account Settings</button>
+        <button>Save Account Settings</button>
       </section>
 
       {/* Notification Settings */}
@@ -137,9 +137,7 @@ const Settings = () => {
           onChange={(e) => setSmsNotifications(e.target.checked)}
         />
 
-        <button onClick={handleSaveNotifications}>
-          Save Notification Settings
-        </button>
+        <button>Save Notification Settings</button>
       </section>
 
       {/* Display Settings */}
