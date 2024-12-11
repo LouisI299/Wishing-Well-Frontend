@@ -1,7 +1,7 @@
 export const lightTheme = {
-  primary100: "#d4eaf7",
+  primary100: "#3b3c3d",
   primary200: "#b6ccd8",
-  primary300: "#3b3c3d",
+  primary300: "#d4eaf7",
   accent100: "#71c4ef",
   accent200: "#00668c",
   text100: "#1d1c1c",
