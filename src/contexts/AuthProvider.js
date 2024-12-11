@@ -1,33 +1,47 @@
-// Imports
-import React, { createContext, useState, useContext } from "react";
+//Imports
+import React, { createContext, useContext, useState, useEffect } from "react";
 
-// Create a context
+//Create context
 const AuthContext = createContext();
 
-// Create a provider
+//AuthProvider component
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Set the initial value of isAuthenticated to false
-  const [token, setToken] = useState(null);
+  //State
+  const [isAuthenticated, setIsAuthenticated] = useState(false); //State for authentication
+  const [token, setToken] = useState(null); //State for token
+  const [loading, setLoading] = useState(true); //State for loading
 
-  // Function to set isAuthenticated to true
+  useEffect(() => {
+    const storedToken = localStorage.getItem("authToken"); // Get the token from localStorage
+
+    if (storedToken) {
+      setToken(storedToken);
+      setIsAuthenticated(true);
+    } else {
+      setIsAuthenticated(false);
+    }
+    setLoading(false);
+  }, []);
+
   const login = (newToken) => {
     setIsAuthenticated(true);
     setToken(newToken);
+    localStorage.setItem("authToken", newToken); // Store the token in localStorage
   };
 
-  // Function to set isAuthenticated to false
   const logout = () => {
     setIsAuthenticated(false);
     setToken(null);
+    localStorage.removeItem("authToken"); // Remove the token from localStorage
   };
 
-  // Return the AuthContext.Provider
   return (
-    <AuthContext.Provider value={{ isAuthenticated, token, login, logout }}>
+    <AuthContext.Provider
+      value={{ isAuthenticated, token, login, logout, loading }}
+    >
       {children}
     </AuthContext.Provider>
   );
 };
 
-// Hook to use the AuthContext
 export const useAuth = () => useContext(AuthContext);

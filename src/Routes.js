@@ -1,5 +1,3 @@
-// Main routes for the app
-
 // Imports
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
@@ -11,8 +9,8 @@ import Social from "./pages/Social";
 import Settings from "./pages/Settings";
 import NoPage from "./pages/NoPage";
 import GoalSummary from "./pages/GoalSummary";
-import PrivateRoute from "./components/PrivateRoute";
 import EditGoal from "./pages/EditGoal";
+import PrivateRoute from "./components/PrivateRoute";
 
 const AppRoutes = () => {
   return (
