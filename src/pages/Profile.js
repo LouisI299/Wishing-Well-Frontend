@@ -35,13 +35,17 @@ const Profile = () => {
   return (
     <div>
       <Header />
-      <h1>Profile</h1>
-      <p>First Name: {profileData.first_name}</p>
+      <p>Hi, {profileData.first_name} {profileData.last_name}</p>
       <p>Last Name: {profileData.last_name}</p>
       <p>Email: {profileData.email}</p>
       <p>Join Date: {profileData.join_date}</p>
       <p>Points: {profileData.points}</p>
       <p>Level: {profileData.level}</p>
+      <h1>Account settings</h1>
+      <a href="#">Contact details</a>
+      <a href="#">Friends</a>
+      <a href="#">Friend requests</a>
+
       <button onClick={logout}>Log out</button>
       <Footer />
     </div>
