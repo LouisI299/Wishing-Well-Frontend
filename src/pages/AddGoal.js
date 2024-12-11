@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../contexts/AuthProvider";
+import { postDataWithToken } from "../utils/api";
 
 const AddGoal = () => {
   const [step, setStep] = useState(1);
@@ -13,6 +15,7 @@ const AddGoal = () => {
   const [end_date, setEndDate] = useState("");
   const [error, setError] = useState("");
   const [timeNeeded, setTimeNeeded] = useState("");
+  const { token } = useAuth();
 
   useEffect(() => {
     setError("");
@@ -85,10 +88,18 @@ const AddGoal = () => {
       name: goalName,
       target_amount,
       current_amount: current_amount || 0, // Default to 0 if not provided
-      savingMethod,
-      payment,
+      saving_method: savingMethod,
+      period_amount: payment,
       end_date,
     };
+    
+    try {
+      postDataWithToken("/api/goals/", goalData, token);
+    } catch (error) {
+      console.error("Error posting data:", error);
+      throw error;
+    }
+    
     console.log(goalData);
     // Add your API call here to save the goal
   };
@@ -113,7 +124,7 @@ const AddGoal = () => {
       <Link to="/">Home</Link>
       {step === 1 && (
         <div>
-          <label>Category:</label>
+          <label>Choose a Category:</label>
           <div>
             <button onClick={() => setCategory("driving_lessons")}>Driving Lessons</button>
             <button onClick={() => setCategory("vacation")}>Vacation</button>
