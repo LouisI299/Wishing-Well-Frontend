@@ -7,19 +7,64 @@ const Footer = () => {
     <footer>
       <div>
         <div>
-            <Link to="/Home">Home</Link>
+          <Link
+            to={{
+              pathname: "/",
+              state: {
+                from: "Footer",
+              },
+            }}
+          >
+            Home
+          </Link>
         </div>
         <div>
-            <Link to="/Social">Social</Link>
+          <Link
+            to={{
+              pathname: "/social",
+              state: {
+                from: "Footer",
+              },
+            }}
+          >
+            Social
+          </Link>
         </div>
         <div>
-            <Link to="/add-goal">Add Goal</Link>
+          <Link
+            to={{
+              pathname: "/add-goal",
+              state: {
+                from: "Footer",
+              },
+            }}
+          >
+            Add Goal
+          </Link>
         </div>
         <div>
-            <Link to="/Settings">Settings</Link>
+          <Link
+            to={{
+              pathname: "/settings",
+              state: {
+                from: "Footer",
+              },
+            }}
+          >
+            Settings
+          </Link>
         </div>
         <div>
-            <Link to="/Profile">Profile</Link>
+          <Link
+            to={{
+              pathname: "/profile",
+              state: {
+                from: "Footer",
+              },
+            }}
+          >
+            Profile
+          </Link>
         </div>
       </div>
     </footer>

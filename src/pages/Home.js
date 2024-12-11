@@ -33,7 +33,7 @@ const Home = () => {
           </li>
         ))}
       </ul>
-      <Link to="/Profile">Profile</Link>
+      <Link to="/profile">Profile</Link>
       <Footer />
     </div>
   );
