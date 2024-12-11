@@ -25,14 +25,14 @@ const Settings = () => {
   const { token } = useAuth();
 
   // Fetch user data
-  useEffect(() => {
-    if (token) {
-      axios
-        .get(`/api/users/${token.sub}`)
-        .then((response) => setUser(response.data))
-        .catch((error) => console.error("Error fetching user data:", error));
-    }
-  }, [token]);
+  //   useEffect(() => {
+  //     if (token) {
+  //       axios
+  //         .get(`/api/users/${token.sub}`)
+  //         .then((response) => setUser(response.data))
+  //         .catch((error) => console.error("Error fetching user data:", error));
+  //     }
+  //   }, [token]);
 
   // Apply theme
   useEffect(() => {
