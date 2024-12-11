@@ -11,6 +11,7 @@ import NoPage from "./pages/NoPage";
 import GoalSummary from "./pages/GoalSummary";
 import EditGoal from "./pages/EditGoal";
 import PrivateRoute from "./components/PrivateRoute";
+import Layout from "./components/Layout";
 
 const AppRoutes = () => {
   return (
@@ -18,13 +19,15 @@ const AppRoutes = () => {
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route element={<PrivateRoute />}>
-        <Route path="/" element={<Home />} />
-        <Route path="/edit-goal/:goalId" element={<EditGoal />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/goal-summary/:goalId" element={<GoalSummary />} />
-        <Route path="/add-goal" element={<AddGoal />} />
-        <Route path="/social" element={<Social />} />
-        <Route path="/settings" element={<Settings />} />
+        <Route element={<Layout />}>
+          <Route path="/" element={<Home />} />
+          <Route path="/edit-goal/:goalId" element={<EditGoal />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/goal-summary/:goalId" element={<GoalSummary />} />
+          <Route path="/add-goal" element={<AddGoal />} />
+          <Route path="/social" element={<Social />} />
+          <Route path="/settings" element={<Settings />} />
+        </Route>
       </Route>
       <Route path="*" element={<NoPage />} />
     </Routes>

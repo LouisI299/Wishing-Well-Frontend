@@ -21,17 +21,14 @@ const Home = () => {
   if (goals == null || goals.length === 0) {
     return (
       <div>
-        <Header />
         <h1>Home</h1>
         <div>No goals yet! Click "Add goal" to start saving now.</div>
-        <Footer />
       </div>
     );
   }
 
   return (
     <div>
-      <Header />
       <h1>Home</h1>
       {/* Display each goal */}
       <ul>
@@ -44,8 +41,6 @@ const Home = () => {
           </li>
         ))}
       </ul>
-
-      <Footer />
     </div>
   );
 };

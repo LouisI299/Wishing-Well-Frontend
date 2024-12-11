@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
 
 const AddGoal = () => {
   const [step, setStep] = useState(1);
@@ -22,8 +22,10 @@ const AddGoal = () => {
       if (monthsNeeded > 0) {
         setTimeNeeded(`${Math.ceil(monthsNeeded)} months`);
         const calculatedEndDate = new Date();
-        calculatedEndDate.setMonth(calculatedEndDate.getMonth() + Math.ceil(monthsNeeded));
-        setEndDate(calculatedEndDate.toISOString().split('T')[0]);
+        calculatedEndDate.setMonth(
+          calculatedEndDate.getMonth() + Math.ceil(monthsNeeded)
+        );
+        setEndDate(calculatedEndDate.toISOString().split("T")[0]);
       } else {
         setError("Monthly payment is too high or invalid.");
       }
@@ -32,8 +34,10 @@ const AddGoal = () => {
       if (weeksNeeded > 0) {
         setTimeNeeded(`${Math.ceil(weeksNeeded)} weeks`);
         const calculatedEndDate = new Date();
-        calculatedEndDate.setDate(calculatedEndDate.getDate() + Math.ceil(weeksNeeded * 7));
-        setEndDate(calculatedEndDate.toISOString().split('T')[0]);
+        calculatedEndDate.setDate(
+          calculatedEndDate.getDate() + Math.ceil(weeksNeeded * 7)
+        );
+        setEndDate(calculatedEndDate.toISOString().split("T")[0]);
       } else {
         setError("Weekly payment is too high or invalid.");
       }
@@ -41,10 +45,13 @@ const AddGoal = () => {
       const endDateObj = new Date(end_date);
       const today = new Date();
       if (endDateObj > today) {
-        const monthsNeeded = (endDateObj.getFullYear() - today.getFullYear()) * 12 + (endDateObj.getMonth() - today.getMonth());
+        const monthsNeeded =
+          (endDateObj.getFullYear() - today.getFullYear()) * 12 +
+          (endDateObj.getMonth() - today.getMonth());
         if (monthsNeeded > 0) {
           setTimeNeeded(`${monthsNeeded} months`);
-          const calculatedMonthlyPayment = (target_amount - current_amount) / monthsNeeded;
+          const calculatedMonthlyPayment =
+            (target_amount - current_amount) / monthsNeeded;
           setMonthlyPayment(calculatedMonthlyPayment.toFixed(2));
         } else {
           setError("End date must allow for at least one month to save.");
@@ -53,14 +60,29 @@ const AddGoal = () => {
         setError("End date must be in the future.");
       }
     }
-  }, [savingMethod, monthlyPayment, weeklyPayment, end_date, target_amount, current_amount]);
+  }, [
+    savingMethod,
+    monthlyPayment,
+    weeklyPayment,
+    end_date,
+    target_amount,
+    current_amount,
+  ]);
 
   const handleNext = () => {
     if (step === 1 && goalName) {
       setStep(step + 1);
-    } else if (step === 2 && target_amount > 0 && target_amount > current_amount) {
+    } else if (
+      step === 2 &&
+      target_amount > 0 &&
+      target_amount > current_amount
+    ) {
       setStep(step + 1);
-    } else if (step === 3 && savingMethod && (monthlyPayment || weeklyPayment || end_date)) {
+    } else if (
+      step === 3 &&
+      savingMethod &&
+      (monthlyPayment || weeklyPayment || end_date)
+    ) {
       setStep(step + 1);
     } else {
       setError("Please fill in the required fields correctly.");
@@ -85,7 +107,6 @@ const AddGoal = () => {
     };
     console.log(goalData);
     // Add your API call here to save the goal
-
   };
 
   const getSavingMethodLabel = (method) => {
@@ -103,10 +124,9 @@ const AddGoal = () => {
 
   return (
     <div>
-      <Header />
       <h1>Add Goal</h1>
       <Link to="/">Home</Link>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+      {error && <p style={{ color: "red" }}>{error}</p>}
       {step === 1 && (
         <div>
           <label>
@@ -166,7 +186,7 @@ const AddGoal = () => {
                 type="date"
                 value={end_date}
                 onChange={(e) => setEndDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
+                min={new Date().toISOString().split("T")[0]}
                 required
               />
             </label>
@@ -200,23 +220,26 @@ const AddGoal = () => {
       {step === 4 && (
         <div>
           <h2>Summary</h2>
-          <p>Name: {goalName}</p>S
-          <p>Target Amount: {target_amount}</p>
+          <p>Name: {goalName}</p>S<p>Target Amount: {target_amount}</p>
           <p>Current Amount: {current_amount || 0}</p>
           <p>Saving Method: {getSavingMethodLabel(savingMethod)}</p>
           <p>End Date: {end_date}</p>
           {timeNeeded && <p>Time Needed: {timeNeeded}</p>}
-          {savingMethod === "monthly_amount" && <p>Monthly Payment: {monthlyPayment}</p>}
-          {savingMethod === "weekly_amount" && <p>Weekly Payment: {weeklyPayment}</p>}
-          {savingMethod === "end_date" && <p>Calculated Monthly Payment: {monthlyPayment}</p>}
+          {savingMethod === "monthly_amount" && (
+            <p>Monthly Payment: {monthlyPayment}</p>
+          )}
+          {savingMethod === "weekly_amount" && (
+            <p>Weekly Payment: {weeklyPayment}</p>
+          )}
+          {savingMethod === "end_date" && (
+            <p>Calculated Monthly Payment: {monthlyPayment}</p>
+          )}
           <button onClick={handleBack}>Back</button>
           <button onClick={handleSubmit}>Submit</button>
         </div>
       )}
-      <Footer />
     </div>
   );
-
 };
 
 export default AddGoal;
