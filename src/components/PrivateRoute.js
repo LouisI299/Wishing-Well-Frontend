@@ -1,14 +1,11 @@
-// Imports
 import React from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 
-// Component to render a private route (Not acccesible unless logged in)
-const PrivateRoute = ({ element: Component }) => {
-  const { isAuthenticated } = useAuth(); // Get the isAuthenticated value from the AuthProvider
+const PrivateRoute = () => {
+  const { isAuthenticated } = useAuth();
 
-  return isAuthenticated ? Component : <Navigate to="/login" />; // If the user is logged in, render the component, else redirect to the login page
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };
 
-// Export the component
 export default PrivateRoute;

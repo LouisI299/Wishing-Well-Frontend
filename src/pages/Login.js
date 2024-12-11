@@ -32,7 +32,7 @@ const Login = () => {
 
   // If the user is logged in, redirect to the dashboard/home page
   if (redirectToDashboard) {
-    return <Navigate to="/Home" />;
+    return <Navigate to="/" />;
   }
 
   return (
