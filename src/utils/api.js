@@ -9,13 +9,11 @@ const API_BASE_URL = "http://127.0.0.1:5000";
 //Function to fetch data from the backend server
 export const fetchData = async (endpoint, callback, token) => {
   try {
-    const response = await axios.get(`${API_BASE_URL}${endpoint}`,
-      {
-        headers:{
-          Authorization: `Bearer ${token}`
-        }
-      }
-    );
+    const response = await axios.get(`${API_BASE_URL}${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
     callback(response.data);
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -108,22 +106,43 @@ export const updateDataById = async (url, id, data, token) => {
 export const updateGoalData = async (url, data, token) => {
   try {
     const response = await fetch(url, {
-      method: 'PUT',
+      method: "PUT",
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
       },
       body: JSON.stringify(data),
     });
 
     if (!response.ok) {
-      throw new Error('Failed to update goal');
+      throw new Error("Failed to update goal");
     }
 
     const updatedGoal = await response.json();
-    return updatedGoal;  // Return the updated goal object
+    return updatedGoal; // Return the updated goal object
   } catch (error) {
     console.error("Error updating goal:", error);
+    throw error;
+  }
+};
+
+// function to make a transaction
+export const makeTransaction = async (data, token) => {
+  try {
+    const response = await axios.post(
+      `${API_BASE_URL}/api/transactions/`,
+      data,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    console.error("Error making transaction:", error);
     throw error;
   }
 };
