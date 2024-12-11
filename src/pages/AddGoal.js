@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { postDataWithToken } from "../utils/api";
 
@@ -85,7 +85,7 @@ const AddGoal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const methodBool = false;
+    const [methodBool, setMethodBool] = useState(false);
     if (savingMethod === "monthly_amount") {
       methodBool = true;
     }
@@ -101,12 +101,11 @@ const AddGoal = () => {
     console.log(goalData);
     try {
       const response = postDataWithToken("/api/goals/", goalData, token);
+      return redirect("/");
     } catch (error) {
       console.error("Error posting data:", error);
       throw error;
     }
-
-    // Add your API call here to save the goal
   };
 
   const getSavingMethodLabel = (method) => {
