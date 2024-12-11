@@ -21,6 +21,7 @@ const AddGoal = () => {
     setError("");
     if (savingMethod === "monthly_amount" && payment) {
       const monthsNeeded = (target_amount - current_amount) / payment;
+
       if (monthsNeeded > 0) {
         setTimeNeeded(`${Math.ceil(monthsNeeded)} months`);
         const calculatedEndDate = new Date();
@@ -52,7 +53,8 @@ const AddGoal = () => {
           (endDateObj.getMonth() - today.getMonth());
         if (monthsNeeded > 0) {
           setTimeNeeded(`${monthsNeeded} months`);
-          const calculatedMonthlyPayment = (target_amount - current_amount) / monthsNeeded;
+          const calculatedMonthlyPayment =
+            (target_amount - current_amount) / monthsNeeded;
           setPayment(calculatedMonthlyPayment.toFixed(2));
         } else {
           setError("End date must allow for at least one month to save.");
@@ -83,27 +85,29 @@ const AddGoal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const methodBool = false;
+    if (savingMethod === "monthly_amount") {
+      methodBool = true;
+    }
     const goalData = {
       category: customCategory || category,
       name: goalName,
       target_amount,
       current_amount: current_amount || 0, // Default to 0 if not provided
-      saving_method: savingMethod,
+      saving_method: methodBool,
       period_amount: payment,
       end_date,
     };
-    
+    console.log(goalData);
     try {
-      postDataWithToken("/api/goals/", goalData, token);
+      const response = postDataWithToken("/api/goals/", goalData, token);
     } catch (error) {
       console.error("Error posting data:", error);
       throw error;
     }
-    
-    console.log(goalData);
+
     // Add your API call here to save the goal
   };
-
 
   const getSavingMethodLabel = (method) => {
     switch (method) {
@@ -126,9 +130,13 @@ const AddGoal = () => {
         <div>
           <label>Choose a Category:</label>
           <div>
-            <button onClick={() => setCategory("driving_lessons")}>Driving Lessons</button>
+            <button onClick={() => setCategory("driving_lessons")}>
+              Driving Lessons
+            </button>
             <button onClick={() => setCategory("vacation")}>Vacation</button>
-            <button onClick={() => setCategory("emergency_fund")}>Emergency Fund</button>
+            <button onClick={() => setCategory("emergency_fund")}>
+              Emergency Fund
+            </button>
             <button onClick={() => setCategory("wedding")}>Wedding</button>
             <button onClick={() => setCategory("")}>Custom Category</button>
           </div>
@@ -213,9 +221,13 @@ const AddGoal = () => {
               />
             </label>
           )}
-          {(savingMethod === "monthly_amount" || savingMethod === "weekly_amount") && (
+          {(savingMethod === "monthly_amount" ||
+            savingMethod === "weekly_amount") && (
             <label>
-              {savingMethod === "monthly_amount" ? "Monthly Payment" : "Weekly Payment"}:
+              {savingMethod === "monthly_amount"
+                ? "Monthly Payment"
+                : "Weekly Payment"}
+              :
               <input
                 type="number"
                 value={payment}
@@ -237,8 +249,18 @@ const AddGoal = () => {
           <p>Saved so Far: {current_amount || 0}</p>
           <p>Saving Method: {getSavingMethodLabel(savingMethod)}</p>
           <p>End Date: {end_date}</p>
-          {(savingMethod === "monthly_amount" || savingMethod === "weekly_amount") && <p>{savingMethod === "monthly_amount" ? "Monthly Payment" : "Weekly Payment"}: {payment}</p>}
-          {savingMethod === "end_date" && <p>Calculated Monthly Payment: {payment}</p>}
+          {(savingMethod === "monthly_amount" ||
+            savingMethod === "weekly_amount") && (
+            <p>
+              {savingMethod === "monthly_amount"
+                ? "Monthly Payment"
+                : "Weekly Payment"}
+              : {payment}
+            </p>
+          )}
+          {savingMethod === "end_date" && (
+            <p>Calculated Monthly Payment: {payment}</p>
+          )}
           <button onClick={handleBack}>Back</button>
           <button onClick={handleSubmit}>Submit</button>
         </div>
