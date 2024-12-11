@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 const AddGoal = () => {
   const [step, setStep] = useState(1);
@@ -23,8 +21,10 @@ const AddGoal = () => {
       if (monthsNeeded > 0) {
         setTimeNeeded(`${Math.ceil(monthsNeeded)} months`);
         const calculatedEndDate = new Date();
-        calculatedEndDate.setMonth(calculatedEndDate.getMonth() + Math.ceil(monthsNeeded));
-        setEndDate(calculatedEndDate.toISOString().split('T')[0]);
+        calculatedEndDate.setMonth(
+          calculatedEndDate.getMonth() + Math.ceil(monthsNeeded)
+        );
+        setEndDate(calculatedEndDate.toISOString().split("T")[0]);
       } else {
         setError("Monthly payment is too high or invalid.");
       }
@@ -33,8 +33,10 @@ const AddGoal = () => {
       if (weeksNeeded > 0) {
         setTimeNeeded(`${Math.ceil(weeksNeeded)} weeks`);
         const calculatedEndDate = new Date();
-        calculatedEndDate.setDate(calculatedEndDate.getDate() + Math.ceil(weeksNeeded * 7));
-        setEndDate(calculatedEndDate.toISOString().split('T')[0]);
+        calculatedEndDate.setDate(
+          calculatedEndDate.getDate() + Math.ceil(weeksNeeded * 7)
+        );
+        setEndDate(calculatedEndDate.toISOString().split("T")[0]);
       } else {
         setError("Weekly payment is too high or invalid.");
       }
@@ -42,7 +44,9 @@ const AddGoal = () => {
       const endDateObj = new Date(end_date);
       const today = new Date();
       if (endDateObj > today) {
-        const monthsNeeded = (endDateObj.getFullYear() - today.getFullYear()) * 12 + (endDateObj.getMonth() - today.getMonth());
+        const monthsNeeded =
+          (endDateObj.getFullYear() - today.getFullYear()) * 12 +
+          (endDateObj.getMonth() - today.getMonth());
         if (monthsNeeded > 0) {
           setTimeNeeded(`${monthsNeeded} months`);
           const calculatedMonthlyPayment = (target_amount - current_amount) / monthsNeeded;
@@ -105,7 +109,6 @@ const AddGoal = () => {
 
   return (
     <div>
-      <Header />
       <h1>Add Goal</h1>
       <Link to="/">Home</Link>
       {step === 1 && (
@@ -194,7 +197,7 @@ const AddGoal = () => {
                 type="date"
                 value={end_date}
                 onChange={(e) => setEndDate(e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
+                min={new Date().toISOString().split("T")[0]}
                 required
               />
             </label>
@@ -229,7 +232,6 @@ const AddGoal = () => {
           <button onClick={handleSubmit}>Submit</button>
         </div>
       )}
-      <Footer />
     </div>
   );
 };

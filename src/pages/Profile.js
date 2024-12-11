@@ -5,7 +5,6 @@ import { useAuth } from "../contexts/AuthProvider";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
-
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const { token } = useAuth();
@@ -24,8 +23,8 @@ const Profile = () => {
   }, [token]);
 
   const logout = () => {
-    localStorage.removeItem('authToken');
-    window.location.href = '/login';
+    localStorage.removeItem("authToken");
+    window.location.href = "/login";
   };
 
   if (!profileData) {
@@ -34,8 +33,9 @@ const Profile = () => {
 
   return (
     <div>
-      <Header />
-      <p>Hi, {profileData.first_name} {profileData.last_name}</p>
+      <p>
+        Hi, {profileData.first_name} {profileData.last_name}
+      </p>
       <p>Last Name: {profileData.last_name}</p>
       <p>Email: {profileData.email}</p>
       <p>Join Date: {profileData.join_date}</p>
@@ -47,7 +47,6 @@ const Profile = () => {
       <a href="#">Friend requests</a>
 
       <button onClick={logout}>Log out</button>
-      <Footer />
     </div>
   );
 };

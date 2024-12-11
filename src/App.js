@@ -1,6 +1,7 @@
 // Main App component
 
 // Imports
+import React from 'react';
 import { BrowserRouter } from "react-router-dom";
 import AppRoutes from "./Routes";
 import { AuthProvider } from "./contexts/AuthProvider";

@@ -84,6 +84,22 @@ export const fetchCurrentUser = async (token) => {
   }
 };
 
+export const postDataWithToken = async (endpoint, data, token) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error posting data with token:", error);
+    throw error;
+  }
+};
+
 //Put request to update goal
 
 export const updateDataById = async (url, id, data, token) => {

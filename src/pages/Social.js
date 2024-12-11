@@ -7,9 +7,7 @@ import Footer from "../components/Footer";
 const Social = () => {
   return (
     <div>
-      <Header />
       <h1>Social</h1>
-      <Footer />
     </div>
   );
 };
