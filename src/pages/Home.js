@@ -18,6 +18,10 @@ const Home = () => {
     fetchData("/api/goals/user", setGoals, token);
   }, []);
 
+  if (!goals) {
+    return <div>No goals yet! Click "Add goal" to start saving now.</div>;
+  }
+
   return (
     <div>
       <Header />
