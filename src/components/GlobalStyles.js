@@ -13,7 +13,7 @@ body {
     color: ${({ theme }) => theme.accent200};
   }
   button {
-    background-color: ${({ theme }) => theme.primary100};
+    background-color: ${({ theme }) => theme.primary200};
     color: ${({ theme }) => theme.text100};
   }
 

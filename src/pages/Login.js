@@ -11,6 +11,7 @@ const Login = () => {
   const [email, setEmail] = useState(""); // State for email
   const [password, setPassword] = useState(""); // State for password
   const [redirectToDashboard, setRedirectToDashboard] = useState(false); // State to redirect to the dashboard
+  const [error, setError] = useState(""); // State for error message
 
   const { login } = useAuth(); // Get the login function from the AuthProvider
 
@@ -23,7 +24,7 @@ const Login = () => {
         login(data.access_token);
         setRedirectToDashboard(true);
       } else {
-        alert("Invalid email or password");
+        setError(data.message);
       }
     } catch (error) {
       console.error("Error logging in:", error);
