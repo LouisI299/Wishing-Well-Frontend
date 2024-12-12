@@ -5,6 +5,7 @@ import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { checkLogin } from "../utils/api";
+import { Alert, Container, Form, Button } from "react-bootstrap";
 
 // Login component
 const Login = () => {
@@ -24,10 +25,11 @@ const Login = () => {
         login(data.access_token);
         setRedirectToDashboard(true);
       } else {
-        setError(data.message);
+        setError(data.error);
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      setError("Invalid email or password, please try again.");
     }
   };
 
@@ -37,31 +39,35 @@ const Login = () => {
   }
 
   return (
-    <div>
+    <Container>
       <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <label>
-          Email:
-          <input
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form onSubmit={handleLogin}>
+        <Form.Group controlId="formEmail">
+          <Form.Label>Email: </Form.Label>
+          <Form.Control
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
-        <label>
-          Password:
-          <input
+        </Form.Group>
+
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </label>
-        <button type="submit">Login</button>
-        <Link to="/Register">Register</Link>
-      </form>
-    </div>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </Form>
+      <Link to="/Register">Register</Link>
+    </Container>
   );
 };
 
