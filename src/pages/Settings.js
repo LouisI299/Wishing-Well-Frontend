@@ -11,6 +11,7 @@ const Settings = () => {
     phone: "",
   });
 
+
   // State for notification settings
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);

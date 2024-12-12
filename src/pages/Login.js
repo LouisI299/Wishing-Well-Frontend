@@ -5,12 +5,14 @@ import { Navigate, Link } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { checkLogin } from "../utils/api";
+import { Alert, Container, Form, Button } from "react-bootstrap";
 
 // Login component
 const Login = () => {
   const [email, setEmail] = useState(""); // State for email
   const [password, setPassword] = useState(""); // State for password
   const [redirectToDashboard, setRedirectToDashboard] = useState(false); // State to redirect to the dashboard
+  const [error, setError] = useState(""); // State for error message
 
   const { login } = useAuth(); // Get the login function from the AuthProvider
 
@@ -23,10 +25,11 @@ const Login = () => {
         login(data.access_token);
         setRedirectToDashboard(true);
       } else {
-        alert("Invalid email or password");
+        setError(data.error);
       }
     } catch (error) {
       console.error("Error logging in:", error);
+      setError("Invalid email or password, please try again.");
     }
   };
 
@@ -36,31 +39,35 @@ const Login = () => {
   }
 
   return (
-    <div>
+    <Container>
       <h1>Login</h1>
-      <form onSubmit={handleLogin}>
-        <label>
-          Email:
-          <input
+      {error && <Alert variant="danger">{error}</Alert>}
+      <Form onSubmit={handleLogin}>
+        <Form.Group controlId="formEmail">
+          <Form.Label>Email: </Form.Label>
+          <Form.Control
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
           />
-        </label>
-        <label>
-          Password:
-          <input
+        </Form.Group>
+
+        <Form.Group controlId="formPassword">
+          <Form.Label>Password</Form.Label>
+          <Form.Control
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-        </label>
-        <button type="submit">Login</button>
-        <Link to="/Register">Register</Link>
-      </form>
-    </div>
+        </Form.Group>
+        <Button variant="primary" type="submit">
+          Login
+        </Button>
+      </Form>
+      <Link to="/Register">Register</Link>
+    </Container>
   );
 };
 
