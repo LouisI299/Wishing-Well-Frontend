@@ -123,8 +123,6 @@ api.interceptors.response.use(
   }
 );
 
-export default api;
-
 // Function to change password
 export const changePassword = async (oldPassword, newPassword, token) => {
   try {
@@ -148,3 +146,5 @@ export const updateEmail = async (email, token) => {
     throw error;
   }
 };
+
+export default api;
