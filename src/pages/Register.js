@@ -76,10 +76,14 @@ const Register = () => {
       email,
       password,
     };
-
-    postData("/api/users/", newUser);
-    console.log(firstName, lastName, email, password);
-    setSuccess(true);
+    try {
+      postData("/api/users/", newUser);
+      console.log(firstName, lastName, email, password);
+      setSuccess(true);
+    } catch (error) {
+      console.error("Error creating user:", error);
+      setErrorMessage("Error creating user");
+    }
   };
 
   return (
