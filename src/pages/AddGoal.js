@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
+import "../styles/addgoal.css";
 import { postDataWithToken } from "../utils/api";
 
 const AddGoal = () => {
@@ -16,19 +18,19 @@ const AddGoal = () => {
   const [error, setError] = useState("");
   const [timeNeeded, setTimeNeeded] = useState("");
   const { token } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setError("");
     if (savingMethod === "monthly_amount" && payment) {
       const monthsNeeded = (target_amount - current_amount) / payment;
-
       if (monthsNeeded > 0) {
         setTimeNeeded(`${Math.ceil(monthsNeeded)} months`);
         const calculatedEndDate = new Date();
         calculatedEndDate.setMonth(
           calculatedEndDate.getMonth() + Math.ceil(monthsNeeded)
         );
-        setEndDate(calculatedEndDate.toISOString().split("T")[0]);
+        setEndDate(calculatedEndDate.toISOString());
       } else {
         setError("Monthly payment is too high or invalid.");
       }
@@ -40,7 +42,7 @@ const AddGoal = () => {
         calculatedEndDate.setDate(
           calculatedEndDate.getDate() + Math.ceil(weeksNeeded * 7)
         );
-        setEndDate(calculatedEndDate.toISOString().split("T")[0]);
+        setEndDate(calculatedEndDate.toISOString());
       } else {
         setError("Weekly payment is too high or invalid.");
       }
@@ -71,7 +73,11 @@ const AddGoal = () => {
     } else if (step === 2 && goalName) {
       setStep(step + 1);
     } else if (step === 3 && target_amount) {
-      setStep(step + 1);
+      if (parseFloat(current_amount) >= parseFloat(target_amount)) {
+        setError("Current amount cannot be greater than or equal to target amount.");
+      } else {
+        setStep(step + 1);
+      }
     } else if (step === 4 && savingMethod && (payment || end_date)) {
       setStep(step + 1);
     } else {
@@ -83,25 +89,24 @@ const AddGoal = () => {
     setStep(step - 1);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const methodBool = savingMethod === "monthly_amount";
     const goalData = {
       category: customCategory || category,
       name: goalName,
       target_amount,
       current_amount: current_amount || 0, // Default to 0 if not provided
-      saving_method: methodBool,
-      period_amount: payment,
-      end_date,
+      savingMethod,
+      payment,
+      end_date: new Date(end_date), // Convert end_date to Date object
     };
     console.log(goalData);
     try {
-      const response = postDataWithToken("/api/goals/", goalData, token);
-      return redirect("/");
+      await postDataWithToken("/api/goals/", goalData, token);
+      navigate("/"); // Redirect to home page after successful submission
     } catch (error) {
       console.error("Error posting data:", error);
-      throw error;
+      setError("Failed to submit goal. Please try again.");
     }
   };
 
@@ -119,82 +124,103 @@ const AddGoal = () => {
   };
 
   return (
-    <div>
+    <Container>
       <h1>Add Goal</h1>
       <Link to="/">Home</Link>
+      {error && <Alert variant="danger">{error}</Alert>}
       {step === 1 && (
-        <div>
-          <label>Choose a Category:</label>
-          <div>
-            <button onClick={() => setCategory("driving_lessons")}>
-              Driving Lessons
-            </button>
-            <button onClick={() => setCategory("vacation")}>Vacation</button>
-            <button onClick={() => setCategory("emergency_fund")}>
-              Emergency Fund
-            </button>
-            <button onClick={() => setCategory("wedding")}>Wedding</button>
-            <button onClick={() => setCategory("")}>Custom Category</button>
-          </div>
-          {category === "" && (
-            <div>
-              <label>
-                Custom Category:
-                <input
+        <Form>
+          <Form.Group>
+            <Form.Label>Category:</Form.Label>
+            <div className="categoryButtons">
+              <Button variant="primary" onClick={() => setCategory("driving_lessons")}>
+                Driving Lessons
+              </Button>
+              <Button variant="primary" onClick={() => setCategory("vacation")}>
+                Vacation
+              </Button>
+              <Button variant="primary" onClick={() => setCategory("laptop")}>
+                Laptop
+              </Button>
+              <Button variant="primary" onClick={() => setCategory("emergency_fund")}>
+                Emergency Fund
+              </Button>
+              <Button variant="primary" onClick={() => setCategory("wedding")}>
+                Wedding
+              </Button>
+              <Button variant="primary" onClick={() => setCategory("")}>
+                Custom Category
+              </Button>
+            </div>
+            {category === "" && (
+              <Form.Group>
+                <Form.Label>Custom Category:</Form.Label>
+                <Form.Control
                   type="text"
                   value={customCategory}
                   onChange={(e) => setCustomCategory(e.target.value)}
                   required
                 />
-              </label>
-            </div>
-          )}
-          <button onClick={handleNext}>Next</button>
-        </div>
+              </Form.Group>
+            )}
+          </Form.Group>
+          <Button variant="secondary" onClick={handleNext}>
+            Next
+          </Button>
+        </Form>
       )}
       {step === 2 && (
-        <div>
-          <label>
-            Name:
-            <input
+        <Form>
+          <Form.Group>
+            <Form.Label>Name:</Form.Label>
+            <Form.Control
               type="text"
               value={goalName}
               onChange={(e) => setGoalName(e.target.value)}
               required
             />
-          </label>
-          <button onClick={handleBack}>Back</button>
-          <button onClick={handleNext}>Next</button>
-        </div>
+          </Form.Group>
+          <Button variant="secondary" onClick={handleBack}>
+            Back
+          </Button>
+          <Button variant="primary" onClick={handleNext}>
+            Next
+          </Button>
+        </Form>
       )}
       {step === 3 && (
-        <div>
-          <label>
-            Target Amount:
-            <input
+        <Form>
+          <Form.Group>
+            <Form.Label>Target Amount:</Form.Label>
+            <Form.Control
               type="number"
               value={target_amount}
               onChange={(e) => setTargetAmount(e.target.value)}
               required
             />
-          </label>
-          <label>
-            Current Amount (optional):
-            <input
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Current Amount (optional):</Form.Label>
+            <Form.Control
               type="number"
               value={current_amount}
               onChange={(e) => setCurrentAmount(e.target.value)}
             />
-          </label>
-          <button onClick={handleBack}>Back</button>
-          <button onClick={handleNext}>Next</button>
-        </div>
+          </Form.Group>
+          <Button variant="secondary" onClick={handleBack}>
+            Back
+          </Button>
+          <Button variant="primary" onClick={handleNext}>
+            Next
+          </Button>
+        </Form>
       )}
       {step === 4 && (
-        <div>
-          <label>
-            Saving Method:
-            <select
+        <Form>
+          <Form.Group>
+            <Form.Label>Saving Method:</Form.Label>
+            <Form.Control
+              as="select"
               value={savingMethod}
               onChange={(e) => setSavingMethod(e.target.value)}
               required
@@ -203,38 +229,44 @@ const AddGoal = () => {
               <option value="end_date">End Date</option>
               <option value="monthly_amount">Monthly Amount</option>
               <option value="weekly_amount">Weekly Amount</option>
-            </select>
-          </label>
+            </Form.Control>
+          </Form.Group>
           {savingMethod === "end_date" && (
-            <label>
-              End Date:
-              <input
+            <Form.Group>
+              <Form.Label>End Date:</Form.Label>
+              <Form.Control
                 type="date"
                 value={end_date}
                 onChange={(e) => setEndDate(e.target.value)}
                 min={new Date().toISOString().split("T")[0]}
                 required
               />
-            </label>
+            </Form.Group>
           )}
           {(savingMethod === "monthly_amount" ||
             savingMethod === "weekly_amount") && (
-            <label>
-              {savingMethod === "monthly_amount"
-                ? "Monthly Payment"
-                : "Weekly Payment"}
-              :
-              <input
+            <Form.Group>
+              <Form.Label>
+                {savingMethod === "monthly_amount"
+                  ? "Monthly Payment"
+                  : "Weekly Payment"}
+                :
+              </Form.Label>
+              <Form.Control
                 type="number"
                 value={payment}
                 onChange={(e) => setPayment(e.target.value)}
                 required
               />
-            </label>
+            </Form.Group>
           )}
-          <button onClick={handleBack}>Back</button>
-          <button onClick={handleNext}>Next</button>
-        </div>
+          <Button variant="secondary" onClick={handleBack}>
+            Back
+          </Button>
+          <Button variant="primary" onClick={handleNext}>
+            Next
+          </Button>
+        </Form>
       )}
       {step === 5 && (
         <div>
@@ -244,7 +276,8 @@ const AddGoal = () => {
           <p>Total Amount: {target_amount}</p>
           <p>Saved so Far: {current_amount || 0}</p>
           <p>Saving Method: {getSavingMethodLabel(savingMethod)}</p>
-          <p>End Date: {end_date}</p>
+          <p>End Date:  {new Date(end_date).toLocaleDateString()}</p>
+          {timeNeeded && <p>Time Needed: {timeNeeded}</p>}
           {(savingMethod === "monthly_amount" ||
             savingMethod === "weekly_amount") && (
             <p>
@@ -257,11 +290,15 @@ const AddGoal = () => {
           {savingMethod === "end_date" && (
             <p>Calculated Monthly Payment: {payment}</p>
           )}
-          <button onClick={handleBack}>Back</button>
-          <button onClick={handleSubmit}>Submit</button>
+          <Button variant="secondary" onClick={handleBack}>
+            Back
+          </Button>
+          <Button variant="primary" onClick={handleSubmit}>
+            Submit
+          </Button>
         </div>
       )}
-    </div>
+    </Container>
   );
 };
 
