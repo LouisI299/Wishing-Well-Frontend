@@ -43,7 +43,7 @@ const Profile = () => {
       <p>Last Name: {profileData.last_name}</p>
       <p>Email: {profileData.email}</p>
       <p>Join Date: {profileData.join_date}</p>
-      <p>Delete yuur account <a href="#">here</a></p>
+      <p>Delete your account <a href="#">here</a></p>
       </div>
       <div style = {{display: "flex", justifyContent: "center"}}>
         <img src={logo} alt="logo" style = {{width: "20em", marginTop: "4em"}}></img>
