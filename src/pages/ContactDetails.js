@@ -46,7 +46,7 @@ const Profile = () => {
       <p>Delete yuur account <a href="#">here</a></p>
       </div>
       <div style = {{display: "flex", justifyContent: "center"}}>
-        <img src={logo} alt="logo" style = {{width: "20em", marginBottom: "2em"}}></img>
+        <img src={logo} alt="logo" style = {{width: "20em", marginTop: "4em"}}></img>
       </div>
       
     </div>
