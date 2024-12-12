@@ -85,10 +85,7 @@ const AddGoal = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const [methodBool, setMethodBool] = useState(false);
-    if (savingMethod === "monthly_amount") {
-      methodBool = true;
-    }
+    const methodBool = savingMethod === "monthly_amount";
     const goalData = {
       category: customCategory || category,
       name: goalName,
