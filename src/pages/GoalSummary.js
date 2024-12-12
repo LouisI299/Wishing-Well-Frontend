@@ -3,7 +3,11 @@ import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
-import { fetchDataById, makeTransaction } from "../utils/api";
+import {
+  fetchDataById,
+  makeTransaction,
+  postDataWithToken,
+} from "../utils/api";
 
 const GoalSummary = () => {
   const params = useParams();
@@ -34,17 +38,14 @@ const GoalSummary = () => {
   const handleTransaction = (amount, goalId, token) => async (e) => {
     e.preventDefault();
     try {
-      if (parseFloat(amount) > 0) {
-        setType("deposit");
-      } else {
-        setType("withdrawal");
-      }
+      const transactionType = parseFloat(amount) > 0 ? "deposit" : "withdrawal";
+      setType(transactionType);
       const data = {
         goal_id: goalId,
         amount: parseFloat(amount),
         type: type,
       };
-      await makeTransaction(data, token);
+      await postDataWithToken("/api/transactions/", data, token);
       const updatedGoal = await fetchDataById("/api/goals", goalId, token);
       setGoal(updatedGoal);
     } catch (error) {

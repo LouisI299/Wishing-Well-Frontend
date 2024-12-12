@@ -22,7 +22,24 @@ export const fetchData = async (endpoint, callback, token) => {
   }
 };
 
-//Function to post data to the backend server
+//Function to post data with token
+export const postDataWithToken = async (endpoint, data, token) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("Error posting data with token:", error);
+    throw error;
+  }
+};
+
+//Function to post data to the backend server without jwt token
 export const postData = async (endpoint, data) => {
   try {
     const response = await axios.post(`${API_BASE_URL}${endpoint}`, data);
@@ -59,43 +76,6 @@ export const checkLogin = async (email, password) => {
     return response.data;
   } catch (error) {
     console.error("Error checking login data:", error);
-    throw error;
-  }
-};
-
-//Function to get current user data
-export const fetchCurrentUser = async (token) => {
-  try {
-    const response = await axios.get(`${API_BASE_URL}/api/users/current`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    if (error.response) {
-      console.error(
-        "Error response from backend:",
-        error.response.status,
-        error.response.data
-      );
-    }
-  }
-};
-
-export const postDataWithToken = async (endpoint, data, token) => {
-  try {
-    const response = await axios.post(`${API_BASE_URL}${endpoint}`, data, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error("Error posting data with token:", error);
     throw error;
   }
 };
@@ -138,27 +118,6 @@ export const updateGoalData = async (url, data, token) => {
     return updatedGoal; // Return the updated goal object
   } catch (error) {
     console.error("Error updating goal:", error);
-    throw error;
-  }
-};
-
-// function to make a transaction
-export const makeTransaction = async (data, token) => {
-  try {
-    const response = await axios.post(
-      `${API_BASE_URL}/api/transactions/`,
-      data,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    return response.data;
-  } catch (error) {
-    console.error("Error making transaction:", error);
     throw error;
   }
 };

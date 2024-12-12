@@ -1,6 +1,7 @@
 // Profile.js
 import React, { useEffect, useState } from "react";
 import { fetchCurrentUser } from "../utils/api";
+import { fetchData } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -12,8 +13,11 @@ const Profile = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const userData = await fetchCurrentUser(token);
-        setProfileData(userData);
+        const userData = await fetchData(
+          "/api/users/current",
+          setProfileData,
+          token
+        );
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
