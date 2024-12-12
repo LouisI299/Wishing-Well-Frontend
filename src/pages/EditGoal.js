@@ -1,12 +1,14 @@
 ﻿import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Import useNavigate
 import { useAuth } from "../contexts/AuthProvider";
-import { fetchDataById, updateGoalData } from "../utils/api"; // Make sure you have the correct API utility
+import { fetchDataById, updateGoalData, deleteGoalData } from "../utils/api"; // Make sure you have the correct API utility
 
 const EditGoal = () => {
     const { goalId } = useParams();
     const [goal, setGoal] = useState(null);
     const { token } = useAuth();
+    const [confirmDelete, setConfirmDelete] = useState(false);
+    const navigate = useNavigate(); // Initialize useNavigate
 
     useEffect(() => {
         if (!goalId) {
@@ -41,6 +43,22 @@ const EditGoal = () => {
         } catch (error) {
             console.error("Error updating goal:", error);
             alert(`Failed to update goal: ${error.message}`);
+        }
+    };
+
+    const handleDelete = async () => {
+        if (!confirmDelete) {
+            setConfirmDelete(true);
+            return;
+        }
+
+        try {
+            await deleteGoalData(`/api/goals/${goalId}`, token);
+            console.log("Goal deleted successfully!");
+            navigate("/"); // Redirect to home page
+        } catch (error) {
+            console.error("Error deleting goal:", error);
+            alert(`Failed to delete goal: ${error.message}`);
         }
     };
 
@@ -93,6 +111,13 @@ const EditGoal = () => {
                     />
                 </label>
                 <button type="submit">Update Goal</button>
+                <button
+                    type="button"
+                    onClick={handleDelete}
+                    style={{ backgroundColor: confirmDelete ? 'red' : 'initial' }}
+                >
+                    {confirmDelete ? 'Confirm Delete' : 'Delete Goal'}
+                </button>
             </form>
         </div>
     );
