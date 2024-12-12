@@ -80,42 +80,16 @@ export const checkLogin = async (email, password) => {
   }
 };
 
-//Put request to update goal
-
-export const updateDataById = async (url, id, data, token) => {
-  const response = await fetch(`${url}/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`,
-    },
-    body: JSON.stringify(data),
-  });
-
-  if (!response.ok) {
-    throw new Error("Failed to update data");
-  }
-  return response.json();
-};
-
-// Add the updateGoalData function
-export const updateGoalData = async (url, data, token) => {
+// Function to update goal data
+export const updateGoalData = async (endpoint, data, token) => {
   try {
-    const response = await fetch(url, {
-      method: "PUT",
+    const response = await axios.put(`${API_BASE_URL}${endpoint}`, data, {
       headers: {
-        "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
     });
-
-    if (!response.ok) {
-      throw new Error("Failed to update goal");
-    }
-
-    const updatedGoal = await response.json();
-    return updatedGoal; // Return the updated goal object
+    return response.data;
   } catch (error) {
     console.error("Error updating goal:", error);
     throw error;

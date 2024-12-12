@@ -12,6 +12,9 @@ import GoalSummary from "./pages/GoalSummary";
 import EditGoal from "./pages/EditGoal";
 import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./components/Layout";
+import ContactDetails from "./pages/ContactDetails";
+import Friends from "./pages/Friends";
+import FriendRequests from "./pages/FriendRequests";
 
 const AppRoutes = () => {
   return (
@@ -24,6 +27,9 @@ const AppRoutes = () => {
           <Route path="/edit-goal/:goalId" element={<EditGoal />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/goal-summary/:goalId" element={<GoalSummary />} />
+          <Route path="/contactDetails" element={<ContactDetails />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/friendRequests" element={<FriendRequests />} />
           <Route path="/add-goal" element={<AddGoal />} />
           <Route path="/social" element={<Social />} />
           <Route path="/settings" element={<Settings />} />
