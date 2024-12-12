@@ -40,6 +40,7 @@ const EditGoal = () => {
             console.log("Goal updated successfully!");
         } catch (error) {
             console.error("Error updating goal:", error);
+            alert(`Failed to update goal: ${error.message}`);
         }
     };
 

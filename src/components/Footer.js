@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "../styles/global.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faHouse, faUserGroup, faCirclePlus, faGear, faUser } from "@fortawesome/free-solid-svg-icons";
 
 const Footer = () => {
   return (
@@ -15,7 +17,7 @@ const Footer = () => {
               },
             }}
           >
-            Home
+            <FontAwesomeIcon icon={faHouse} />
           </Link>
         </div>
         <div>
@@ -27,7 +29,7 @@ const Footer = () => {
               },
             }}
           >
-            Social
+            <FontAwesomeIcon icon={faUserGroup} />
           </Link>
         </div>
         <div>
@@ -39,7 +41,7 @@ const Footer = () => {
               },
             }}
           >
-            Add Goal
+            <FontAwesomeIcon icon={faCirclePlus} />
           </Link>
         </div>
         <div>
@@ -51,7 +53,7 @@ const Footer = () => {
               },
             }}
           >
-            Settings
+            <FontAwesomeIcon icon={faGear} />
           </Link>
         </div>
         <div>
@@ -63,7 +65,7 @@ const Footer = () => {
               },
             }}
           >
-            Profile
+            <FontAwesomeIcon icon={faUser} />
           </Link>
         </div>
       </div>

@@ -1,7 +1,7 @@
 // Login page
 
 // Imports
-import { Navigate, Link } from "react-router-dom";
+import { Navigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { checkLogin } from "../utils/api";
@@ -13,8 +13,9 @@ const Login = () => {
   const [password, setPassword] = useState(""); // State for password
   const [redirectToDashboard, setRedirectToDashboard] = useState(false); // State to redirect to the dashboard
   const [error, setError] = useState(""); // State for error message
-
   const { login } = useAuth(); // Get the login function from the AuthProvider
+  const location = useLocation();
+  const successMessage = location.state?.successMessage;
 
   // Function to handle login when form is submitted
   const handleLogin = async (e) => {
@@ -41,6 +42,7 @@ const Login = () => {
   return (
     <Container>
       <h1>Login</h1>
+      {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}
       <Form onSubmit={handleLogin}>
         <Form.Group controlId="formEmail">
