@@ -4,6 +4,7 @@ import { fetchCurrentUser } from "../utils/api";
 import { fetchData } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
 import { Link } from "react-router-dom";
+import logo from "../images/WishingWell800.png";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -36,11 +37,18 @@ const Profile = () => {
 
   return (
     <div>
+      <div>
       <h1>Contact details</h1>
       <p>First name: {profileData.first_name} {profileData.last_name}</p>
       <p>Last Name: {profileData.last_name}</p>
       <p>Email: {profileData.email}</p>
       <p>Join Date: {profileData.join_date}</p>
+      <p>Delete yuur account <a href="#">here</a></p>
+      </div>
+      <div style = {{display: "flex", justifyContent: "center"}}>
+        <img src={logo} alt="logo" style = {{width: "20em", marginBottom: "2em"}}></img>
+      </div>
+      
     </div>
   );
 };
