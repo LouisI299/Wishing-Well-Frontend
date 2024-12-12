@@ -3,8 +3,7 @@ import React, { useEffect, useState } from "react";
 import { fetchCurrentUser } from "../utils/api";
 import { fetchData } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
-import Header from "../components/Header";
-import Footer from "../components/Footer";
+import { Link } from "react-router-dom";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -37,19 +36,14 @@ const Profile = () => {
 
   return (
     <div>
-      <p>
-        Hi, {profileData.first_name} {profileData.last_name}
-      </p>
-      <p>Last Name: {profileData.last_name}</p>
-      <p>Email: {profileData.email}</p>
-      <p>Join Date: {profileData.join_date}</p>
-      <p>Points: {profileData.points}</p>
+      <img src="#" alt="Profle Picture"></img>
+      <p>Hi, {profileData.first_name} {profileData.last_name}</p>
       <p>Level: {profileData.level}</p>
+      <p>Points: {profileData.points}</p>
       <h1>Account settings</h1>
-      <a href="#">Contact details</a>
-      <a href="#">Friends</a>
-      <a href="#">Friend requests</a>
-
+      <Link to="/ContactDetails">Contact details</Link>
+      <Link to="/Friends">Friebds</Link>
+      <Link to="/FriendRequests">Friend requests</Link>
       <button onClick={logout}>Log out</button>
     </div>
   );
