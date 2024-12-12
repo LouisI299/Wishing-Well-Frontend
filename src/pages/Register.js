@@ -1,18 +1,19 @@
 import React, { useRef, useState, useEffect } from "react";
 import { postData } from "../utils/api";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { Alert, Button, Container, Form } from "react-bootstrap";
 
 const NAME_REGEX = /^[a-zA-Z\s]*$/; // Regex for name input
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex for email input
 const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/; // Regex for password input
 
 const Register = () => {
-  const firstNameRef = useRef();
-  const lastNameRef = useRef();
-  const emailRef = useRef();
-  const passwordRef = useRef();
+  const firstNameRef = useRef(null);
+  const lastNameRef = useRef(null);
+  const emailRef = useRef(null);
+  const passwordRef = useRef(null);
   const confirmPasswordRef = useRef();
-  const errorRef = useRef();
+  // const errorRef = useRef();
 
   const [firstName, setFirstName] = useState("");
   const [validFirstName, setValidFirstName] = useState(false);
@@ -32,38 +33,40 @@ const Register = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [success, setSuccess] = useState(false);
 
-  useEffect(() => {
-    setValidFirstName(NAME_REGEX.test(firstName));
-  }, [firstName]);
+  // useEffect(() => {
+  //   setValidFirstName(NAME_REGEX.test(firstName));
+  // }, [firstName]);
 
-  useEffect(() => {
-    setValidLastName(NAME_REGEX.test(lastName));
-  }, [lastName]);
+  // useEffect(() => {
+  //   setValidLastName(NAME_REGEX.test(lastName));
+  // }, [lastName]);
 
-  useEffect(() => {
-    setValidEmail(EMAIL_REGEX.test(email));
-  }, [email]);
+  // useEffect(() => {
+  //   setValidEmail(EMAIL_REGEX.test(email));
+  // }, [email]);
 
-  useEffect(() => {
-    setValidPassword(PASSWORD_REGEX.test(password));
-  }, [password]);
+  // useEffect(() => {
+  //   setValidPassword(PASSWORD_REGEX.test(password));
+  // }, [password]);
 
-  useEffect(() => {
-    setValidConfirmPassword(password === confirmPassword);
-  }, [password, confirmPassword]);
+  // useEffect(() => {
+  //   setValidConfirmPassword(password === confirmPassword);
+  // }, [password, confirmPassword]);
 
-  useEffect(() => {
-    setErrorMessage("");
-  }, [firstName, lastName, email, password, confirmPassword]);
+  // useEffect(() => {
+  //   setErrorMessage("");
+  // }, [firstName, lastName, email, password, confirmPassword]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const isFormValid =
-      NAME_REGEX.test(firstName) &&
-      NAME_REGEX.test(lastName) &&
-      EMAIL_REGEX.test(email) &&
-      PASSWORD_REGEX.test(password);
+    const isFormValid = firstName && lastName && email && password;
+
+    setValidFirstName(NAME_REGEX.test(firstName));
+    setValidLastName(NAME_REGEX.test(lastName));
+    setValidEmail(EMAIL_REGEX.test(email));
+    setValidPassword(PASSWORD_REGEX.test(password));
+    setValidConfirmPassword(password === confirmPassword);
 
     if (!isFormValid) {
       setErrorMessage("Please fill in all fields correctly");
@@ -77,8 +80,8 @@ const Register = () => {
       password,
     };
     try {
-      postData("/api/users/", newUser);
-      console.log(firstName, lastName, email, password);
+      await postData("/api/users/", newUser);
+
       setSuccess(true);
     } catch (error) {
       console.error("Error creating user:", error);
@@ -86,98 +89,128 @@ const Register = () => {
     }
   };
 
+  if (success) {
+    return (
+      <Navigate
+        to="/login"
+        state={{
+          successMessage: "Account created succesfully. Please log in.",
+        }}
+      />
+    );
+  }
+
   return (
-    <>
-      {success ? (
-        <div>
-          <h1>Success</h1>
-          <p>Account created successfully</p>
-          <Link to="/Login">Log In</Link>
-        </div>
-      ) : (
-        <div>
-          <p
-            ref={errorRef}
-            className={errorMessage ? "errmsg" : "offscreen"}
-            aria-live="assertive"
-          >
-            {errorMessage}
-          </p>
-          <h1>Register</h1>
-          <form onSubmit={handleSubmit}>
-            <label htmlFor="firstName">First name:</label>
-            <input
+    <Container>
+      <div>
+        <h1>Register</h1>
+        {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+        <Form onSubmit={handleSubmit}>
+          <Form.Group controlId="formFirstName">
+            <Form.Label>First Name:</Form.Label>
+            <Form.Control
               type="text"
-              id="firstName"
               ref={firstNameRef}
-              autoComplete="off"
-              onChange={(e) => setFirstName(e.target.value)}
               required
-              aria-invalid={!validFirstName}
+              isInvalid={!validFirstName && firstName !== ""}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+                setValidFirstName(NAME_REGEX.test(e.target.value));
+              }}
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid first name.
+            </Form.Control.Feedback>
+          </Form.Group>
 
-            <label htmlFor="lastName">Last name:</label>
-            <input
+          <Form.Group controlId="formLastName">
+            <Form.Label>Last Name:</Form.Label>
+            <Form.Control
               type="text"
-              id="lastName"
               ref={lastNameRef}
-              autoComplete="off"
-              onChange={(e) => setLastName(e.target.value)}
               required
-              aria-invalid={!validLastName}
+              isInvalid={!validLastName && lastName !== ""}
+              onChange={(e) => {
+                setLastName(e.target.value);
+                setValidLastName(NAME_REGEX.test(e.target.value));
+              }}
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid last name.
+            </Form.Control.Feedback>
+          </Form.Group>
 
-            <label htmlFor="email">Email:</label>
-            <input
+          <Form.Group controlId="formEmail">
+            <Form.Label>Email:</Form.Label>
+            <Form.Control
               type="email"
-              id="email"
               ref={emailRef}
-              autoComplete="off"
-              onChange={(e) => setEmail(e.target.value)}
               required
-              aria-invalid={!validEmail}
+              isInvalid={!validEmail && email !== ""}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setValidEmail(EMAIL_REGEX.test(e.target.value));
+              }}
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid email.
+            </Form.Control.Feedback>
+          </Form.Group>
 
-            <label htmlFor="password">Password:</label>
-            <input
+          <Form.Group controlId="formPassword">
+            <Form.Label>Password:</Form.Label>
+            <Form.Control
               type="password"
-              id="password"
               ref={passwordRef}
-              autoComplete="off"
-              onChange={(e) => setPassword(e.target.value)}
               required
+              isInvalid={!validPassword && password !== ""}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setValidPassword(PASSWORD_REGEX.test(e.target.value));
+              }}
             />
+            <Form.Control.Feedback type="invalid">
+              Please provide a valid password.
+            </Form.Control.Feedback>
+          </Form.Group>
 
-            <label htmlFor="confirmPassword">Confirm Password:</label>
-            <input
+          <Form.Group controlId="formConfirmPassword">
+            <Form.Label>Confirm Password:</Form.Label>
+            <Form.Control
               type="password"
-              id="confirmPassword"
               ref={confirmPasswordRef}
-              autoComplete="off"
-              onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              isInvalid={confirmPassword !== password}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                setValidConfirmPassword(e.target.value === password);
+              }}
             />
+            <Form.Control.Feedback type="invalid">
+              Passwords do not match.
+            </Form.Control.Feedback>
+          </Form.Group>
 
-            <button
-              disabled={
-                !validFirstName ||
-                !validLastName ||
-                !validEmail ||
-                !validPassword ||
-                !validConfirmPassword
-              }
-            >
-              Register
-            </button>
-          </form>
-          <span className="line">
-            <p>
-              <Link to="/Login">Log In</Link>
-            </p>
-          </span>
-        </div>
-      )}
-    </>
+          <Button
+            type="submit"
+            disabled={
+              !validFirstName ||
+              !validLastName ||
+              !validEmail ||
+              !validPassword ||
+              !validConfirmPassword
+            }
+          >
+            Register
+          </Button>
+        </Form>
+        <span className="line">
+          <p>
+            <Link to="/Login">Log In</Link>
+          </p>
+        </span>
+      </div>
+    </Container>
   );
 };
 
