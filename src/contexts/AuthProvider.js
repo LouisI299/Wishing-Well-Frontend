@@ -1,5 +1,6 @@
 //Imports
 import React, { createContext, useContext, useState, useEffect } from "react";
+import axios from "axios";
 
 //Create context
 const AuthContext = createContext();
@@ -35,9 +36,25 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("authToken"); // Remove the token from localStorage
   };
 
+  const refreshToken = async () => {
+    try {
+      const response = await axios.post("/api/users/refresh_token/", {
+        token,
+      });
+      const newToken = response.data.access_token;
+      setToken(newToken);
+      localStorage.setItem("authToken", newToken);
+      return newToken;
+    } catch (error) {
+      console.error("Error refreshing token:", error);
+      logout();
+      return null;
+    }
+  };
+
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, token, login, logout, loading }}
+      value={{ isAuthenticated, token, login, logout, loading, refreshToken }}
     >
       {children}
     </AuthContext.Provider>
