@@ -1,15 +1,38 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthProvider";
+import { updateEmail, changePassword } from "../utils/api"; 
 
 const Settings = () => {
-  // State for account settings
-  const [user, setUser] = useState({
-    first_name: "",
-    last_name: "",
-    email: "",
-    phone: "",
-  });
+  const [email, setEmail] = useState("");
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const { token } = useAuth(); // JWT token
+  const user = useAuth();
+
+
+  // Handle email update form submission
+  const handleEmailChange = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await updateEmail(email, token);  // Using the updateEmail function
+      setMessage(response.msg);  // Show the response message
+    } catch (error) {
+      setMessage(error.response?.data?.error || "An error occurred while updating email");
+    }
+  };
+
+  // Handle password change form submission
+  const handlePasswordChange = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await changePassword(oldPassword, newPassword, token);  // Using the changePassword function
+      setMessage(response.msg);  // Show the response message
+    } catch (error) {
+      setMessage(error.response?.data?.error || "An error occurred while changing password");
+    }
+  };
 
 
   // State for notification settings
@@ -22,8 +45,7 @@ const Settings = () => {
   const [fontSize, setFontSize] = useState(16);
   const [language, setLanguage] = useState("en");
 
-  // JWT token
-  const { token } = useAuth();
+
 
   // Fetch user data
   //   useEffect(() => {
@@ -42,10 +64,10 @@ const Settings = () => {
   }, [theme]);
 
   // Handle account settings change
-  const handleAccountChange = (e) => {
-    const { name, value } = e.target;
-    setUser((prevState) => ({ ...prevState, [name]: value }));
-  };
+  //const handleAccountChange = (e) => {
+   // const { name, value } = e.target;
+   // setUser((prevState) => ({ ...prevState, [name]: value }));
+  //};
 
   // Handle save account settings
   //   const handleSaveAccount = () => {
@@ -81,34 +103,44 @@ const Settings = () => {
       {/* Account Settings */}
       <section id="account-settings">
         <h2>Account Settings</h2>
-        <label htmlFor="first_name">First Name:</label>
-        <input
-          type="text"
-          id="first_name"
-          name="first_name"
-          value={user.first_name}
-          onChange={handleAccountChange}
-        />
+        <h3>Hello {user.first_name} {user.last_name}</h3>
+        <h3>Email: {user.email}</h3>
 
-        <label htmlFor="last_name">Last Name:</label>
-        <input
-          type="text"
-          id="last_name"
-          name="last_name"
-          value={user.last_name}
-          onChange={handleAccountChange}
-        />
-
+      {/* Email Update Form */}
+      <form onSubmit={handleEmailChange}>
         <label htmlFor="email">Email:</label>
         <input
           type="email"
-          id="email"
-          name="email"
-          value={user.email}
-          onChange={handleAccountChange}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}  // Update email state
+          required
         />
+        <button type="submit">Update Email</button>
+      </form>
 
-        <button>Save Account Settings</button>
+      <br />
+
+      {/* Password Change Form */}
+      <form onSubmit={handlePasswordChange}>
+        <label htmlFor="oldPassword">Old Password:</label>
+        <input
+          type="password"
+          id="oldPassword"
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}  // Update old password state
+          required
+        />
+        <br />
+        <label htmlFor="newPassword">New Password:</label>
+        <input
+          type="password"
+          id="newPassword"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}  // Update new password state
+          required
+        />
+        <button type="submit">Change Password</button>
+      </form>
       </section>
 
       {/* Notification Settings */}

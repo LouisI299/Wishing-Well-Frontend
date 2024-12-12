@@ -123,4 +123,28 @@ api.interceptors.response.use(
   }
 );
 
+// Function to change password
+export const changePassword = async (oldPassword, newPassword, token) => {
+  try {
+    const data = { action: 'change_password', old_password: oldPassword, new_password: newPassword };
+    const response = await updateDataById(`${API_BASE_URL}/EditAccount`, '', data, token);
+    return response;  // Return response from backend to be used in settings.js
+  } catch (error) {
+    console.error("Error changing password:", error);
+    throw error;
+  }
+};
+
+// Function to update email
+export const updateEmail = async (email, token) => {
+  try {
+    const data = { action: 'update_email', email };
+    const response = await updateDataById(`${API_BASE_URL}/EditAccount`, '', data, token);
+    return response;  // Return response from backend to be used in settings.js
+  } catch (error) {
+    console.error("Error updating email:", error);
+    throw error;
+  }
+};
+
 export default api;
