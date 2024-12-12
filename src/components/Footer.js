@@ -17,7 +17,7 @@ const Footer = () => {
               },
             }}
           >
-            <FontAwesomeIcon icon={faHouse} />
+            <FontAwesomeIcon icon={faHouse} style={{ fontSize: "2em" }} /> {/* Pas de grootte aan met inline CSS */}
           </Link>
         </div>
         <div>
@@ -29,7 +29,7 @@ const Footer = () => {
               },
             }}
           >
-            <FontAwesomeIcon icon={faUserGroup} />
+            <FontAwesomeIcon icon={faUserGroup} style={{ fontSize: "2em" }} /> {/* Pas de grootte aan met inline CSS */}
           </Link>
         </div>
         <div>
@@ -41,7 +41,7 @@ const Footer = () => {
               },
             }}
           >
-            <FontAwesomeIcon icon={faCirclePlus} />
+            <FontAwesomeIcon icon={faCirclePlus} style={{ fontSize: "2em" }} /> {/* Pas de grootte aan met inline CSS */}
           </Link>
         </div>
         <div>
@@ -53,7 +53,7 @@ const Footer = () => {
               },
             }}
           >
-            <FontAwesomeIcon icon={faGear} />
+            <FontAwesomeIcon icon={faGear} style={{ fontSize: "2em" }} /> {/* Pas de grootte aan met inline CSS */}
           </Link>
         </div>
         <div>
@@ -65,7 +65,7 @@ const Footer = () => {
               },
             }}
           >
-            <FontAwesomeIcon icon={faUser} />
+            <FontAwesomeIcon icon={faUser} style={{ fontSize: "2em" }} /> {/* Pas de grootte aan met inline CSS */}
           </Link>
         </div>
       </div>
