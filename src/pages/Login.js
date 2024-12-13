@@ -5,9 +5,19 @@ import { Navigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { checkLogin } from "../utils/api";
-import { Alert, Container, Form, Button } from "react-bootstrap";
+import { Alert, Form, Button } from "react-bootstrap";
 import logo from "../images/WishingWellCircle.png";
-import StyledContainer from "../components/StyledContainer";
+import StyledContainer from "../styles/StyledContainer";
+import {
+  LogoContainer,
+  StyledFormGroup,
+  InputGroup,
+  InputIcon,
+  StyledInput,
+  ButtonContainer,
+} from "../styles/LoginStyles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 // Login component
 const Login = () => {
@@ -45,35 +55,48 @@ const Login = () => {
     <StyledContainer>
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}
-      <div className="logoDiv">
+      <LogoContainer>
         <img src={logo} alt="Wishing Well logo" />
-      </div>
-      <h1>Wishing Well</h1>
-      <Form onSubmit={handleLogin}>
-        <Form.Group controlId="formEmail">
-          <Form.Label>Email: </Form.Label>
-          <Form.Control
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Form.Group>
+        <h1>Wishing Well</h1>
+      </LogoContainer>
 
-        <Form.Group controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Login
-        </Button>
+      <Form onSubmit={handleLogin}>
+        <StyledFormGroup controlId="formEmail" className="loginFormGroup">
+          <InputGroup>
+            <InputIcon icon={faUser} />
+            <StyledInput
+              className="loginInput"
+              type="email"
+              placeholder="E-mail..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </InputGroup>
+        </StyledFormGroup>
+
+        <StyledFormGroup controlId="formPassword" className="loginFormGroup">
+          <InputGroup>
+            <InputIcon icon={faLock} />
+            <StyledInput
+              className="loginInput"
+              type="password"
+              placeholder="Password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </InputGroup>
+        </StyledFormGroup>
+        <ButtonContainer>
+          <Button variant="primary" type="submit">
+            Login
+          </Button>
+          <Button>
+            <Link to="/Register">Register</Link>
+          </Button>
+        </ButtonContainer>
       </Form>
-      <Link to="/Register">Register</Link>
     </StyledContainer>
   );
 };

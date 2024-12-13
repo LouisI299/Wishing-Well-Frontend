@@ -40,12 +40,10 @@ body {
   color: ${({ theme }) => theme.text} !important;
   }
 
-  .logoDiv{
-    max-width: 100%;
-    min-width: 100%;
-    display: flex;
-    justify-content: center;
-    }
+  .form-label{
+    margin: 0;
+  }
+  
     
   }
 `;
