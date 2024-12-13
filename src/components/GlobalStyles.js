@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
+// Colors:
 body {
     background: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text};
@@ -12,9 +13,16 @@ body {
   a {
     color: ${({ theme }) => theme.accent};
   }
-  button {
-    background-color: ${({ theme }) => theme.primary};
-    color: ${({ theme }) => theme.text};
+  button, .btn {
+    background-color: ${({ theme }) => theme.secondary} !important;
+    color: ${({ theme }) => theme.text} !important;
+    border: none !important;
+    &:hover {
+      background-color: ${({ theme }) => theme.secondaryHover} !important;
+    }
+    &:active, &:focus {
+      background-color: ${({ theme }) => theme.secondarySelected} !important;
+    }
   }
 
   header {
@@ -30,4 +38,6 @@ body {
   footer a {
   color: ${({ theme }) => theme.text} !important;
   }
+
+  // Media queries small screens
 `;
