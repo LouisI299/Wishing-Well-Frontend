@@ -2,32 +2,32 @@ import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyles = createGlobalStyle`
 body {
-    background: ${({ theme }) => theme.bg100};
-    color: ${({ theme }) => theme.text100};
+    background: ${({ theme }) => theme.background};
+    color: ${({ theme }) => theme.text};
     transition: all 0.50s linear;
   }
   h1, h2, h3, h4, h5, h6 {
-    color: ${({ theme }) => theme.text200};
+    color: ${({ theme }) => theme.text};
   }
   a {
-    color: ${({ theme }) => theme.accent200};
+    color: ${({ theme }) => theme.accent};
   }
   button {
-    background-color: ${({ theme }) => theme.primary200};
-    color: ${({ theme }) => theme.text100};
+    background-color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.text};
   }
 
   header {
-    background-color: ${({ theme }) => theme.bg300};
-    color: ${({ theme }) => theme.text300};
+    background-color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.text};
   }
 
   footer {
-    background-color: ${({ theme }) => theme.bg300};
-    color: ${({ theme }) => theme.text300} !important;
+    background-color: ${({ theme }) => theme.primary};
+    color: ${({ theme }) => theme.text} !important;
   }
 
   footer a {
-  color: ${({ theme }) => theme.text300} !important;
+  color: ${({ theme }) => theme.text} !important;
   }
 `;
