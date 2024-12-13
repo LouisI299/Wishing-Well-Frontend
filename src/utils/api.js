@@ -11,6 +11,19 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
+// Function to set up interceptors
+export const setupInterceptors = (navigate) => {
+  api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response && error.response.status === 401) {
+        navigate("/login");
+      }
+      return Promise.reject(error);
+    }
+  );
+};
+
 //Function to fetch data from the backend server
 export const fetchData = async (endpoint, callback, token) => {
   try {
@@ -140,14 +153,14 @@ export const updateEmail = async (email, token) => {
 };
 // Function to delete goal data
 export const deleteGoalData = async (endpoint, token) => {
-  try { 
-    const response = await axios.delete(`${API_BASE_URL}${endpoint}`, { headers: { Authorization: `Bearer ${token}`, 
-      }, 
+  try {
+    const response = await axios.delete(`${API_BASE_URL}${endpoint}`, {
+      headers: { Authorization: `Bearer ${token}` },
     });
     return response.data;
-  } catch (error) { 
-    console.error("Error deleting goal:", error); 
-    throw error; } };
+  } catch (error) {
+    console.error("Error deleting goal:", error);
+    throw error;
+  }
+};
 export default api;
-
-
