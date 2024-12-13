@@ -6,6 +6,8 @@ import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { checkLogin } from "../utils/api";
 import { Alert, Container, Form, Button } from "react-bootstrap";
+import logo from "../images/WishingWellCircle.png";
+import StyledContainer from "../components/StyledContainer";
 
 // Login component
 const Login = () => {
@@ -40,10 +42,13 @@ const Login = () => {
   }
 
   return (
-    <Container>
-      <h1>Login</h1>
+    <StyledContainer>
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}
+      <div className="logoDiv">
+        <img src={logo} alt="Wishing Well logo" />
+      </div>
+      <h1>Wishing Well</h1>
       <Form onSubmit={handleLogin}>
         <Form.Group controlId="formEmail">
           <Form.Label>Email: </Form.Label>
@@ -69,7 +74,7 @@ const Login = () => {
         </Button>
       </Form>
       <Link to="/Register">Register</Link>
-    </Container>
+    </StyledContainer>
   );
 };
 

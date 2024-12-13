@@ -6,6 +6,7 @@ body {
     background: ${({ theme }) => theme.background};
     color: ${({ theme }) => theme.text};
     transition: all 0.50s linear;
+    font-family: 'Helvetica';
   }
   h1, h2, h3, h4, h5, h6 {
     color: ${({ theme }) => theme.text};
@@ -39,5 +40,12 @@ body {
   color: ${({ theme }) => theme.text} !important;
   }
 
-  // Media queries small screens
+  .logoDiv{
+    max-width: 100%;
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+    }
+    
+  }
 `;
