@@ -22,8 +22,8 @@ const Login = () => {
     e.preventDefault();
     try {
       const data = await checkLogin(email, password);
-      if (data.access_token && data.refresh_token) {
-        login(data.access_token, data.refresh_token);
+      if (data.access_token) {
+        login(data.access_token);
         setRedirectToDashboard(true);
       } else {
         setError(data.error);

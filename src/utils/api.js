@@ -11,28 +11,6 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-export const setupInterceptors = (refreshTokenFunction) => {
-  api.interceptors.response.use(
-    (response) => response,
-    async (error) => {
-      const { response } = error;
-      if (response.status === 401) {
-        try {
-          const newToken = await refreshTokenFunction();
-          if (newToken) {
-            error.config.headers["Authorization"] = `Bearer ${newToken}`;
-            return api.request(error.config);
-          }
-        } catch (refreshError) {
-          console.error("Error refreshing token:", refreshError);
-          useNavigate()("/login");
-        }
-      }
-      return Promise.reject(error);
-    }
-  );
-};
-
 //Function to fetch data from the backend server
 export const fetchData = async (endpoint, callback, token) => {
   try {
