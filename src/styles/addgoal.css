@@ -1,0 +1,13 @@
+.categoryButtons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    border: 1px solid black;
+    justify-content: center;
+}
+.categoryButtons button{
+    flex: 1 1 calc(50% - 10px); /* Zorg dat elke knop 50% breed is, minus de gap */
+  max-width: calc(50% - 10px); /* Beperk de breedte tot 50%, minus de gap */
+  margin: 5px 0;
+}
+

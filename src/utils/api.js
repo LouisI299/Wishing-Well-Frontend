@@ -138,5 +138,16 @@ export const updateEmail = async (email, token) => {
     throw error;
   }
 };
-
+// Function to delete goal data
+export const deleteGoalData = async (endpoint, token) => {
+  try { 
+    const response = await axios.delete(`${API_BASE_URL}${endpoint}`, { headers: { Authorization: `Bearer ${token}`, 
+      }, 
+    });
+    return response.data;
+  } catch (error) { 
+    console.error("Error deleting goal:", error); 
+    throw error; } };
 export default api;
+
+

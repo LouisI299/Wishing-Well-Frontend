@@ -37,14 +37,16 @@ const Profile = () => {
   return (
     <div>
       <img src="#" alt="Profle Picture"></img>
-      <p>Hi, {profileData.first_name} {profileData.last_name}</p>
+      <h1>Hi, {profileData.first_name} {profileData.last_name}</h1>
       <p>Level: {profileData.level}</p>
       <p>Points: {profileData.points}</p>
       <h1>Account settings</h1>
-      <Link to="/ContactDetails">Contact details</Link>
-      <Link to="/Friends">Friebds</Link>
-      <Link to="/FriendRequests">Friend requests</Link>
-      <button onClick={logout}>Log out</button>
+      <div style = {{display: "flex", flexDirection: "column"}}>
+        <Link to="/ContactDetails">Contact details</Link>
+        <Link to="/Friends">Friends</Link>
+        <Link to="/FriendRequests">Friend requests</Link>
+        <button onClick={logout} style={{ width: "auto", padding: "0.3em", alignSelf: "flex-start", borderRadius: "2em", border: "none", paddingLeft: "1em", paddingRight: "1em"}}>Log out</button>
+      </div>
     </div>
   );
 };
