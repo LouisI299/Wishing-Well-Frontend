@@ -94,9 +94,9 @@ const Login = () => {
           <Button variant="primary" type="submit">
             Login
           </Button>
-          <Button>
-            <Link to="/Register">Register</Link>
-          </Button>
+          <p>
+            Don't have an account? <Link to="/Register">Sign up</Link>
+          </p>
         </ButtonContainer>
       </Form>
     </StyledContainer>
