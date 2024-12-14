@@ -5,7 +5,6 @@ import { changePassword, putDataWithToken, fetchData } from "../utils/api";
 
 
 const Settings = () => {
-  const [email, setEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [notificationPreferences, setNotificationPreferences] = useState({
@@ -15,16 +14,38 @@ const Settings = () => {
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
   const { token } = useAuth(); // JWT token
-
+  const [email, setEmail] = useState("");
   // State for notification settings
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);
   const [smsNotifications, setSmsNotifications] = useState(false);
 
-  // State for display settings
-  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
-  const [fontSize, setFontSize] = useState(16);
-  const [language, setLanguage] = useState("en");  
+  // Handle email update form submission
+  const handleEmailChange = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.put(
+        `/api/settings/`, // Match the route URL
+        {
+          action: "update_email", // Specify the action
+          email, // New email payload
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Token for authentication
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setMessage(response.data.msg || "Email updated successfully!");
+    } catch (error) {
+      if (error.response) {
+        setMessage(error.response.data.error || "Failed to update email.");
+      } else {
+        setMessage("An unexpected error occurred. Please try again.");
+      }
+    }
+  };
 
   // Fetch user data
   useEffect(() => {
@@ -52,19 +73,7 @@ const Settings = () => {
   
     fetchUserData(); // Invoke the fetch function
   }, [token]);
-  
-  
-// Handle email update form submission
-const handleEmailChange = async (e) => {
-  e.preventDefault();
-  try {
-    const data = { action: 'update_email', email };
-    const response = await putDataWithToken('api/settings', data, token);  
-    setMessage(response.msg); 
-  } catch (error) {
-    setMessage(error.response?.data?.error || "An error occurred while updating email");
-  }
-};
+
 
 // Handle password change form submission
 const handlePasswordChange = async (e) => {
@@ -77,14 +86,6 @@ const handlePasswordChange = async (e) => {
     setMessage(error.response?.data?.error || "An error occurred while changing password");
   }
 };
-
-  
-
-  // Apply theme
-  useEffect(() => {
-    document.body.className = theme;
-    localStorage.setItem("theme", theme);
-  }, [theme]);
 
   // Handle account settings change
   //const handleAccountChange = (e) => {
@@ -99,11 +100,6 @@ const handlePasswordChange = async (e) => {
   //   .then((response) => console.log("User updated:", response.data))
   //   .catch((error) => console.error("Error updating user:", error));
   //   };
-
-  // Handle save display settings
-  const handleSaveDisplay = () => {
-    console.log("Display settings saved:", { theme, fontSize, language });
-  };
 
   // Handle save notification settings
   const handleSaveNotifications = () => {
@@ -125,11 +121,10 @@ const handlePasswordChange = async (e) => {
 
       {/* Account Settings */}
     <section id="account-settings">
-      <h2>Account Settings</h2>
       {user ? (
         <>
           <h3>Hello {user.first_name} {user.last_name}</h3>
-          <h3>Email: {user.email}</h3>
+          <h6>Email: {user.email}</h6>
         </>
       ) : (
         <p>Loading user data...</p>
@@ -138,7 +133,7 @@ const handlePasswordChange = async (e) => {
 
       {/* Email Update Form */}
       <form onSubmit={handleEmailChange}>
-        <label htmlFor="email">Email:</label>
+        <label htmlFor="email">New Email:</label>
         <input
           type="email"
           value={email}
@@ -201,43 +196,6 @@ const handlePasswordChange = async (e) => {
         />
 
         <button>Save Notification Settings</button>
-      </section>
-
-      {/* Display Settings */}
-      <section id="display-settings">
-        <h2>Display and Appearance</h2>
-        <label htmlFor="theme">Theme:</label>
-        <select
-          id="theme"
-          value={theme}
-          onChange={(e) => setTheme(e.target.value)}
-        >
-          <option value="light">Light</option>
-          <option value="dark">Dark</option>
-        </select>
-
-        <label htmlFor="font-size">Font Size:</label>
-        <input
-          type="range"
-          id="font-size"
-          value={fontSize}
-          min="10"
-          max="30"
-          onChange={(e) => setFontSize(e.target.value)}
-        />
-
-        <label htmlFor="language">Language:</label>
-        <select
-          id="language"
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-        >
-          <option value="en">English</option>
-          <option value="fr">French</option>
-          {/* Add more languages as needed */}
-        </select>
-
-        <button onClick={handleSaveDisplay}>Save Display Settings</button>
       </section>
 
       {/* Security Settings */}

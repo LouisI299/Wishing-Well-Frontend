@@ -153,19 +153,27 @@ export const changePassword = async (oldPassword, newPassword, token) => {
 };
 
 // Function to update email
-export const updateEmail = async (email, token) => {
+export const updateEmail = async (token, email) => {
   try {
-    const data = { action: "update_email", email };
-    const response = await postDataWithToken(
-      `${API_BASE_URL}/EditAccount`,
-      "",
-      data,
-      token
+    const response = await axios.put(
+      `${API_BASE_URL}/api/settings/`,
+      {
+        action: "update_email", // Action specifies the operation
+        email, // Email to update
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      }
     );
-    return response; // Return response from backend to be used in settings.js
+    return response.data; // Return the response data
   } catch (error) {
-    console.error("Error updating email:", error);
-    throw error;
+    if (error.response) {
+      throw new Error(error.response.data.error || "Failed to update email.");
+    }
+    throw new Error("An error occurred while updating email.");
   }
 };
 // Function to delete goal data
