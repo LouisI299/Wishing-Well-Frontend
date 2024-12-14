@@ -1,39 +1,20 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthProvider";
-import { updateEmail, changePassword } from "../utils/api"; 
+import { changePassword, putDataWithToken, fetchData } from "../utils/api"; 
+
 
 const Settings = () => {
   const [email, setEmail] = useState("");
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
+  const [notificationPreferences, setNotificationPreferences] = useState({
+    emailNotifications: false,
+    pushNotifications: false,
+  });
   const [message, setMessage] = useState("");
+  const [user, setUser] = useState(null);
   const { token } = useAuth(); // JWT token
-  const user = useAuth();
-
-
-  // Handle email update form submission
-  const handleEmailChange = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await updateEmail(email, token);  // Using the updateEmail function
-      setMessage(response.msg);  // Show the response message
-    } catch (error) {
-      setMessage(error.response?.data?.error || "An error occurred while updating email");
-    }
-  };
-
-  // Handle password change form submission
-  const handlePasswordChange = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await changePassword(oldPassword, newPassword, token);  // Using the changePassword function
-      setMessage(response.msg);  // Show the response message
-    } catch (error) {
-      setMessage(error.response?.data?.error || "An error occurred while changing password");
-    }
-  };
-
 
   // State for notification settings
   const [emailNotifications, setEmailNotifications] = useState(false);
@@ -43,19 +24,61 @@ const Settings = () => {
   // State for display settings
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [fontSize, setFontSize] = useState(16);
-  const [language, setLanguage] = useState("en");
-
-
+  const [language, setLanguage] = useState("en");  
 
   // Fetch user data
-  //   useEffect(() => {
-  //     if (token) {
-  //       axios
-  //         .get(`/api/users/${token.sub}`)
-  //         .then((response) => setUser(response.data))
-  //         .catch((error) => console.error("Error fetching user data:", error));
-  //     }
-  //   }, [token]);
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (token) {
+        try {
+          const response = await axios.get(`/api/users/current`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(response.data); 
+        } catch (error) {
+          if (error.response) {
+            console.error("Response error:", error.response.data);
+          } else if (error.request) {
+            console.error("No response received:", error.request);
+          } else {
+            console.error("Error setting up request:", error.message);
+          }
+          setMessage("Failed to fetch user data. Please try again.");
+        }
+      }
+    };
+  
+    fetchUserData(); // Invoke the fetch function
+  }, [token]);
+  
+  
+// Handle email update form submission
+const handleEmailChange = async (e) => {
+  e.preventDefault();
+  try {
+    const data = { action: 'update_email', email };
+    const response = await putDataWithToken('api/settings', data, token);  
+    setMessage(response.msg); 
+  } catch (error) {
+    setMessage(error.response?.data?.error || "An error occurred while updating email");
+  }
+};
+
+// Handle password change form submission
+const handlePasswordChange = async (e) => {
+  e.preventDefault();
+  try {
+    const data = { action: 'change_password', old_password: oldPassword, new_password: newPassword };
+    const response = await changePassword(oldPassword, newPassword, token);  
+    setMessage(response.msg);  
+  } catch (error) {
+    setMessage(error.response?.data?.error || "An error occurred while changing password");
+  }
+};
+
+  
 
   // Apply theme
   useEffect(() => {
@@ -101,10 +124,17 @@ const Settings = () => {
       <h1>Settings</h1>
 
       {/* Account Settings */}
-      <section id="account-settings">
-        <h2>Account Settings</h2>
-        <h3>Hello {user.first_name} {user.last_name}</h3>
-        <h3>Email: {user.email}</h3>
+    <section id="account-settings">
+      <h2>Account Settings</h2>
+      {user ? (
+        <>
+          <h3>Hello {user.first_name} {user.last_name}</h3>
+          <h3>Email: {user.email}</h3>
+        </>
+      ) : (
+        <p>Loading user data...</p>
+      )}
+    
 
       {/* Email Update Form */}
       <form onSubmit={handleEmailChange}>

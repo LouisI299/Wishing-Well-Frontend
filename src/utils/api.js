@@ -123,11 +123,27 @@ api.interceptors.response.use(
   }
 );
 
+// Function to send PUT request with token
+export const putDataWithToken = async (endpoint, data, token) => {
+  try {
+    const response = await axios.put(`${API_BASE_URL}${endpoint}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Error sending PUT request with token:", error);
+    throw error;
+  }
+};
+
 // Function to change password
 export const changePassword = async (oldPassword, newPassword, token) => {
   try {
     const data = { action: 'change_password', old_password: oldPassword, new_password: newPassword };
-    const response = await postDataWithToken(`${API_BASE_URL}/EditAccount`, '', data, token);
+    const response = await putDataWithToken(`${API_BASE_URL}/settings`, data, token);
     return response;  // Return response from backend to be used in settings.js
   } catch (error) {
     console.error("Error changing password:", error);
@@ -139,7 +155,7 @@ export const changePassword = async (oldPassword, newPassword, token) => {
 export const updateEmail = async (email, token) => {
   try {
     const data = { action: 'update_email', email };
-    const response = await postDataWithToken(`${API_BASE_URL}/EditAccount`, '', data, token);
+    const response = await putDataWithToken(`${API_BASE_URL}/settings`, data, token);
     return response;  // Return response from backend to be used in settings.js
   } catch (error) {
     console.error("Error updating email:", error);
