@@ -1,13 +1,31 @@
+h1{
+    font-weight: bolder;
+    text-align: center;
+    margin-top: 1rem;
+}
+.BackButton{
+    display: block;
+}
+
 .categoryButtons {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    border: 1px solid black;
     justify-content: center;
 }
 .categoryButtons button{
-    flex: 1 1 calc(50% - 10px); /* Zorg dat elke knop 50% breed is, minus de gap */
-  max-width: calc(50% - 10px); /* Beperk de breedte tot 50%, minus de gap */
+    flex: 1 1 calc(50% - 10px); 
+  max-width: calc(50% - 10px); 
   margin: 5px 0;
 }
-
+.NextButton{
+    margin-top: 20px;
+    width: 80%;
+    display: block;
+    margin : auto;
+    margin-top: 30px;
+}
+.NextButton:hover{
+    background-color: #ca15be;
+    color: black;
+}
