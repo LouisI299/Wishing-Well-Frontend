@@ -47,6 +47,35 @@ const Settings = () => {
     }
   };
 
+  // Handle password change form submission
+  const handlePasswordChange = async (e) => {
+    e.preventDefault(); // Prevent page reload
+  
+    try {
+      // Include the action field with the required values
+      const response = await axios.put(
+        "/api/settings/", 
+        {
+          action: "change_password", // Action to perform
+          old_password: oldPassword,
+          new_password: newPassword
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          }
+        }
+      );
+  
+      // Display the response message
+      setMessage(response.data.msg || "Password changed successfully!");
+    } catch (error) {
+      // Handle any errors from the server
+      setMessage(error.response?.data?.error || "An error occurred while changing password");
+    }
+  };
+
   // Fetch user data
   useEffect(() => {
     const fetchUserData = async () => {
@@ -73,33 +102,6 @@ const Settings = () => {
   
     fetchUserData(); // Invoke the fetch function
   }, [token]);
-
-
-// Handle password change form submission
-const handlePasswordChange = async (e) => {
-  e.preventDefault();
-  try {
-    const data = { action: 'change_password', old_password: oldPassword, new_password: newPassword };
-    const response = await changePassword(oldPassword, newPassword, token);  
-    setMessage(response.msg);  
-  } catch (error) {
-    setMessage(error.response?.data?.error || "An error occurred while changing password");
-  }
-};
-
-  // Handle account settings change
-  //const handleAccountChange = (e) => {
-   // const { name, value } = e.target;
-   // setUser((prevState) => ({ ...prevState, [name]: value }));
-  //};
-
-  // Handle save account settings
-  //   const handleSaveAccount = () => {
-  //     axios;
-  //   .put(`/api/users/${token.sub}`, user)
-  //   .then((response) => console.log("User updated:", response.data))
-  //   .catch((error) => console.error("Error updating user:", error));
-  //   };
 
   // Handle save notification settings
   const handleSaveNotifications = () => {
