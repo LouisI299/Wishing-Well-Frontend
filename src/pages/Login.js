@@ -48,7 +48,9 @@ const Login = () => {
 
   // If the user is logged in, redirect to the dashboard/home page
   if (redirectToDashboard) {
-    return <Navigate to="/" />;
+    return (
+      <Navigate to="/" state={{ successMessage: "Logged in succesfully" }} />
+    );
   }
 
   return (
