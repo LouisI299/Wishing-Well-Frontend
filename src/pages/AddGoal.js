@@ -75,7 +75,9 @@ const AddGoal = () => {
       setStep(step + 1);
     } else if (step === 3 && target_amount) {
       if (parseFloat(current_amount) >= parseFloat(target_amount)) {
-        setError("Current amount cannot be greater than or equal to target amount.");
+        setError(
+          "Current amount cannot be greater than or equal to target amount."
+        );
       } else {
         setStep(step + 1);
       }
@@ -85,7 +87,7 @@ const AddGoal = () => {
       setError("Please fill in the required fields.");
     }
   };
-  
+
   const handleBack = () => {
     setStep(step - 1);
   };
@@ -103,7 +105,7 @@ const AddGoal = () => {
       saving_method: methodBool,
       period_amount,
       status: true,
-      end_date: new Date(end_date), // Convert end_date to Date object
+      end_date: end_date, // Convert end_date to Date object
     };
     console.log(goalData);
     try {
@@ -131,8 +133,10 @@ const AddGoal = () => {
   return (
     <Container>
       {step > 1 && (
-  <Button className="BackButton" variant="secondary" onClick={handleBack}>&lt;</Button>
-)}
+        <Button className="BackButton" variant="secondary" onClick={handleBack}>
+          &lt;
+        </Button>
+      )}
       <h1 name="Title">Add a Goal</h1>
       {error && <Alert variant="danger">{error}</Alert>}
       {step === 1 && (
@@ -140,7 +144,10 @@ const AddGoal = () => {
           <Form.Group>
             <Form.Label className="TitleStep">Category:</Form.Label>
             <div className="categoryButtons">
-              <Button variant="primary" onClick={() => setCategory("driving_lessons")}>
+              <Button
+                variant="primary"
+                onClick={() => setCategory("driving_lessons")}
+              >
                 Driving Lessons
               </Button>
               <Button variant="primary" onClick={() => setCategory("vacation")}>
@@ -149,7 +156,10 @@ const AddGoal = () => {
               <Button variant="primary" onClick={() => setCategory("laptop")}>
                 Laptop
               </Button>
-              <Button variant="primary" onClick={() => setCategory("emergency_fund")}>
+              <Button
+                variant="primary"
+                onClick={() => setCategory("emergency_fund")}
+              >
                 Emergency Fund
               </Button>
               <Button variant="primary" onClick={() => setCategory("wedding")}>
@@ -171,7 +181,11 @@ const AddGoal = () => {
               </Form.Group>
             )}
           </Form.Group>
-          <Button className="NextButton" variant="secondary" onClick={handleNext}>
+          <Button
+            className="NextButton"
+            variant="secondary"
+            onClick={handleNext}
+          >
             Next
           </Button>
         </Form>
@@ -261,7 +275,7 @@ const AddGoal = () => {
                 required
               />
             </Form.Group>
-          )}  
+          )}
           <Button className="NextButton" variant="primary" onClick={handleNext}>
             Next
           </Button>
@@ -275,7 +289,7 @@ const AddGoal = () => {
           <p>Total Amount: {target_amount}</p>
           <p>Saved so Far: {current_amount || 0}</p>
           <p>Saving Method: {getSavingMethodLabel(saving_method)}</p>
-          <p>End Date:  {new Date(end_date).toLocaleDateString()}</p>
+          <p>End Date: {new Date(end_date).toLocaleDateString()}</p>
           {timeNeeded && <p>Time Needed: {timeNeeded}</p>}
           {(saving_method === "monthly_amount" ||
             saving_method === "weekly_amount") && (

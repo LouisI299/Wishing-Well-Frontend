@@ -35,8 +35,11 @@ export const fetchData = async (endpoint, callback, token) => {
     });
     callback(response.data);
   } catch (error) {
-    console.error("Error fetching data:", error);
-
+    if (error.response) {
+      console.error("Error fetching data:", error.response.data);
+    } else {
+      console.error("Error fetching data:", error.message);
+    }
     throw error;
   }
 };
@@ -53,7 +56,11 @@ export const postDataWithToken = async (endpoint, data, token) => {
 
     return response.data;
   } catch (error) {
-    console.error("Error posting data with token:", error);
+    if (error.response) {
+      console.error("Error posting data with token:", error.response.data);
+    } else {
+      console.error("Error posting data with token:", error.message);
+    }
     throw error;
   }
 };
@@ -135,22 +142,22 @@ export const putDataWithToken = async (endpoint, data, token) => {
 export const changePassword = async (oldPassword, newPassword, token) => {
   try {
     const response = await axios.put(
-      `${API_BASE_URL}/api/settings/`, 
+      `${API_BASE_URL}/api/settings/`,
       {
-        action: 'change_password',  // Include the action in the request body
-        old_password: oldPassword,  // Pass the old password
-        new_password: newPassword   // Pass the new password
+        action: "change_password", // Include the action in the request body
+        old_password: oldPassword, // Pass the old password
+        new_password: newPassword, // Pass the new password
       },
       {
         headers: {
           Authorization: `Bearer ${token}`, // Pass the JWT token for authentication
-          "Content-Type": "application/json"
-        }
+          "Content-Type": "application/json",
+        },
       }
     );
-    return response.data;  // Return the response data (msg or error)
+    return response.data; // Return the response data (msg or error)
   } catch (error) {
-    throw error;  // Propagate the error for handling in the component
+    throw error; // Propagate the error for handling in the component
   }
 };
 
