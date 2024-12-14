@@ -15,7 +15,7 @@ const Header = () => {
           </div>
           <ToggleButton />
           <div>
-            <FontAwesomeIcon icon={faFire} />
+            <FontAwesomeIcon icon={faFire} style={{ fontSize: "2em"}} />
             <p>26</p>
           </div>
         </div>

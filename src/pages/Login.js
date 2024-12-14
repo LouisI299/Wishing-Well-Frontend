@@ -5,7 +5,19 @@ import { Navigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
 import { useState } from "react";
 import { checkLogin } from "../utils/api";
-import { Alert, Container, Form, Button } from "react-bootstrap";
+import { Alert, Form, Button } from "react-bootstrap";
+import logo from "../images/WishingWellCircle.png";
+import StyledContainer from "../styles/StyledContainer";
+import {
+  LogoContainer,
+  StyledFormGroup,
+  InputGroup,
+  InputIcon,
+  StyledInput,
+  ButtonContainer,
+} from "../styles/LoginStyles";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUser, faLock } from "@fortawesome/free-solid-svg-icons";
 
 // Login component
 const Login = () => {
@@ -22,7 +34,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const data = await checkLogin(email, password);
-      if (data.success) {
+      if (data.access_token) {
         login(data.access_token);
         setRedirectToDashboard(true);
       } else {
@@ -36,40 +48,58 @@ const Login = () => {
 
   // If the user is logged in, redirect to the dashboard/home page
   if (redirectToDashboard) {
-    return <Navigate to="/" />;
+    return (
+      <Navigate to="/" state={{ successMessage: "Logged in succesfully" }} />
+    );
   }
 
   return (
-    <Container>
-      <h1>Login</h1>
+    <StyledContainer>
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {error && <Alert variant="danger">{error}</Alert>}
-      <Form onSubmit={handleLogin}>
-        <Form.Group controlId="formEmail">
-          <Form.Label>Email: </Form.Label>
-          <Form.Control
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </Form.Group>
+      <LogoContainer>
+        <img src={logo} alt="Wishing Well logo" />
+        <h1>Wishing Well</h1>
+      </LogoContainer>
 
-        <Form.Group controlId="formPassword">
-          <Form.Label>Password</Form.Label>
-          <Form.Control
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          Login
-        </Button>
+      <Form onSubmit={handleLogin}>
+        <StyledFormGroup controlId="formEmail" className="loginFormGroup">
+          <InputGroup>
+            <InputIcon icon={faUser} />
+            <StyledInput
+              className="loginInput"
+              type="email"
+              placeholder="E-mail..."
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+          </InputGroup>
+        </StyledFormGroup>
+
+        <StyledFormGroup controlId="formPassword" className="loginFormGroup">
+          <InputGroup>
+            <InputIcon icon={faLock} />
+            <StyledInput
+              className="loginInput"
+              type="password"
+              placeholder="Password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </InputGroup>
+        </StyledFormGroup>
+        <ButtonContainer>
+          <Button variant="primary" type="submit">
+            Login
+          </Button>
+          <p>
+            Don't have an account? <Link to="/Register">Sign up</Link>
+          </p>
+        </ButtonContainer>
       </Form>
-      <Link to="/Register">Register</Link>
-    </Container>
+    </StyledContainer>
   );
 };
 

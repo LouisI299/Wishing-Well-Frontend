@@ -2,6 +2,14 @@ import React, { useRef, useState, useEffect } from "react";
 import { postData } from "../utils/api";
 import { Link, Navigate } from "react-router-dom";
 import { Alert, Button, Container, Form } from "react-bootstrap";
+import { faChevronLeft } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  StyledIcon,
+  IconContainer,
+  StyledInput,
+  ButtonContainer,
+} from "../styles/RegisterStyles";
 
 const NAME_REGEX = /^[a-zA-Z\s]*$/; // Regex for name input
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Regex for email input
@@ -103,15 +111,20 @@ const Register = () => {
   return (
     <Container>
       <div>
-        <h1>Register</h1>
         {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+        <Link to="/login">
+          <IconContainer>
+            <StyledIcon icon={faChevronLeft} />
+          </IconContainer>
+        </Link>
+
         <Form onSubmit={handleSubmit}>
           <Form.Group controlId="formFirstName">
-            <Form.Label>First Name:</Form.Label>
-            <Form.Control
+            <StyledInput
               type="text"
               ref={firstNameRef}
               required
+              placeholder="First Name..."
               isInvalid={!validFirstName && firstName !== ""}
               onChange={(e) => {
                 setFirstName(e.target.value);
@@ -124,11 +137,11 @@ const Register = () => {
           </Form.Group>
 
           <Form.Group controlId="formLastName">
-            <Form.Label>Last Name:</Form.Label>
-            <Form.Control
+            <StyledInput
               type="text"
               ref={lastNameRef}
               required
+              placeholder="Last Name..."
               isInvalid={!validLastName && lastName !== ""}
               onChange={(e) => {
                 setLastName(e.target.value);
@@ -141,11 +154,11 @@ const Register = () => {
           </Form.Group>
 
           <Form.Group controlId="formEmail">
-            <Form.Label>Email:</Form.Label>
-            <Form.Control
+            <StyledInput
               type="email"
               ref={emailRef}
               required
+              placeholder="Email..."
               isInvalid={!validEmail && email !== ""}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -158,11 +171,11 @@ const Register = () => {
           </Form.Group>
 
           <Form.Group controlId="formPassword">
-            <Form.Label>Password:</Form.Label>
-            <Form.Control
+            <StyledInput
               type="password"
               ref={passwordRef}
               required
+              placeholder="Password..."
               isInvalid={!validPassword && password !== ""}
               onChange={(e) => {
                 setPassword(e.target.value);
@@ -175,11 +188,11 @@ const Register = () => {
           </Form.Group>
 
           <Form.Group controlId="formConfirmPassword">
-            <Form.Label>Confirm Password:</Form.Label>
-            <Form.Control
+            <StyledInput
               type="password"
               ref={confirmPasswordRef}
               required
+              placeholder="Confirm Password..."
               isInvalid={confirmPassword !== password}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
@@ -190,25 +203,24 @@ const Register = () => {
               Passwords do not match.
             </Form.Control.Feedback>
           </Form.Group>
-
-          <Button
-            type="submit"
-            disabled={
-              !validFirstName ||
-              !validLastName ||
-              !validEmail ||
-              !validPassword ||
-              !validConfirmPassword
-            }
-          >
-            Register
-          </Button>
+          <ButtonContainer>
+            <Button
+              type="submit"
+              disabled={
+                !validFirstName ||
+                !validLastName ||
+                !validEmail ||
+                !validPassword ||
+                !validConfirmPassword
+              }
+            >
+              Register
+            </Button>
+            <p>
+              Already have an account? <Link to="/Login">Log In</Link>
+            </p>
+          </ButtonContainer>
         </Form>
-        <span className="line">
-          <p>
-            <Link to="/Login">Log In</Link>
-          </p>
-        </span>
       </div>
     </Container>
   );
