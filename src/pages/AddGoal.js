@@ -94,6 +94,7 @@ const AddGoal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(end_date);
     if (saving_method === "monthly_amount") {
       setMethodBool(true);
     }
@@ -105,7 +106,8 @@ const AddGoal = () => {
       saving_method: methodBool,
       period_amount,
       status: true,
-      end_date: end_date, // Convert end_date to Date object
+
+      end_date: new Date(end_date).toISOString().split("T")[0], // Convert end_date to string
     };
     console.log(goalData);
     try {
@@ -254,7 +256,6 @@ const AddGoal = () => {
                 type="date"
                 value={end_date}
                 onChange={(e) => setEndDate(e.target.value)}
-                min={new Date().toISOString().split("T")[0]}
                 required
               />
             </Form.Group>
