@@ -173,7 +173,7 @@ const EditGoal = () => {
 
     try {
       await deleteGoalData(`/api/goals/${goalId}`, token);
-      navigate("/goals");
+      navigate("/");
     } catch (error) {
       setError("Failed to delete goal.");
       console.error("Error deleting goal:", error);
