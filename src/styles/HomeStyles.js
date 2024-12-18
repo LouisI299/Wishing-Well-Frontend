@@ -5,10 +5,11 @@ import { faChevronUp } from "@fortawesome/free-solid-svg-icons";
 
 export const StyledCard = styled(Card)`
   margin: 1em 0 1em 0;
-  border-radius: 1.5em;
+  border-radius: 1em;
   background-color: ${({ theme }) => theme.secondary};
   color: ${({ theme }) => theme.text};
   height: 30vh;
+  min-height: fit-content;
   .card-img {
     max-height: 55%;
     border-top-left-radius: 1.5em;
@@ -24,24 +25,44 @@ export const StyledCard = styled(Card)`
     max-height: fit-content;
     padding-bottom: 0;
     height: 20%;
+    margin: 0 0.5rem 0.8rem 0;
+    padding-left: 0.5rem;
+
+    svg {
+      font-size: 2em;
+    }
   }
   .card-header .title {
     font-weight: bold;
     font-size: 1.5em;
+    margin: 0;
   }
 
   .card-body {
     padding-top: 0.5em;
     padding-left: 0.3em;
+    padding-bottom: 0.1rem;
     height: 25%;
+    min-height: fit-content;
     margin-top: -1em;
+
+    p {
+      margin-bottom: 0;
+      margin-top: 0.4rem;
+    }
 
     #targetDiv {
       display: flex;
       flex-direction: row;
-      justify-content: end;
+      justify-content: space-between;
+      align-items: center;
       max-height: fit-content;
-      margin-bottom: -1em;
+      margin-right: 4vw;
+      margin-bottom: 0.5rem;
+      p {
+        padding-bottom: 0em;
+        margin: 0;
+      }
     }
 
     #progressTargetDiv {
@@ -50,10 +71,12 @@ export const StyledCard = styled(Card)`
       justify-content: space-between;
       align-items: center;
       max-height: fit-content;
+      margin-bottom: 0.3rem;
 
       p {
         padding-bottom: 0em;
         margin-bottom: 0em;
+        margin-top: 0;
       }
     }
   }
@@ -96,5 +119,4 @@ export const Chevron = styled.div`
 export const GoalProgress = styled.div`
   min-width: 80%;
   position: relative;
-  margin-left: 0.3em;
 `;

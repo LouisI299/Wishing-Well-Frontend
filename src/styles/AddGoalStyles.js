@@ -52,7 +52,7 @@ export const CategoryButton = styled(Button)`
 
   margin: 10px;
   &:focus {
-    outline: none;
+    border-color: ${({ theme }) => theme.secondary};
     box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
   }
 `;
@@ -62,10 +62,12 @@ export const NextButton = styled(Button)`
   visibility: ${({ visible }) => (visible ? "visible" : "hidden")};
   transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
   position: fixed;
-  top: 85%;
+  top: 83vh;
+
   font-size: 1.5rem;
+
   border-radius: 2em;
-  width: 20%;
+  width: 25%;
 `;
 export const SummaryCard = styled(Card)`
 border-radius: 15px;
