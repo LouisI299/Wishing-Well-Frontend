@@ -1,6 +1,5 @@
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Button, Card, Container } from "react-bootstrap";
 import styled from "styled-components";
-import { theme } from "./GlobalStyles";
 
 export const AddGoalContainer = styled(Container)`
   h1 {
@@ -67,4 +66,48 @@ export const NextButton = styled(Button)`
   font-size: 1.5rem;
   border-radius: 2em;
   width: 20%;
+`;
+export const SummaryCard = styled(Card)`
+border-radius: 15px;
+box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+padding: 1rem; 
+
+h2 {
+text-align: center;
+font-weight: bolder;
+}
+
+#GoalName, #TotalAmount{
+margin: auto;
+text-align: center;
+font-weight: bolder;
+font-size: 1.5rem;
+}
+
+#EndDate {
+  margin: auto;
+  border: 1px solid black;
+  border-radius: 15px;
+  text-align: center; 
+  width: 40%;
+  background-color:${({ theme }) => theme.secondary};
+  color: ${({ theme }) => theme.text};
+}
+  #CurrentSaved, #TimeNeeded, #SavingMethod{
+  margin: auto;
+  text-align: center;
+  }
+
+  .SummaryIcon{
+  margin-right: 0.5rem;
+  }
+
+.categoryImage img {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: auto;
+  border-radius: 15px;
+  border: 1px solid #ccc;
+}
 `;
