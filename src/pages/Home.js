@@ -20,7 +20,11 @@ import {
   GoalProgress,
 } from "../styles/HomeStyles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCalendarAlt, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCalendarAlt,
+  faChevronUp,
+  faPiggyBank,
+} from "@fortawesome/free-solid-svg-icons";
 import electronicsImg from "../images/categoryImages/electronics.jpg";
 import businessImg from "../images/categoryImages/business.jpg";
 import charityImg from "../images/categoryImages/charity.jpg";
@@ -115,37 +119,31 @@ const Home = () => {
               <CardImg
                 className="card-img"
                 src={getImageByCategory(goal.category)}
-                alt={`${goal.category}`}
+                alt={`${goal.cate}`}
               />
               <CardHeader>
                 <p className="title">{goal.name}</p>
-                <p>
-                  <FontAwesomeIcon icon={faCalendarAlt} />{" "}
-                  {formatDate(goal.end_date)}
-                </p>
+                <FontAwesomeIcon icon={faPiggyBank} />
               </CardHeader>
 
               <CardBody>
-                <div id="targetDiv">
-                  <p>Target:</p>
-                </div>
                 <div id="progressTargetDiv">
                   <GoalProgress>
                     <ProgressBar
                       now={progress}
-                      label={`${progress.toFixed(2)}%`}
+                      label={`${goal.current_amount}€`}
                     />
-
-                    <Chevron progress={progress}>
-                      <FontAwesomeIcon
-                        icon={faChevronUp}
-                        className="chevron-icon"
-                      />
-                      {goal.current_amount}€
-                    </Chevron>
                   </GoalProgress>
                   <p>{goal.target_amount}€</p>
                 </div>
+                <div id="targetDiv">
+                  <p>You have saved {progress.toFixed(2)}% of your goal!</p>
+                </div>
+                <p>
+                  {" "}
+                  <FontAwesomeIcon icon={faCalendarAlt} />{" "}
+                  {formatDate(goal.end_date)}
+                </p>
               </CardBody>
             </StyledCard>
           </Link>
