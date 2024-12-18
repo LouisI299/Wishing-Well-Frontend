@@ -8,6 +8,20 @@ import {
   CategoryButton,
   NextButton,
 } from "../styles/AddGoalStyles";
+import electronicsImg from "../images/categoryImages/electronics.jpg";
+import businessImg from "../images/categoryImages/business.jpg";
+import charityImg from "../images/categoryImages/charity.jpg";
+import drivingLessonsImg from "../images/categoryImages/driving-lessons.jpg";
+import carImg from "../images/categoryImages/car.jpg";
+import emergencyFundImg from "../images/categoryImages/emergency-fund.jpg";
+import festivalImg from "../images/categoryImages/festival.jpg";
+import gamingImg from "../images/categoryImages/gaming.jpg";
+import houseImg from "../images/categoryImages/house.jpg";
+import sportsImg from "../images/categoryImages/sports.jpg";
+import studiesImg from "../images/categoryImages/studies.jpg";
+import weddingImg from "../images/categoryImages/wedding.jpg";
+import customImg from "../images/categoryImages/custom.jpg";
+import vacationImg from "../images/categoryImages/vacation.jpg";
 
 const AddGoal = () => {
   const [step, setStep] = useState(1);
@@ -150,91 +164,160 @@ const AddGoal = () => {
           <h1>Pick a Category: </h1>
           <Form.Group>
             <div className="categoryButtons">
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("vacation")}
-                style={{
-                  backgroundImage: `url(https://via.placeholder.com/150)`,
-                }}
-              >
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("vacation")}
+                  style={{
+                    backgroundImage: `url(${vacationImg})`,
+                  }}
+                ></CategoryButton>
                 Vacation
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("festival")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("festival")}
+                  style={{
+                    backgroundImage: `url(${festivalImg})`,
+                  }}
+                ></CategoryButton>
                 Festival
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("sports")}
-              >
+              </div>
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("sports")}
+                  style={{
+                    backgroundImage: `url(${sportsImg})`,
+                  }}
+                ></CategoryButton>
                 Sports
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("driving_lessons")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("driving_lessons")}
+                  style={{
+                    backgroundImage: `url(${drivingLessonsImg})`,
+                  }}
+                ></CategoryButton>
                 Driving Lessons
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("studies")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("studies")}
+                  style={{
+                    backgroundImage: `url(${studiesImg})`,
+                  }}
+                ></CategoryButton>
                 Studies
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("business")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("business")}
+                  style={{
+                    backgroundImage: `url(${businessImg})`,
+                  }}
+                ></CategoryButton>
                 Starting your business
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("electronics")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("electronics")}
+                  style={{
+                    backgroundImage: `url(${electronicsImg})`,
+                  }}
+                ></CategoryButton>
                 Electronics
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("gaming")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("gaming")}
+                  style={{
+                    backgroundImage: `url(${gamingImg})`,
+                  }}
+                ></CategoryButton>
                 Gaming
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("car")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("car")}
+                  style={{
+                    backgroundImage: `url(${carImg})`,
+                  }}
+                ></CategoryButton>
                 Car
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("emergency_fund")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("emergency_fund")}
+                  style={{
+                    backgroundImage: `url(${emergencyFundImg})`,
+                  }}
+                ></CategoryButton>
                 Emergency Fund
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("charity")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("charity")}
+                  style={{
+                    backgroundImage: `url(${charityImg})`,
+                  }}
+                ></CategoryButton>
                 Charity
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("house")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("house")}
+                  style={{
+                    backgroundImage: `url(${houseImg})`,
+                  }}
+                ></CategoryButton>
                 House Deposit
-              </CategoryButton>
-              <CategoryButton
-                variant="primary"
-                onClick={() => setCategory("wedding")}
-              >
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("wedding")}
+                  style={{
+                    backgroundImage: `url(${weddingImg})`,
+                  }}
+                ></CategoryButton>
                 Wedding
-              </CategoryButton>
-              <CategoryButton variant="primary" onClick={() => setCategory("")}>
+              </div>
+
+              <div className="categoryDiv">
+                <CategoryButton
+                  variant="primary"
+                  onClick={() => setCategory("")}
+                  style={{
+                    backgroundImage: `url(${customImg})`,
+                  }}
+                ></CategoryButton>
                 Custom Category
-              </CategoryButton>
+              </div>
             </div>
+
             {category === "" && (
               <Form.Group>
                 <Form.Label>Custom Category:</Form.Label>

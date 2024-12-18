@@ -1,5 +1,6 @@
 import { Alert, Button, Container, Form } from "react-bootstrap";
 import styled from "styled-components";
+import { theme } from "./GlobalStyles";
 
 export const AddGoalContainer = styled(Container)`
   h1 {
@@ -15,8 +16,10 @@ export const AddGoalContainer = styled(Container)`
   .categoryButtons {
     display: flex;
     flex-wrap: wrap;
+    padding-top: 1rem;
     gap: 1rem;
     justify-content: center;
+    min-height: fit-content;
   }
 
   Form {
@@ -27,20 +30,27 @@ export const AddGoalContainer = styled(Container)`
 
   .categoryButtons button {
     flex: 1 1 calc(50% - 10px);
-    max-width: calc(50% - 10px);
+
     margin: 5px 0;
+  }
+
+  .categoryDiv {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: calc(50% - 10px);
+    height: 17vh;
   }
 `;
 
 export const CategoryButton = styled(Button)`
-  flex: 1 1 calc(50% - 10px);
-  max-width: calc(50% - 10px);
+  width: 100%;
 
-  margin: 5px 0;
+  margin: 0;
   background-size: cover;
   background-position: center;
   border: none;
-  color: black;
+
   margin: 10px;
   &:focus {
     outline: none;
