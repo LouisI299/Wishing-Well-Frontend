@@ -2,8 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Alert, Button, Container, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
-import "../styles/addgoal.css";
 import { postDataWithToken } from "../utils/api";
+import {
+  AddGoalContainer,
+  CategoryButton,
+  NextButton,
+} from "../styles/AddGoalStyles";
 
 const AddGoal = () => {
   const [step, setStep] = useState(1);
@@ -133,43 +137,103 @@ const AddGoal = () => {
   };
 
   return (
-    <Container>
+    <AddGoalContainer>
       {step > 1 && (
         <Button className="BackButton" variant="secondary" onClick={handleBack}>
           &lt;
         </Button>
       )}
-      <h1 name="Title">Add a Goal</h1>
+
       {error && <Alert variant="danger">{error}</Alert>}
       {step === 1 && (
         <Form>
+          <h1>Pick a Category: </h1>
           <Form.Group>
-            <Form.Label className="TitleStep">Category:</Form.Label>
             <div className="categoryButtons">
-              <Button
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("vacation")}
+                style={{
+                  backgroundImage: `url(https://via.placeholder.com/150)`,
+                }}
+              >
+                Vacation
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("festival")}
+              >
+                Festival
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("sports")}
+              >
+                Sports
+              </CategoryButton>
+              <CategoryButton
                 variant="primary"
                 onClick={() => setCategory("driving_lessons")}
               >
                 Driving Lessons
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("vacation")}>
-                Vacation
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("laptop")}>
-                Laptop
-              </Button>
-              <Button
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("studies")}
+              >
+                Studies
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("business")}
+              >
+                Starting your business
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("electronics")}
+              >
+                Electronics
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("gaming")}
+              >
+                Gaming
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("car")}
+              >
+                Car
+              </CategoryButton>
+              <CategoryButton
                 variant="primary"
                 onClick={() => setCategory("emergency_fund")}
               >
                 Emergency Fund
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("wedding")}>
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("charity")}
+              >
+                Charity
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("house")}
+              >
+                House Deposit
+              </CategoryButton>
+              <CategoryButton
+                variant="primary"
+                onClick={() => setCategory("wedding")}
+              >
                 Wedding
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("")}>
+              </CategoryButton>
+              <CategoryButton variant="primary" onClick={() => setCategory("")}>
                 Custom Category
-              </Button>
+              </CategoryButton>
             </div>
             {category === "" && (
               <Form.Group>
@@ -183,13 +247,15 @@ const AddGoal = () => {
               </Form.Group>
             )}
           </Form.Group>
-          <Button
+
+          <NextButton
             className="NextButton"
             variant="secondary"
             onClick={handleNext}
+            visible={!!(category || customCategory)}
           >
             Next
-          </Button>
+          </NextButton>
         </Form>
       )}
       {step === 2 && (
@@ -310,7 +376,7 @@ const AddGoal = () => {
           </Button>
         </div>
       )}
-    </Container>
+    </AddGoalContainer>
   );
 };
 
