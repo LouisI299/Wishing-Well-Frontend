@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthProvider";
-import { changePassword, putDataWithToken, fetchData } from "../utils/api"; 
+import { SettingsContainer } from "../styles/SettingsStyles";
+
 
 
 const Settings = () => {
@@ -19,6 +20,19 @@ const Settings = () => {
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);
   const [smsNotifications, setSmsNotifications] = useState(false);
+
+  const [showEmailForm, setShowEmailForm] = useState(false);
+  const [showPasswordForm, setShowPasswordForm] = useState(false);
+
+  const handleToggleEmailForm = () => {
+    setShowEmailForm(!showEmailForm);
+    setShowPasswordForm(false); // Ensure only one form is visible
+  };
+
+  const handleTogglePasswordForm = () => {
+    setShowPasswordForm(!showPasswordForm);
+    setShowEmailForm(false); // Ensure only one form is visible
+  };
 
   // Handle email update form submission
   const handleEmailChange = async (e) => {
@@ -125,50 +139,59 @@ const Settings = () => {
     <section id="account-settings">
       {user ? (
         <>
-          <h3>Hello {user.first_name} {user.last_name}</h3>
-          <h6>Email: {user.email}</h6>
+          <h5>Username : {user.first_name} {user.last_name}</h5>
+          <h5>Email : {user.email}</h5>
         </>
       ) : (
         <p>Loading user data...</p>
       )}
     
+      {/* Buttons to toggle forms */}
+      <div className="action-buttons">
+        <button onClick={() => setShowEmailForm(!showEmailForm)}>Change Email</button>
+        <button onClick={() => setShowPasswordForm(!showPasswordForm)}>Change Password</button>
+      </div>
 
       {/* Email Update Form */}
-      <form onSubmit={handleEmailChange}>
-        <label htmlFor="email">New Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}  // Update email state
-          required
-        />
-        <button type="submit">Update Email</button>
-      </form>
+      {showEmailForm && ( 
+        <form onSubmit={handleEmailChange}>
+          <label htmlFor="email">New Email:</label>
+          <input
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}  // Update email state
+            required
+          />
+          <button type="submit">Update Email</button>
+       </form>
+      )}
 
       <br />
 
       {/* Password Change Form */}
-      <form onSubmit={handlePasswordChange}>
-        <label htmlFor="oldPassword">Old Password:</label>
-        <input
-          type="password"
-          id="oldPassword"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}  // Update old password state
-          required
-        />
-        <br />
-        <label htmlFor="newPassword">New Password:</label>
-        <input
-          type="password"
-          id="newPassword"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}  // Update new password state
-          required
-        />
-        <button type="submit">Change Password</button>
-      </form>
-      </section>
+      {showPasswordForm && (
+        <form onSubmit={handlePasswordChange}>
+          <label htmlFor="oldPassword">Old Password:</label>
+          <input
+            type="password"
+            id="oldPassword"
+            value={oldPassword}
+            onChange={(e) => setOldPassword(e.target.value)}  // Update old password state
+            required
+          />
+          <br />
+          <label htmlFor="newPassword">New Password:</label>
+          <input
+            type="password"
+            id="newPassword"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}  // Update new password state
+            required
+          />
+          <button type="submit">Change Password</button>
+        </form>
+      )}
+    </section>
 
       {/* Notification Settings */}
       <section id="notification-settings">
