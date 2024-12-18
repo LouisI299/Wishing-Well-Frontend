@@ -21,6 +21,20 @@ import {
 } from "../styles/HomeStyles";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCalendarAlt, faChevronUp } from "@fortawesome/free-solid-svg-icons";
+import electronicsImg from "../images/categoryImages/electronics.jpg";
+import businessImg from "../images/categoryImages/business.jpg";
+import charityImg from "../images/categoryImages/charity.jpg";
+import drivingLessonsImg from "../images/categoryImages/driving-lessons.jpg";
+import carImg from "../images/categoryImages/car.jpg";
+import emergencyFundImg from "../images/categoryImages/emergency-fund.jpg";
+import festivalImg from "../images/categoryImages/festival.jpg";
+import gamingImg from "../images/categoryImages/gaming.jpg";
+import houseImg from "../images/categoryImages/house.jpg";
+import sportsImg from "../images/categoryImages/sports.jpg";
+import studiesImg from "../images/categoryImages/studies.jpg";
+import weddingImg from "../images/categoryImages/wedding.jpg";
+import customImg from "../images/categoryImages/custom.jpg";
+import vacationImg from "../images/categoryImages/vacation.jpg";
 
 const Home = () => {
   //State
@@ -36,6 +50,43 @@ const Home = () => {
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  const getImageByCategory = (category) => {
+    switch (category) {
+      case "electronics":
+        return electronicsImg;
+      case "business":
+        return businessImg;
+      case "charity":
+        return charityImg;
+      case "driving-lessons":
+        return drivingLessonsImg;
+      case "car":
+        return carImg;
+      case "emergency-fund":
+        return emergencyFundImg;
+      case "festival":
+        return festivalImg;
+      case "gaming":
+        return gamingImg;
+      case "house":
+        return houseImg;
+      case "sports":
+        return sportsImg;
+      case "studies":
+        return studiesImg;
+      case "wedding":
+        return weddingImg;
+      case "vacation":
+        return vacationImg;
+      case "custom":
+        return customImg;
+      default:
+        return customImg;
+    }
+  };
+
+  const imageUrl = "../images/categoryImages/";
 
   //Get goals from api.js
   useEffect(() => {
@@ -63,8 +114,8 @@ const Home = () => {
             <StyledCard>
               <CardImg
                 className="card-img"
-                src="https://via.placeholder.com/150"
-                alt="Placeholder"
+                src={getImageByCategory(goal.category)}
+                alt={`${goal.category}`}
               />
               <CardHeader>
                 <p className="title">{goal.name}</p>

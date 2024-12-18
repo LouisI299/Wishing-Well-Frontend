@@ -40,7 +40,6 @@ export const fetchData = async (endpoint, callback, token) => {
     } else {
       console.error("Error fetching data:", error.message);
     }
-    throw error;
   }
 };
 

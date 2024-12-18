@@ -199,7 +199,7 @@ const AddGoal = () => {
               <div className="categoryDiv">
                 <CategoryButton
                   variant="primary"
-                  onClick={() => setCategory("driving_lessons")}
+                  onClick={() => setCategory("driving-lessons")}
                   style={{
                     backgroundImage: `url(${drivingLessonsImg})`,
                   }}
@@ -265,7 +265,7 @@ const AddGoal = () => {
               <div className="categoryDiv">
                 <CategoryButton
                   variant="primary"
-                  onClick={() => setCategory("emergency_fund")}
+                  onClick={() => setCategory("emergency-fund")}
                   style={{
                     backgroundImage: `url(${emergencyFundImg})`,
                   }}
@@ -309,7 +309,7 @@ const AddGoal = () => {
               <div className="categoryDiv">
                 <CategoryButton
                   variant="primary"
-                  onClick={() => setCategory("")}
+                  onClick={() => setCategory("custom")}
                   style={{
                     backgroundImage: `url(${customImg})`,
                   }}
@@ -317,18 +317,6 @@ const AddGoal = () => {
                 Custom Category
               </div>
             </div>
-
-            {category === "" && (
-              <Form.Group>
-                <Form.Label>Custom Category:</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                  required
-                />
-              </Form.Group>
-            )}
           </Form.Group>
 
           <NextButton
