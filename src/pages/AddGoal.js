@@ -202,7 +202,7 @@ const AddGoal = () => {
                 { name: "Charity", value: "charity", img: charityImg },
                 { name: "House Deposit", value: "house", img: houseImg },
                 { name: "Wedding", value: "wedding", img: weddingImg },
-                { name: "Custom Category", value: "", img: customImg },
+                { name: "Custom Category", value: "Custom", img: customImg },
               ].map(({ name, value, img }) => (
                 <div className="categoryDiv" key={value}>
                   <CategoryButton
@@ -214,24 +214,13 @@ const AddGoal = () => {
                 </div>
               ))}
             </div>
-            {category === "" && (
-              <Form.Group>
-                <Form.Label>Custom Category:</Form.Label>
-                <Form.Control
-                  type="text"
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                  required
-                />
-              </Form.Group>
-            )}
           </Form.Group>
 
           <NextButton
             className="NextButton"
             variant="secondary"
             onClick={handleNext}
-            visible={!!(category || customCategory)}
+            visible={!!category}
           >
             Next
           </NextButton>
