@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthProvider";
-import { SettingsContainer } from "../styles/SettingsStyles";
+import { ButtonContainer, SettingsContainer, UserInfoContainer, NotificationSettingsContainer, ActionButton } from "../styles/SettingsStyles";
+import { Alert } from "react-bootstrap";
 
 
 
@@ -16,13 +17,14 @@ const Settings = () => {
   const [user, setUser] = useState(null);
   const { token } = useAuth(); // JWT token
   const [email, setEmail] = useState("");
-  // State for notification settings
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);
   const [smsNotifications, setSmsNotifications] = useState(false);
-
   const [showEmailForm, setShowEmailForm] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [success, setSuccess] = useState("");
+  
 
   const handleToggleEmailForm = () => {
     setShowEmailForm(!showEmailForm);
@@ -51,7 +53,8 @@ const Settings = () => {
           },
         }
       );
-      setMessage(response.data.msg || "Email updated successfully!");
+      setSuccess(true);
+      setSuccessMessage("Email updated successfully!");
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.error || "Failed to update email.");
@@ -81,11 +84,9 @@ const Settings = () => {
           }
         }
       );
-  
-      // Display the response message
-      setMessage(response.data.msg || "Password changed successfully!");
+      setSuccess(true);
+      setSuccessMessage("Password changed successfully!");
     } catch (error) {
-      // Handle any errors from the server
       setMessage(error.response?.data?.error || "An error occurred while changing password");
     }
   };
@@ -132,69 +133,75 @@ const Settings = () => {
   };
 
   return (
-    <div className="settings-container">
-      <h1>Settings</h1>
+    <SettingsContainer>    
+    <h1>Settings</h1>
+    
+    {/* Display success message if email or password is updated */}
+    {success && <Alert variant="success">{successMessage}</Alert>}
 
       {/* Account Settings */}
     <section id="account-settings">
       {user ? (
-        <>
+        <UserInfoContainer>  
           <h5>Username : {user.first_name} {user.last_name}</h5>
-          <h5>Email : {user.email}</h5>
-        </>
+          <h5>E-mail : {user.email}</h5>
+        </UserInfoContainer>
       ) : (
         <p>Loading user data...</p>
       )}
     
       {/* Buttons to toggle forms */}
-      <div className="action-buttons">
+      <ButtonContainer>
         <button onClick={() => setShowEmailForm(!showEmailForm)}>Change Email</button>
-        <button onClick={() => setShowPasswordForm(!showPasswordForm)}>Change Password</button>
-      </div>
+      </ButtonContainer>
 
-      {/* Email Update Form */}
-      {showEmailForm && ( 
-        <form onSubmit={handleEmailChange}>
-          <label htmlFor="email">New Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}  // Update email state
-            required
-          />
-          <button type="submit">Update Email</button>
-       </form>
-      )}
+    {/* Email Update Form */}
+    {showEmailForm && (
+      <form onSubmit={handleEmailChange}>
+        <label htmlFor="email">New Email:</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}  // Update email state
+          required
+        />
+        <button type="submit">Update Email</button>
+      </form>
+    )}
+  
+    <br/>
 
-      <br />
+    <ButtonContainer>
+      <button onClick={() => setShowPasswordForm(!showPasswordForm)}>Change Password</button>
+    </ButtonContainer>
 
-      {/* Password Change Form */}
-      {showPasswordForm && (
-        <form onSubmit={handlePasswordChange}>
-          <label htmlFor="oldPassword">Old Password:</label>
-          <input
-            type="password"
-            id="oldPassword"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}  // Update old password state
-            required
-          />
-          <br />
-          <label htmlFor="newPassword">New Password:</label>
-          <input
-            type="password"
-            id="newPassword"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}  // Update new password state
-            required
-          />
-          <button type="submit">Change Password</button>
-        </form>
-      )}
+    {/* Password Change Form */}
+    {showPasswordForm && (
+      <form onSubmit={handlePasswordChange}>
+        <label htmlFor="oldPassword">Old Password:</label>
+        <input
+          type="password"
+          id="oldPassword"
+          value={oldPassword}
+          onChange={(e) => setOldPassword(e.target.value)}  // Update old password state
+          required
+        />
+        <br />
+        <label htmlFor="newPassword">New Password:</label>
+        <input
+          type="password"
+          id="newPassword"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}  // Update new password state
+          required
+        />
+        <button type="submit">Change Password</button>
+      </form>
+    )}
     </section>
 
       {/* Notification Settings */}
-      <section id="notification-settings">
+      <NotificationSettingsContainer>
         <h2>Notification Settings</h2>
         <label htmlFor="email-notifications">Email Notifications:</label>
         <input
@@ -221,7 +228,7 @@ const Settings = () => {
         />
 
         <button>Save Notification Settings</button>
-      </section>
+      </NotificationSettingsContainer>
 
       {/* Security Settings */}
       <section id="security-settings">
@@ -242,7 +249,7 @@ const Settings = () => {
         </button>
         <button onClick={handleSaveSecurity}>Save Security Settings</button>
       </section>
-    </div>
+    </SettingsContainer>  
   );
 };
 
