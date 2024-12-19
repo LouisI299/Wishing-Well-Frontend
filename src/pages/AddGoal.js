@@ -1,8 +1,29 @@
+import { faCalendarAlt, faClock } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React, { useEffect, useState } from "react";
-import { Alert, Button, Container, Form } from "react-bootstrap";
+import { Alert, Button, Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthProvider";
-import "../styles/addgoal.css";
+import businessImg from "../images/categoryImages/business.jpg";
+import carImg from "../images/categoryImages/car.jpg";
+import charityImg from "../images/categoryImages/charity.jpg";
+import customImg from "../images/categoryImages/custom.jpg";
+import drivingLessonsImg from "../images/categoryImages/driving-lessons.jpg";
+import electronicsImg from "../images/categoryImages/electronics.jpg";
+import emergencyFundImg from "../images/categoryImages/emergency-fund.jpg";
+import festivalImg from "../images/categoryImages/festival.jpg";
+import gamingImg from "../images/categoryImages/gaming.jpg";
+import houseImg from "../images/categoryImages/house.jpg";
+import sportsImg from "../images/categoryImages/sports.jpg";
+import studiesImg from "../images/categoryImages/studies.jpg";
+import vacationImg from "../images/categoryImages/vacation.jpg";
+import weddingImg from "../images/categoryImages/wedding.jpg";
+import {
+  AddGoalContainer,
+  CategoryButton,
+  NextButton,
+  SummaryCard,
+} from "../styles/AddGoalStyles";
 import { postDataWithToken } from "../utils/api";
 
 const AddGoal = () => {
@@ -132,44 +153,66 @@ const AddGoal = () => {
     }
   };
 
+  function formatCurrency(amount) {
+    const formattedAmount = parseFloat(amount).toFixed(2).replace(".", ",");
+    return formattedAmount.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+  }
+
   return (
-    <Container>
+    <AddGoalContainer>
       {step > 1 && (
         <Button className="BackButton" variant="secondary" onClick={handleBack}>
           &lt;
         </Button>
       )}
-      <h1 name="Title">Add a Goal</h1>
+
       {error && <Alert variant="danger">{error}</Alert>}
       {step === 1 && (
         <Form>
+          <h1>Pick a Category: </h1>
           <Form.Group>
-            <Form.Label className="TitleStep">Category:</Form.Label>
             <div className="categoryButtons">
-              <Button
-                variant="primary"
-                onClick={() => setCategory("driving_lessons")}
-              >
-                Driving Lessons
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("vacation")}>
-                Vacation
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("laptop")}>
-                Laptop
-              </Button>
-              <Button
-                variant="primary"
-                onClick={() => setCategory("emergency_fund")}
-              >
-                Emergency Fund
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("wedding")}>
-                Wedding
-              </Button>
-              <Button variant="primary" onClick={() => setCategory("")}>
-                Custom Category
-              </Button>
+              {[
+                { name: "Vacation", value: "vacation", img: vacationImg },
+                { name: "Festival", value: "festival", img: festivalImg },
+                { name: "Sports", value: "sports", img: sportsImg },
+                {
+                  name: "Driving Lessons",
+                  value: "driving_lessons",
+                  img: drivingLessonsImg,
+                },
+                { name: "Studies", value: "studies", img: studiesImg },
+                {
+                  name: "Starting your business",
+                  value: "business",
+                  img: businessImg,
+                },
+                {
+                  name: "Electronics",
+                  value: "electronics",
+                  img: electronicsImg,
+                },
+                { name: "Gaming", value: "gaming", img: gamingImg },
+                { name: "Car", value: "car", img: carImg },
+                {
+                  name: "Emergency Fund",
+                  value: "emergency_fund",
+                  img: emergencyFundImg,
+                },
+                { name: "Charity", value: "charity", img: charityImg },
+                { name: "House Deposit", value: "house", img: houseImg },
+                { name: "Wedding", value: "wedding", img: weddingImg },
+                { name: "Custom Category", value: "", img: customImg },
+              ].map(({ name, value, img }) => (
+                <div className="categoryDiv" key={value}>
+                  <CategoryButton
+                    variant="primary"
+                    onClick={() => setCategory(value)}
+                    style={{ backgroundImage: `url(${img})` }}
+                  ></CategoryButton>
+                  {name}
+                </div>
+              ))}
             </div>
             {category === "" && (
               <Form.Group>
@@ -183,13 +226,15 @@ const AddGoal = () => {
               </Form.Group>
             )}
           </Form.Group>
-          <Button
+
+          <NextButton
             className="NextButton"
             variant="secondary"
             onClick={handleNext}
+            visible={!!(category || customCategory)}
           >
             Next
-          </Button>
+          </NextButton>
         </Form>
       )}
       {step === 2 && (
@@ -283,34 +328,49 @@ const AddGoal = () => {
         </Form>
       )}
       {step === 5 && (
-        <div>
+        <SummaryCard>
           <h2>Summary</h2>
-          <p>Category: {customCategory || category}</p>
-          <p>Name: {goalName}</p>
-          <p>Total Amount: {target_amount}</p>
-          <p>Saved so Far: {current_amount || 0}</p>
-          <p>Saving Method: {getSavingMethodLabel(saving_method)}</p>
-          <p>End Date: {new Date(end_date).toLocaleDateString()}</p>
-          {timeNeeded && <p>Time Needed: {timeNeeded}</p>}
-          {(saving_method === "monthly_amount" ||
-            saving_method === "weekly_amount") && (
-            <p>
-              {saving_method === "monthly_amount"
-                ? "Monthly Payment"
-                : "Weekly Payment"}
-              : {period_amount}
-            </p>
-          )}
-          {saving_method === "end_date" && (
-            <p>Calculated Monthly Payment: {period_amount}</p>
-          )}
-
+          <p id="GoalName">{goalName}</p>
+          <div className="categoryImage">
+    <img 
+      src={
+        {
+          vacation: vacationImg,
+          festival: festivalImg,
+          sports: sportsImg,
+          driving_lessons: drivingLessonsImg,
+          studies: studiesImg,
+          business: businessImg,
+          electronics: electronicsImg,
+          gaming: gamingImg,
+          car: carImg,
+          emergency_fund: emergencyFundImg,
+          charity: charityImg,
+          house: houseImg,
+          wedding: weddingImg,
+          custom: customImg,
+        }[category] || customImg
+      } 
+      alt={customCategory || category} 
+    />
+  </div>
+          <p id="TotalAmount">€{formatCurrency(target_amount)}</p>
+          <p id="CurrentSaved">Saved so Far: €{formatCurrency(current_amount) || 0}</p>
+          <p id="SavingMethod">{getSavingMethodLabel(saving_method)} : €{formatCurrency(period_amount)}</p>
+          <p id="EndDate"><FontAwesomeIcon icon={faCalendarAlt} className="SummaryIcon" />
+              {new Date(end_date).toLocaleDateString()}
+          </p>
+          {timeNeeded && 
+          <p id="TimeNeeded">
+            <FontAwesomeIcon icon={faClock} />
+             {timeNeeded}
+            </p>}
           <Button variant="primary" onClick={handleSubmit}>
             Submit
           </Button>
-        </div>
+        </SummaryCard>
       )}
-    </Container>
+    </AddGoalContainer>
   );
 };
 

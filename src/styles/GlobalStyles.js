@@ -18,7 +18,7 @@ body {
   }
   button, .btn {
     background-color: ${({ theme }) => theme.secondary} !important;
-    color: ${({ theme }) => theme.text} !important;
+    color: ${({ theme }) => theme.text} ;
     border: none !important;
     &:hover {
       background-color: ${({ theme }) => theme.secondaryHover} !important;

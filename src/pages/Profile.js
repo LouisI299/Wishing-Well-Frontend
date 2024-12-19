@@ -4,6 +4,7 @@ import { fetchCurrentUser } from "../utils/api";
 import { fetchData } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
 import { Link } from "react-router-dom";
+import profilePic from "../images/emptyProfilePicture.jpg";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -36,7 +37,7 @@ const Profile = () => {
 
   return (
     <div>
-      <img src="#" alt="Profle Picture"></img>
+      <img src={profilePic} style={{width: "300px"}} alt="Profle Picture"></img>
       <h1>Hi, {profileData.first_name} {profileData.last_name}</h1>
       <p>Level: {profileData.level}</p>
       <p>Points: {profileData.points}</p>
