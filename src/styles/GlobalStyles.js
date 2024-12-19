@@ -1,4 +1,6 @@
 import { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
+import { Modal } from "react-bootstrap";
 
 export const GlobalStyles = createGlobalStyle`
 // Colors:
@@ -45,5 +47,42 @@ body {
   }
   
     
+  }
+`;
+
+export const StyledModal = styled(Modal)`
+  .container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 300px;
+    text-align: center;
+    color: black;
+  }
+
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ffffff;);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+
+  button {
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-top: 10px;
+    &:hover {
+      background-color: #45a049;
+    }
   }
 `;
