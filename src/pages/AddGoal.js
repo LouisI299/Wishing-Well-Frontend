@@ -55,6 +55,7 @@ const AddGoal = () => {
           calculatedEndDate.getMonth() + Math.ceil(monthsNeeded)
         );
         setEndDate(calculatedEndDate.toISOString());
+        setMethodBool(true);
       } else {
         setError("Monthly payment is too high or invalid.");
       }
@@ -67,6 +68,7 @@ const AddGoal = () => {
           calculatedEndDate.getDate() + Math.ceil(weeksNeeded * 7)
         );
         setEndDate(calculatedEndDate.toISOString());
+        setMethodBool(false);
       } else {
         setError("Weekly payment is too high or invalid.");
       }
@@ -84,6 +86,7 @@ const AddGoal = () => {
             setTimeNeeded(`${monthsNeeded} months`);
             const calculatedMonthlyPayment = totalAmountNeeded / monthsNeeded;
             setPayment(calculatedMonthlyPayment.toFixed(2));
+            setMethodBool(true);
           } else {
             setError("End date must allow for at least one month to save.");
           }
@@ -95,6 +98,7 @@ const AddGoal = () => {
             setTimeNeeded(`${weeksNeeded} weeks`);
             const calculatedWeeklyPayment = totalAmountNeeded / weeksNeeded;
             setPayment(calculatedWeeklyPayment.toFixed(2));
+            setMethodBool(false);
           } else {
             setError("End date must allow for at least one week to save.");
           }
