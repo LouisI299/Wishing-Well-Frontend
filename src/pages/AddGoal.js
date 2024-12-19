@@ -34,6 +34,7 @@ const AddGoal = () => {
   const [target_amount, setTargetAmount] = useState("");
   const [current_amount, setCurrentAmount] = useState(0);
   const [saving_method, setSavingMethod] = useState("");
+  const [saving_frequency, setSavingFrequency] = useState("");
   const [period_amount, setPayment] = useState("");
   const [end_date, setEndDate] = useState("");
   const [methodBool, setMethodBool] = useState(false);
@@ -44,7 +45,8 @@ const AddGoal = () => {
 
   useEffect(() => {
     setError("");
-    if (saving_method === "monthly_amount" && period_amount) {
+  
+    if (saving_method === "monthly_amount" && period_amount > 0) {
       const monthsNeeded = (target_amount - current_amount) / period_amount;
       if (monthsNeeded > 0) {
         setTimeNeeded(`${Math.ceil(monthsNeeded)} months`);
@@ -56,7 +58,7 @@ const AddGoal = () => {
       } else {
         setError("Monthly payment is too high or invalid.");
       }
-    } else if (saving_method === "weekly_amount" && period_amount) {
+    } else if (saving_method === "weekly_amount" && period_amount > 0) {
       const weeksNeeded = (target_amount - current_amount) / period_amount;
       if (weeksNeeded > 0) {
         setTimeNeeded(`${Math.ceil(weeksNeeded)} weeks`);
@@ -72,22 +74,43 @@ const AddGoal = () => {
       const endDateObj = new Date(end_date);
       const today = new Date();
       if (endDateObj > today) {
-        const monthsNeeded =
-          (endDateObj.getFullYear() - today.getFullYear()) * 12 +
-          (endDateObj.getMonth() - today.getMonth());
-        if (monthsNeeded > 0) {
-          setTimeNeeded(`${monthsNeeded} months`);
-          const calculatedMonthlyPayment =
-            (target_amount - current_amount) / monthsNeeded;
-          setPayment(calculatedMonthlyPayment.toFixed(2));
-        } else {
-          setError("End date must allow for at least one month to save.");
+        const totalAmountNeeded = target_amount - current_amount;
+  
+        if (saving_frequency === "monthly_amount") {
+          const monthsNeeded =
+            (endDateObj.getFullYear() - today.getFullYear()) * 12 +
+            (endDateObj.getMonth() - today.getMonth());
+          if (monthsNeeded > 0) {
+            setTimeNeeded(`${monthsNeeded} months`);
+            const calculatedMonthlyPayment = totalAmountNeeded / monthsNeeded;
+            setPayment(calculatedMonthlyPayment.toFixed(2));
+          } else {
+            setError("End date must allow for at least one month to save.");
+          }
+        } else if (saving_frequency === "weekly_amount") {
+          const weeksNeeded = Math.ceil(
+            (endDateObj - today) / (1000 * 60 * 60 * 24 * 7)
+          );
+          if (weeksNeeded > 0) {
+            setTimeNeeded(`${weeksNeeded} weeks`);
+            const calculatedWeeklyPayment = totalAmountNeeded / weeksNeeded;
+            setPayment(calculatedWeeklyPayment.toFixed(2));
+          } else {
+            setError("End date must allow for at least one week to save.");
+          }
         }
       } else {
         setError("End date must be in the future.");
       }
     }
-  }, [saving_method, period_amount, end_date, target_amount, current_amount]);
+  }, [
+    saving_method,
+    period_amount,
+    end_date,
+    target_amount,
+    current_amount,
+    saving_frequency,
+  ]);
 
   const handleNext = () => {
     if (step === 1 && (category || customCategory)) {
@@ -96,19 +119,50 @@ const AddGoal = () => {
       setStep(step + 1);
     } else if (step === 3 && target_amount) {
       if (parseFloat(current_amount) >= parseFloat(target_amount)) {
-        setError(
-          "Current amount cannot be greater than or equal to target amount."
-        );
+        setError("Current amount cannot be greater than or equal to target amount.");
       } else {
         setStep(step + 1);
       }
-    } else if (step === 4 && saving_method && (period_amount || end_date)) {
+    } else if (step === 4 && saving_method) {
+      if (saving_method === "end_date") {
+        const endDateObj = new Date(end_date);
+        const today = new Date();
+  
+        // Controleer of de einddatum een geldige datum is
+        if (isNaN(endDateObj.getTime())) {
+          setError("Please enter a valid date.");
+          return;
+        }
+  
+        // Controleer of de einddatum minimaal één maand in de toekomst ligt
+        const oneMonthFromNow = new Date(today);
+        oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+  
+        if (endDateObj <= oneMonthFromNow) {
+          setError("End date must allow at least one month to save.");
+          return;
+        }
+  
+        // Controleer of een saving_frequency is geselecteerd
+        if (!saving_frequency) {
+          setError("Please select a saving frequency.");
+          return;
+        }
+      } else if (
+        (saving_method === "monthly_amount" || saving_method === "weekly_amount") &&
+        !period_amount
+      ) {
+        setError("Please enter a valid payment amount.");
+        return;
+      }
+  
+      // Als alles geldig is, ga naar de volgende stap
       setStep(step + 1);
     } else {
       setError("Please fill in the required fields.");
     }
   };
-
+  
   const handleBack = () => {
     setStep(step - 1);
   };
@@ -140,17 +194,19 @@ const AddGoal = () => {
     }
   };
 
-  const getSavingMethodLabel = (method) => {
-    switch (method) {
-      case "monthly_amount":
+  const getSavingMethodLabel = (method, saving_frequency) => {
+    if (method === "monthly_amount") {
+      return "Monthly";
+    } else if (method === "weekly_amount") {
+      return "Weekly";
+    } else if (method === "end_date") {
+      if (saving_frequency === "monthly_amount") {
         return "Monthly";
-      case "weekly_amount":
+      } else if (saving_frequency === "weekly_amount") {
         return "Weekly";
-      case "end_date":
-        return "Monthly";
-      default:
-        return "End Date";
+      }
     }
+    return "Save Amount";
   };
 
   function formatCurrency(amount) {
@@ -284,15 +340,31 @@ const AddGoal = () => {
             </Form.Control>
           </Form.Group>
           {saving_method === "end_date" && (
-            <Form.Group>
-              <Form.Label>End Date:</Form.Label>
-              <Form.Control
-                type="date"
-                value={end_date}
-                onChange={(e) => setEndDate(e.target.value)}
-                required
-              />
-            </Form.Group>
+            <>
+              <Form.Group>
+                <Form.Label>End Date:</Form.Label>
+                <Form.Control
+                  type="date"
+                  value={end_date}
+                  onChange={(e) => setEndDate(e.target.value)}
+                  min={new Date().toISOString().split("T")[0]}
+                  required
+                />
+              </Form.Group>
+              <Form.Group>
+                <Form.Label>Saving Frequency:</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={saving_frequency}
+                  onChange={(e) => setSavingFrequency(e.target.value)}
+                  required
+                >
+                  <option value="">Select Frequency</option>
+                  <option value="monthly_amount">Monthly</option>
+                  <option value="weekly_amount">Weekly</option>
+                </Form.Control>
+              </Form.Group>
+            </>
           )}
           {(saving_method === "monthly_amount" ||
             saving_method === "weekly_amount") && (
@@ -321,39 +393,46 @@ const AddGoal = () => {
           <h2>Summary</h2>
           <p id="GoalName">{goalName}</p>
           <div className="categoryImage">
-    <img 
-      src={
-        {
-          vacation: vacationImg,
-          festival: festivalImg,
-          sports: sportsImg,
-          driving_lessons: drivingLessonsImg,
-          studies: studiesImg,
-          business: businessImg,
-          electronics: electronicsImg,
-          gaming: gamingImg,
-          car: carImg,
-          emergency_fund: emergencyFundImg,
-          charity: charityImg,
-          house: houseImg,
-          wedding: weddingImg,
-          custom: customImg,
-        }[category] || customImg
-      } 
-      alt={customCategory || category} 
-    />
-  </div>
+            <img
+              src={
+                {
+                  vacation: vacationImg,
+                  festival: festivalImg,
+                  sports: sportsImg,
+                  driving_lessons: drivingLessonsImg,
+                  studies: studiesImg,
+                  business: businessImg,
+                  electronics: electronicsImg,
+                  gaming: gamingImg,
+                  car: carImg,
+                  emergency_fund: emergencyFundImg,
+                  charity: charityImg,
+                  house: houseImg,
+                  wedding: weddingImg,
+                  custom: customImg,
+                }[category] || customImg
+              }
+              alt={customCategory || category}
+            />
+          </div>
           <p id="TotalAmount">€{formatCurrency(target_amount)}</p>
-          <p id="CurrentSaved">Saved so Far: €{formatCurrency(current_amount) || 0}</p>
-          <p id="SavingMethod">{getSavingMethodLabel(saving_method)} : €{formatCurrency(period_amount)}</p>
-          <p id="EndDate"><FontAwesomeIcon icon={faCalendarAlt} className="SummaryIcon" />
-              {new Date(end_date).toLocaleDateString()}
+          <p id="CurrentSaved">
+            Saved so Far: €{formatCurrency(current_amount) || 0}
           </p>
-          {timeNeeded && 
-          <p id="TimeNeeded">
-            <FontAwesomeIcon icon={faClock} />
-             {timeNeeded}
-            </p>}
+          <p id="SavingMethod">
+            {getSavingMethodLabel(saving_method, saving_frequency)} : €
+            {formatCurrency(period_amount)}
+          </p>
+          <p id="EndDate">
+            <FontAwesomeIcon icon={faCalendarAlt} className="SummaryIcon" />
+            {new Date(end_date).toLocaleDateString()}
+          </p>
+          {timeNeeded && (
+            <p id="TimeNeeded">
+              <FontAwesomeIcon icon={faClock} />
+              {timeNeeded}
+            </p>
+          )}
           <Button variant="primary" onClick={handleSubmit}>
             Submit
           </Button>
