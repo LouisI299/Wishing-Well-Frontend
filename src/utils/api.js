@@ -2,7 +2,7 @@
 
 // Imports
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 // API base URL for fetching data
 const API_BASE_URL = "http://127.0.0.1:5000";
@@ -18,7 +18,7 @@ export const setupInterceptors = (navigate) => {
     (error) => {
       if (error.response && error.response.status === 401) {
         navigate("/login");
-        return Promise.resolve();
+        return redirect("/login");
       }
       return Promise.reject(error);
     }
@@ -40,6 +40,7 @@ export const fetchData = async (endpoint, callback, token) => {
     } else {
       console.error("Error fetching data:", error.message);
     }
+    return redirect("/login");
   }
 };
 
