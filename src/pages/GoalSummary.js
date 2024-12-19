@@ -8,6 +8,23 @@ import {
   makeTransaction,
   postDataWithToken,
 } from "../utils/api";
+import { ImgContainer, SummaryContainer } from "../styles/GoalSummaryStyles";
+import electronicsImg from "../images/categoryImages/electronics.jpg";
+import businessImg from "../images/categoryImages/business.jpg";
+import charityImg from "../images/categoryImages/charity.jpg";
+import drivingLessonsImg from "../images/categoryImages/driving-lessons.jpg";
+import carImg from "../images/categoryImages/car.jpg";
+import emergencyFundImg from "../images/categoryImages/emergency-fund.jpg";
+import festivalImg from "../images/categoryImages/festival.jpg";
+import gamingImg from "../images/categoryImages/gaming.jpg";
+import houseImg from "../images/categoryImages/house.jpg";
+import sportsImg from "../images/categoryImages/sports.jpg";
+import studiesImg from "../images/categoryImages/studies.jpg";
+import weddingImg from "../images/categoryImages/wedding.jpg";
+import customImg from "../images/categoryImages/custom.jpg";
+import vacationImg from "../images/categoryImages/vacation.jpg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
 
 const GoalSummary = () => {
   const params = useParams();
@@ -16,6 +33,41 @@ const GoalSummary = () => {
   const { token } = useAuth();
   const [amount, setAmount] = useState(0);
   const [type, setType] = useState("deposit");
+
+  const getImageByCategory = (category) => {
+    switch (category) {
+      case "electronics":
+        return electronicsImg;
+      case "business":
+        return businessImg;
+      case "charity":
+        return charityImg;
+      case "driving-lessons":
+        return drivingLessonsImg;
+      case "car":
+        return carImg;
+      case "emergency-fund":
+        return emergencyFundImg;
+      case "festival":
+        return festivalImg;
+      case "gaming":
+        return gamingImg;
+      case "house":
+        return houseImg;
+      case "sports":
+        return sportsImg;
+      case "studies":
+        return studiesImg;
+      case "wedding":
+        return weddingImg;
+      case "vacation":
+        return vacationImg;
+      case "custom":
+        return customImg;
+      default:
+        return customImg;
+    }
+  };
 
   useEffect(() => {
     if (!goalId) {
@@ -27,6 +79,7 @@ const GoalSummary = () => {
       try {
         const goalData = await fetchDataById("/api/goals", goalId, token);
         setGoal(goalData);
+        console.log(goal.status);
       } catch (error) {
         console.error("Error fetching goal data:", error);
       }
@@ -58,9 +111,17 @@ const GoalSummary = () => {
   }
 
   return (
-    <div>
-      <h1>Goal Summary</h1>
-      <p>Name: {goal.name}</p>
+    <SummaryContainer>
+      <ImgContainer>
+        <img src={getImageByCategory(goal.category)} alt={goal.category} />
+      </ImgContainer>
+      <div className="summaryTitle">
+        <h1>{goal.name}</h1>
+        <Link to={`/edit-goal/${goal.id}`}>
+          <FontAwesomeIcon icon={faPenToSquare} />
+        </Link>
+      </div>
+
       <p>Status: {goal.status}</p>
       <p>Target Amount: {goal.target_amount}</p>
       <p>Current Amount: {goal.current_amount}</p>
@@ -78,10 +139,7 @@ const GoalSummary = () => {
         </label>
         <button type="submit">Add Amount</button>
       </form>
-      <button>
-        <Link to={`/edit-goal/${goal.id}`}>Edit Goal</Link>
-      </button>
-    </div>
+    </SummaryContainer>
   );
 };
 
