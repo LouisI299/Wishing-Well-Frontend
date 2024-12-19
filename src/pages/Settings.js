@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useAuth } from "../contexts/AuthProvider";
-import { ButtonContainer, SettingsContainer, UserInfoContainer, NotificationSettingsContainer, ActionButton } from "../styles/SettingsStyles";
+import React, { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
+import { useAuth } from "../contexts/AuthProvider";
+import { ActionButton, ButtonContainer, NotificationSettingsContainer, SettingsContainer, UserInfoContainer } from "../styles/SettingsStyles";
 
 
 
@@ -15,7 +15,7 @@ const Settings = () => {
   });
   const [message, setMessage] = useState("");
   const [user, setUser] = useState(null);
-  const { token } = useAuth(); // JWT token
+  const { token, logout } = useAuth(); // JWT token
   const [email, setEmail] = useState("");
   const [emailNotifications, setEmailNotifications] = useState(false);
   const [pushNotifications, setPushNotifications] = useState(false);
@@ -117,6 +117,25 @@ const Settings = () => {
   
     fetchUserData(); // Invoke the fetch function
   }, [token]);
+//handle account deletion
+const handleDeleteAccount = async () => {
+  if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+    try {
+      await axios.delete(`/api/users/delete`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setSuccessMessage("Account deleted successfully.");
+      logout(); // Log out the user after account deletion
+    } catch (error) {
+      console.error("Error deleting account:", error);
+      setMessage(
+        error.response?.data?.error || "An error occurred while deleting your account."
+      );
+    }
+  }
+};
 
   // Handle save notification settings
   const handleSaveNotifications = () => {
@@ -171,6 +190,7 @@ const Settings = () => {
   
     <br/>
 
+
     <ButtonContainer>
       <button onClick={() => setShowPasswordForm(!showPasswordForm)}>Change Password</button>
     </ButtonContainer>
@@ -198,6 +218,12 @@ const Settings = () => {
         <button type="submit">Change Password</button>
       </form>
     )}
+    <br/>
+    <ButtonContainer>
+          <ActionButton onClick={handleDeleteAccount}>
+            Delete Account
+          </ActionButton>
+        </ButtonContainer>
     </section>
 
       {/* Notification Settings */}
