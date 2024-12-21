@@ -5,7 +5,7 @@ import axios from "axios";
 import { redirect, useNavigate } from "react-router-dom";
 
 // API base URL for fetching data
-const API_BASE_URL = "http://127.0.0.1:5000";
+const API_BASE_URL = "http://10.3.51.162";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
