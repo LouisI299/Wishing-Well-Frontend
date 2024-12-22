@@ -55,6 +55,8 @@ const Settings = () => {
       );
       setSuccess(true);
       setSuccessMessage("Email updated successfully!");
+      setEmail(""); 
+      setShowEmailForm(false); 
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.error || "Failed to update email.");
@@ -86,8 +88,11 @@ const Settings = () => {
       );
       setSuccess(true);
       setSuccessMessage("Password changed successfully!");
+      setOldPassword(""); 
+      setNewPassword(""); 
+      setShowPasswordForm(false); 
     } catch (error) {
-      setMessage(error.response?.data?.error || "An error occurred while changing password");
+      setMessage(error.response.data.error || "An error occurred while changing password");
     }
   };
 
@@ -169,10 +174,12 @@ const handleDeleteAccount = async () => {
         <p>Loading user data...</p>
       )}
     
-      {/* Buttons to toggle forms */}
-      <ButtonContainer>
-        <button onClick={() => setShowEmailForm(!showEmailForm)}>Change Email</button>
-      </ButtonContainer>
+      {/* Conditionally render buttons based on form visibility */}
+      {!showEmailForm && (
+        <ButtonContainer>
+          <button onClick={handleToggleEmailForm}>Change Email</button>
+        </ButtonContainer>
+      )}
 
     {/* Email Update Form */}
     {showEmailForm && (
@@ -191,9 +198,11 @@ const handleDeleteAccount = async () => {
     <br/>
 
 
-    <ButtonContainer>
-      <button onClick={() => setShowPasswordForm(!showPasswordForm)}>Change Password</button>
-    </ButtonContainer>
+      {!showPasswordForm && (
+          <ButtonContainer>
+            <button onClick={handleTogglePasswordForm}>Change Password</button>
+          </ButtonContainer>
+        )}
 
     {/* Password Change Form */}
     {showPasswordForm && (
