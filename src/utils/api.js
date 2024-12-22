@@ -20,7 +20,7 @@ export const setupInterceptors = (navigate) => {
         navigate("/login");
         return redirect("/login");
       }
-      return Promise.reject(error);
+      return redirect("/login");
     }
   );
 };
