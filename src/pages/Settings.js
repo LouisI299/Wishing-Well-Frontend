@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthProvider";
-import { ActionButton, ButtonContainer, NotificationSettingsContainer, SettingsContainer, UserInfoContainer } from "../styles/SettingsStyles";
+import { ActionButton, ButtonContainer, NotificationSettingsContainer, SettingsContainer, UserInfoContainer, ProgressBar, ProgressFiller, StyledButton } from "../styles/SettingsStyles";
 
 
 
@@ -24,7 +24,16 @@ const Settings = () => {
   const [showPasswordForm, setShowPasswordForm] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [success, setSuccess] = useState("");
+  const [progress, setProgress] = useState(0); // Track settings completion progress
   
+  // Progress calculation
+  useEffect(() => {
+    let completed = 0;
+    if (emailNotifications) completed += 1;
+    if (pushNotifications) completed += 1;
+    if (smsNotifications) completed += 1;
+    setProgress((completed / 3) * 100);
+  }, [emailNotifications, pushNotifications, smsNotifications]);
 
   const handleToggleEmailForm = () => {
     setShowEmailForm(!showEmailForm);
@@ -163,6 +172,8 @@ const handleDeleteAccount = async () => {
     {/* Display success message if email or password is updated */}
     {success && <Alert variant="success">{successMessage}</Alert>}
 
+
+
       {/* Account Settings */}
     <section id="account-settings">
       {user ? (
@@ -176,9 +187,11 @@ const handleDeleteAccount = async () => {
     
       {/* Conditionally render buttons based on form visibility */}
       {!showEmailForm && (
+        <StyledButton>
         <ButtonContainer>
-          <button onClick={handleToggleEmailForm}>Change Email</button>
+          <button onClick={handleToggleEmailForm}>✉️ Change Email</button>
         </ButtonContainer>
+        </StyledButton>
       )}
 
     {/* Email Update Form */}
@@ -191,17 +204,17 @@ const handleDeleteAccount = async () => {
           onChange={(e) => setEmail(e.target.value)}  // Update email state
           required
         />
-        <button type="submit">Update Email</button>
+        <StyledButton type="submit">Update Email</StyledButton>
       </form>
     )}
-  
-    <br/>
 
 
       {!showPasswordForm && (
+          <StyledButton>
           <ButtonContainer>
-            <button onClick={handleTogglePasswordForm}>Change Password</button>
+            <button onClick={handleTogglePasswordForm}>🔒 Change Password</button>
           </ButtonContainer>
+          </StyledButton>
         )}
 
     {/* Password Change Form */}
@@ -215,7 +228,6 @@ const handleDeleteAccount = async () => {
           onChange={(e) => setOldPassword(e.target.value)}  // Update old password state
           required
         />
-        <br />
         <label htmlFor="newPassword">New Password:</label>
         <input
           type="password"
@@ -224,20 +236,25 @@ const handleDeleteAccount = async () => {
           onChange={(e) => setNewPassword(e.target.value)}  // Update new password state
           required
         />
-        <button type="submit">Change Password</button>
+        <StyledButton type="submit">Change Password</StyledButton>
       </form>
     )}
-    <br/>
+
     <ButtonContainer>
           <ActionButton onClick={handleDeleteAccount}>
-            Delete Account
+          Delete Account
           </ActionButton>
-        </ButtonContainer>
+    </ButtonContainer>
     </section>
-
+      <br/>
+      <br/>
       {/* Notification Settings */}
       <NotificationSettingsContainer>
-        <h2>Notification Settings</h2>
+        <h2>Notification Settings</h2>   
+         {/* Progress bar */}
+        <ProgressBar>
+          <ProgressFiller style={{ width: `${progress}%` }} />
+        </ProgressBar>
         <label htmlFor="email-notifications">Email Notifications:</label>
         <input
           type="checkbox"
@@ -262,7 +279,7 @@ const handleDeleteAccount = async () => {
           onChange={(e) => setSmsNotifications(e.target.checked)}
         />
 
-        <button>Save Notification Settings</button>
+        <StyledButton>💾 Save Notification Settings</StyledButton>
       </NotificationSettingsContainer>
 
       {/* Security Settings */}
