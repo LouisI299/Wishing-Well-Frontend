@@ -5,6 +5,7 @@ import { fetchData } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
 import { Link } from "react-router-dom";
 import logo from "../images/WishingWell800.png";
+import { CDContainer, Title, Text, Image } from '../styles/ContactDetailsStyles';
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
@@ -36,20 +37,19 @@ const Profile = () => {
   }
 
   return (
-    <div>
-      <div>
-      <h1>Contact details</h1>
-      <p>First name: {profileData.first_name} {profileData.last_name}</p>
-      <p>Last Name: {profileData.last_name}</p>
-      <p>Email: {profileData.email}</p>
-      <p>Join Date: {profileData.join_date}</p>
-      <p>Delete your account <a href="#">here</a></p>
-      </div>
-      <div style = {{display: "flex", justifyContent: "center"}}>
-        <img src={logo} alt="logo" style = {{width: "20em", marginTop: "4em"}}></img>
-      </div>
-      
-    </div>
+    <CDContainer>
+      <Title><h1>Contact details</h1></Title>
+      <Text>
+        <p>First name: {profileData.first_name}</p>
+        <p>Last Name: {profileData.last_name}</p>
+        <p>Email: {profileData.email}</p>
+        <p>Join Date: {profileData.join_date}</p>
+        <p>Delete your account <a href="#" style = {{textDecoration: "none", fontWeight: "bold"}}>here</a></p>
+      </Text>
+      <Image>
+        <img src={logo} alt="logo" style = {{width: "20em"}}></img>
+      </Image>
+    </CDContainer>
   );
 };
 
