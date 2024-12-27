@@ -2,9 +2,17 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthProvider";
-import { ActionButton, ButtonContainer, NotificationSettingsContainer, SettingsContainer, UserInfoContainer, ProgressBar, ProgressFiller, StyledButton } from "../styles/SettingsStyles";
-
-
+import {
+  StyledIcon,
+  ButtonContainer,
+  NotificationSettingsContainer,
+  SettingsContainer,
+  UserInfoContainer,
+  ProgressBar,
+  ProgressFiller,
+  StyledButton,
+} from "../styles/SettingsStyles";
+import { faUser, faLock, faTrash } from "@fortawesome/free-solid-svg-icons";
 
 const Settings = () => {
   const [oldPassword, setOldPassword] = useState("");
@@ -25,7 +33,7 @@ const Settings = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [success, setSuccess] = useState("");
   const [progress, setProgress] = useState(0); // Track settings completion progress
-  
+
   // Progress calculation
   useEffect(() => {
     let completed = 0;
@@ -34,6 +42,28 @@ const Settings = () => {
     if (smsNotifications) completed += 1;
     setProgress((completed / 3) * 100);
   }, [emailNotifications, pushNotifications, smsNotifications]);
+
+  const fetchUserData = async () => {
+    if (token) {
+      try {
+        const response = await axios.get(`/api/users/current`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setUser(response.data);
+      } catch (error) {
+        if (error.response) {
+          console.error("Response error:", error.response.data);
+        } else if (error.request) {
+          console.error("No response received:", error.request);
+        } else {
+          console.error("Error setting up request:", error.message);
+        }
+        setMessage("Failed to fetch user data. Please try again.");
+      }
+    }
+  };
 
   const handleToggleEmailForm = () => {
     setShowEmailForm(!showEmailForm);
@@ -64,8 +94,9 @@ const Settings = () => {
       );
       setSuccess(true);
       setSuccessMessage("Email updated successfully!");
-      setEmail(""); 
-      setShowEmailForm(false); 
+      setEmail("");
+      setShowEmailForm(false);
+      fetchUserData();
     } catch (error) {
       if (error.response) {
         setMessage(error.response.data.error || "Failed to update email.");
@@ -78,78 +109,63 @@ const Settings = () => {
   // Handle password change form submission
   const handlePasswordChange = async (e) => {
     e.preventDefault(); // Prevent page reload
-  
+
     try {
       // Include the action field with the required values
       const response = await axios.put(
-        "/api/settings/", 
+        "/api/settings/",
         {
           action: "change_password", // Action to perform
           old_password: oldPassword,
-          new_password: newPassword
+          new_password: newPassword,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
-          }
+          },
         }
       );
       setSuccess(true);
       setSuccessMessage("Password changed successfully!");
-      setOldPassword(""); 
-      setNewPassword(""); 
-      setShowPasswordForm(false); 
+      setOldPassword("");
+      setNewPassword("");
+      setShowPasswordForm(false);
     } catch (error) {
-      setMessage(error.response.data.error || "An error occurred while changing password");
+      setMessage(
+        error.response.data.error || "An error occurred while changing password"
+      );
     }
   };
 
   // Fetch user data
   useEffect(() => {
-    const fetchUserData = async () => {
-      if (token) {
-        try {
-          const response = await axios.get(`/api/users/current`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-          setUser(response.data); 
-        } catch (error) {
-          if (error.response) {
-            console.error("Response error:", error.response.data);
-          } else if (error.request) {
-            console.error("No response received:", error.request);
-          } else {
-            console.error("Error setting up request:", error.message);
-          }
-          setMessage("Failed to fetch user data. Please try again.");
-        }
-      }
-    };
-  
     fetchUserData(); // Invoke the fetch function
   }, [token]);
-//handle account deletion
-const handleDeleteAccount = async () => {
-  if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
-    try {
-      await axios.delete(`/api/users/delete`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setSuccessMessage("Account deleted successfully.");
-      logout(); // Log out the user after account deletion
-    } catch (error) {
-      console.error("Error deleting account:", error);
-      setMessage(
-        error.response?.data?.error || "An error occurred while deleting your account."
-      );
+  //handle account deletion
+  const handleDeleteAccount = async () => {
+    if (
+      window.confirm(
+        "Are you sure you want to delete your account? This action cannot be undone."
+      )
+    ) {
+      try {
+        await axios.delete(`/api/users/delete`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setSuccessMessage("Account deleted successfully.");
+        logout(); // Log out the user after account deletion
+      } catch (error) {
+        console.error("Error deleting account:", error);
+        setMessage(
+          error.response?.data?.error ||
+            "An error occurred while deleting your account."
+        );
+      }
     }
-  }
-};
+  };
 
   // Handle save notification settings
   const handleSaveNotifications = () => {
@@ -166,92 +182,100 @@ const handleDeleteAccount = async () => {
   };
 
   return (
-    <SettingsContainer>    
-    <h1>Settings</h1>
-    
-    {/* Display success message if email or password is updated */}
-    {success && <Alert variant="success">{successMessage}</Alert>}
+    <SettingsContainer>
+      <h1>Settings</h1>
 
-
+      {/* Display success message if email or password is updated */}
+      {success && <Alert variant="success">{successMessage}</Alert>}
 
       {/* Account Settings */}
-    <section id="account-settings">
-      {user ? (
-        <UserInfoContainer>  
-          <h5>Username : {user.first_name} {user.last_name}</h5>
-          <h5>E-mail : {user.email}</h5>
-        </UserInfoContainer>
-      ) : (
-        <p>Loading user data...</p>
-      )}
-    
-      {/* Conditionally render buttons based on form visibility */}
-      {!showEmailForm && (
-        <StyledButton>
-        <ButtonContainer>
-          <button onClick={handleToggleEmailForm}>✉️ Change Email</button>
-        </ButtonContainer>
-        </StyledButton>
-      )}
+      <section id="account-settings">
+        {user ? (
+          <UserInfoContainer>
+            <h5>
+              Username : {user.first_name} {user.last_name}
+            </h5>
+            <h5>E-mail : {user.email}</h5>
+          </UserInfoContainer>
+        ) : (
+          <p>Loading user data...</p>
+        )}
 
-    {/* Email Update Form */}
-    {showEmailForm && (
-      <form onSubmit={handleEmailChange}>
-        <label htmlFor="email">New Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}  // Update email state
-          required
-        />
-        <StyledButton type="submit">Update Email</StyledButton>
-      </form>
-    )}
-
-
-      {!showPasswordForm && (
+        {/* Conditionally render buttons based on form visibility */}
+        {!showEmailForm && (
           <StyledButton>
-          <ButtonContainer>
-            <button onClick={handleTogglePasswordForm}>🔒 Change Password</button>
-          </ButtonContainer>
+            <ButtonContainer>
+              <button onClick={handleToggleEmailForm}>
+                <StyledIcon icon={faUser} />
+                Change Email
+              </button>
+            </ButtonContainer>
           </StyledButton>
         )}
 
-    {/* Password Change Form */}
-    {showPasswordForm && (
-      <form onSubmit={handlePasswordChange}>
-        <label htmlFor="oldPassword">Old Password:</label>
-        <input
-          type="password"
-          id="oldPassword"
-          value={oldPassword}
-          onChange={(e) => setOldPassword(e.target.value)}  // Update old password state
-          required
-        />
-        <label htmlFor="newPassword">New Password:</label>
-        <input
-          type="password"
-          id="newPassword"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}  // Update new password state
-          required
-        />
-        <StyledButton type="submit">Change Password</StyledButton>
-      </form>
-    )}
+        {/* Email Update Form */}
+        {showEmailForm && (
+          <form onSubmit={handleEmailChange} className="updateForm">
+            <input
+              type="email"
+              value={email}
+              placeholder="New email..."
+              onChange={(e) => setEmail(e.target.value)} // Update email state
+              required
+            />
+            <StyledButton type="submit">Update Email</StyledButton>
+          </form>
+        )}
 
-    <ButtonContainer>
-          <ActionButton onClick={handleDeleteAccount}>
-          Delete Account
-          </ActionButton>
-    </ButtonContainer>
-    </section>
-      <br/>
-      <br/>
+        {!showPasswordForm && (
+          <StyledButton>
+            <ButtonContainer>
+              <button onClick={handleTogglePasswordForm}>
+                <StyledIcon icon={faLock} />
+                Change Password
+              </button>
+            </ButtonContainer>
+          </StyledButton>
+        )}
+
+        {/* Password Change Form */}
+        {showPasswordForm && (
+          <form onSubmit={handlePasswordChange} className="updateForm">
+            <label htmlFor="oldPassword">Old Password:</label>
+            <input
+              type="password"
+              id="oldPassword"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)} // Update old password state
+              required
+            />
+            <label htmlFor="newPassword">New Password:</label>
+            <input
+              type="password"
+              id="newPassword"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)} // Update new password state
+              required
+            />
+            <StyledButton type="submit">Change Password</StyledButton>
+          </form>
+        )}
+
+        <StyledButton>
+          <ButtonContainer onClick={handleDeleteAccount}>
+            <button>
+              <StyledIcon icon={faTrash} />
+              Delete Account
+            </button>
+          </ButtonContainer>
+        </StyledButton>
+      </section>
+      <br />
+      <br />
       {/* Notification Settings */}
       <NotificationSettingsContainer>
-        <h2>Notification Settings</h2>   
-         {/* Progress bar */}
+        <h2>Notification Settings</h2>
+        {/* Progress bar */}
         <ProgressBar>
           <ProgressFiller style={{ width: `${progress}%` }} />
         </ProgressBar>
@@ -301,7 +325,7 @@ const handleDeleteAccount = async () => {
         </button>
         <button onClick={handleSaveSecurity}>Save Security Settings</button>
       </section>
-    </SettingsContainer>  
+    </SettingsContainer>
   );
 };
 

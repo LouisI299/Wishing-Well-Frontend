@@ -11,4 +11,8 @@ export const StyledHeader = styled.header`
     justify-content: space-between;
     align-items: center;
   }
+
+  .streaksDiv p {
+    margin: 0 0 0 0.5em;
+  }
 `;

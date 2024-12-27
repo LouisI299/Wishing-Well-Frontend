@@ -33,7 +33,7 @@ const Header = () => {
             />
           </div>
           <ToggleButton />
-          <div>
+          <div className="streaksDiv">
             <FontAwesomeIcon icon={faFire} style={{ fontSize: "2em" }} />
             <p>{streakCount}</p>
           </div>
