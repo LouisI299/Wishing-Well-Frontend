@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import profilePicture from "../images/emptyProfilePicture.jpg";
+import { ProgressBar } from "react-bootstrap";
 
 export const ProfileContainer = styled.div`
   display: flex;
@@ -34,9 +35,7 @@ export const STR = styled.div`
   justify-content: space-between;
 `;
 
-export const CurrentTXTFL = styled.div`
-    
-`;
+export const CurrentTXTFL = styled.div``;
 
 export const Links = styled.div`
   display: flex;
@@ -51,4 +50,14 @@ export const Arrow = styled.div`
   justify-content: space-between;
   color: #7100c2;
   margin-right: 0.5em;
+`;
+
+export const ProgressBarContainer = styled.div``;
+
+export const StyledProgressBar = styled(ProgressBar)`
+  height: 2em;
+  width: 80%;
+  .progress-bar {
+    background-color: #7100c2;
+  }
 `;
