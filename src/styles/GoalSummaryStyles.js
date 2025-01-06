@@ -44,4 +44,26 @@ export const SummaryContainer = styled(Container)`
       text-decoration: none;
     }
   }
+
+  form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    input {
+      margin: 0 0.5em 0 0.5em;
+      height: 3em;
+      border-radius: 1em;
+      width: 4em;
+      text-align: center;
+    }
+  }
+`;
+
+export const DepositBtn = styled(FontAwesomeIcon)`
+  color: ${({ theme }) => theme.text};
+  font-size: 2em;
+  border: solid 3px ${({ theme }) => theme.text};
+  border-radius: 50%;
+  padding: 0.2em;
+  margin: 0;
 `;

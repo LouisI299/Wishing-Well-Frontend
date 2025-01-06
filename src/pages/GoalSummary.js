@@ -8,7 +8,11 @@ import {
   makeTransaction,
   postDataWithToken,
 } from "../utils/api";
-import { ImgContainer, SummaryContainer } from "../styles/GoalSummaryStyles";
+import {
+  ImgContainer,
+  SummaryContainer,
+  DepositBtn,
+} from "../styles/GoalSummaryStyles";
 import electronicsImg from "../images/categoryImages/electronics.jpg";
 import businessImg from "../images/categoryImages/business.jpg";
 import charityImg from "../images/categoryImages/charity.jpg";
@@ -24,7 +28,7 @@ import weddingImg from "../images/categoryImages/wedding.jpg";
 import customImg from "../images/categoryImages/custom.jpg";
 import vacationImg from "../images/categoryImages/vacation.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { Alert } from "react-bootstrap";
 import { parse } from "@fortawesome/fontawesome-svg-core";
 
@@ -37,6 +41,7 @@ const GoalSummary = () => {
   const [type, setType] = useState("deposit");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   const getImageByCategory = (category) => {
     switch (category) {
@@ -82,13 +87,15 @@ const GoalSummary = () => {
       try {
         const goalData = await fetchDataById("/api/goals", goalId, token);
         setGoal(goalData);
-        console.log(goal.status);
+        setAmount(goalData.period_amount);
       } catch (error) {
-        console.error("Error fetching goal data:", error);
+        console.error("Error fetching goal:", error);
       }
     };
 
     fetchGoal();
+
+    // setDueDate(new Date(goal.next_due_date));
   }, [goalId, token]);
 
   const handleTransaction = (amount, goalId, token) => async (e) => {
@@ -154,6 +161,10 @@ const GoalSummary = () => {
     return <div>Loading...</div>;
   }
 
+  const startDate = new Date(goal.start_date).toLocaleDateString();
+  const endDate = new Date(goal.end_date).toLocaleDateString();
+  const NextDueDate = new Date(goal.next_due_date).toLocaleDateString();
+
   return (
     <SummaryContainer>
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
@@ -171,20 +182,29 @@ const GoalSummary = () => {
       {goal.status === false && <p>Goal is completed!</p>}
       <p>Target Amount: {goal.target_amount}</p>
       <p>Current Amount: {goal.current_amount}</p>
-      <p>Start Date: {goal.start_date}</p>
-      <p>End Date: {goal.end_date}</p>
+      <p>Start Date: {startDate}</p>
+      <p>End Date: {endDate}</p>
+      <p>Next Due Date: {NextDueDate}</p>
       {goal.status === true && (
         <form onSubmit={handleTransaction(amount, goalId, token)}>
           <label>
-            Add Amount:
+            {goal.saving_method === true ? (
+              <>Add Monthly Amount:</>
+            ) : (
+              <>Add Weekly Amount</>
+            )}
+
             <input
               type="number"
               value={amount}
+              defaultValue={goal.period_amount}
               onChange={(e) => setAmount(e.target.value)}
               required
             />
           </label>
-          <button type="submit">Add Amount</button>
+          <button type="submit">
+            <DepositBtn icon={faPiggyBank} />
+          </button>
         </form>
       )}
     </SummaryContainer>

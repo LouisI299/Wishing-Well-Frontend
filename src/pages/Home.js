@@ -106,12 +106,12 @@ const Home = () => {
       </div>
     );
   }
-
+  const sortedGoals = goals.sort((a, b) => b.status - a.status);
   return (
     <HomeContainer>
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
       {/* Display each goal */}
-      {goals.map((goal) => {
+      {sortedGoals.map((goal) => {
         const progress = (goal.current_amount / goal.target_amount) * 100;
         return (
           <Link to={`/goal-summary/${goal.id}`} key={goal.id}>
@@ -137,7 +137,10 @@ const Home = () => {
                   <p>{goal.target_amount}€</p>
                 </div>
                 <div id="targetDiv">
-                  <p>You have saved {progress.toFixed(2)}% of your goal!</p>
+                  {goal.status === true && (
+                    <p>You have saved {progress.toFixed(2)}% of your goal!</p>
+                  )}
+                  {goal.status === false && <p>Goal is completed!</p>}
                 </div>
                 <p>
                   {" "}
