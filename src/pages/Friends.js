@@ -72,8 +72,8 @@ const Friends = () => {
                     <ul>
                         {searchResults.map(result => (
                             <li key={result.id}>
-                                {result.name}
-                                <button onClick={() => handleAddFriend(result.id)}>Add Friend</button>
+                            {`${result.first_name} ${result.last_name}`} 
+                            <button onClick={() => handleAddFriend(result.id)}>Add Friend</button>
                             </li>
                         ))}
                     </ul>
