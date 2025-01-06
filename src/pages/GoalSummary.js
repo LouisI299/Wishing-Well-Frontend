@@ -37,6 +37,7 @@ const GoalSummary = () => {
   const [type, setType] = useState("deposit");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+  const [dueDate, setDueDate] = useState("");
 
   const getImageByCategory = (category) => {
     switch (category) {
@@ -82,13 +83,15 @@ const GoalSummary = () => {
       try {
         const goalData = await fetchDataById("/api/goals", goalId, token);
         setGoal(goalData);
-        console.log(goal.status);
+        setAmount(goalData.period_amount);
       } catch (error) {
-        console.error("Error fetching goal data:", error);
+        console.error("Error fetching goal:", error);
       }
     };
 
     fetchGoal();
+
+    // setDueDate(new Date(goal.next_due_date));
   }, [goalId, token]);
 
   const handleTransaction = (amount, goalId, token) => async (e) => {
@@ -154,6 +157,10 @@ const GoalSummary = () => {
     return <div>Loading...</div>;
   }
 
+  const startDate = new Date(goal.start_date).toLocaleDateString();
+  const endDate = new Date(goal.end_date).toLocaleDateString();
+  const NextDueDate = new Date(goal.next_due_date).toLocaleDateString();
+
   return (
     <SummaryContainer>
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
@@ -171,15 +178,22 @@ const GoalSummary = () => {
       {goal.status === false && <p>Goal is completed!</p>}
       <p>Target Amount: {goal.target_amount}</p>
       <p>Current Amount: {goal.current_amount}</p>
-      <p>Start Date: {goal.start_date}</p>
-      <p>End Date: {goal.end_date}</p>
+      <p>Start Date: {startDate}</p>
+      <p>End Date: {endDate}</p>
+      <p>Next Due Date: {NextDueDate}</p>
       {goal.status === true && (
         <form onSubmit={handleTransaction(amount, goalId, token)}>
           <label>
-            Add Amount:
+            {goal.saving_method === true ? (
+              <>Add Monthly Amount:</>
+            ) : (
+              <>Add Weekly Amount</>
+            )}
+
             <input
               type="number"
               value={amount}
+              defaultValue={goal.period_amount}
               onChange={(e) => setAmount(e.target.value)}
               required
             />
