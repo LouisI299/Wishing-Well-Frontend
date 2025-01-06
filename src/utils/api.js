@@ -26,23 +26,32 @@ export const setupInterceptors = (navigate) => {
 };
 
 //Function to fetch data from the backend server
-export const fetchData = async (endpoint, callback, token) => {
+export const fetchData = async (endpoint, callback = null, token, method = "GET") => {
   try {
-    const response = await api.get(endpoint, {
+    const response = await api.request({
+      url: endpoint,
+      method: method, // Gebruik de opgegeven HTTP-methode
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    callback(response.data);
+
+    if (callback && typeof callback === "function") {
+      callback(response.data);
+    }
+
+    return response.data;
   } catch (error) {
     if (error.response) {
       console.error("Error fetching data:", error.response.data);
     } else {
       console.error("Error fetching data:", error.message);
     }
-    return redirect("/login");
+    throw error;
   }
 };
+
+
 
 //Function to post data with token
 export const postDataWithToken = async (endpoint, data, token) => {
@@ -53,15 +62,15 @@ export const postDataWithToken = async (endpoint, data, token) => {
         "Content-Type": "application/json",
       },
     });
-
     return response.data;
   } catch (error) {
-    if (error.response) {
-      console.error("Error posting data with token:", error.response.data);
-    } else {
-      console.error("Error posting data with token:", error.message);
-    }
-    throw error;
+    console.log(error);
+    console.error("error: ", error);
+    console.error(
+      "postDataWithToken error:",
+      error.response?.data || error.message
+    );
+    throw error; // Ensure the error is thrown
   }
 };
 

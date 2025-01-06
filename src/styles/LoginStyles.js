@@ -9,7 +9,7 @@ export const LogoContainer = styled(Container)`
   justify-content: center;
   align-items: center;
   flex-direction: column;
- img {
+  img {
     width: 100px;
   }
 
@@ -17,7 +17,7 @@ export const LogoContainer = styled(Container)`
     font-size: 2em;
   }
 
-   @media (min-width: 1024px) {
+  @media (min-width: 1024px) {
     img {
       width: 150px;
       margin: auto;
@@ -35,9 +35,9 @@ export const StyledFormGroup = styled(Form.Group)`
   margin: 1em 0 1em 0;
   position: relative;
 
-   @media (max-width: 768px) {
+  @media (max-width: 768px) {
     height: 2.5em;
-    margin: 0.5em 0;
+    margin: 1em 0;
   }
 `;
 
@@ -54,8 +54,9 @@ export const InputGroup = styled.div`
   align-items: center;
   position: relative;
   width: 100%;
+  gap: 1em;
 
-   @media (min-width: 1024px) {
+  @media (min-width: 1024px) {
     width: 50%;
     margin-bottom: 1em;
   }
@@ -65,8 +66,6 @@ export const StyledInput = styled(Form.Control)`
   padding-left: 35px;
   height: 3em;
   border-radius: 1em;
-
-  
 `;
 
 export const ButtonContainer = styled.div`

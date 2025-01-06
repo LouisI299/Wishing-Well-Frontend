@@ -1,51 +1,46 @@
-// Profile.js
 import React, { useEffect, useState } from "react";
-import { fetchCurrentUser } from "../utils/api";
 import { fetchData } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
-import { faFire } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import {
   ProfileContainer,
+  ProfileHeader,
+  ProfileContent,
   ProfileText,
+  ProfileStats,
   STR,
   Links,
   Arrow,
   ProgressBarContainer,
   StyledProgressBar,
+  LogoutButton,
 } from "../styles/ProfileStyles";
 
 const Profile = () => {
   const [profileData, setProfileData] = useState(null);
+  const [streaks, setStreaks] = useState({ current: 0, highest: 0 });
   const { token } = useAuth();
 
-  const [streak, setStreak] = React.useState(0);
-
-  const [streakCount, setStreakCount] = React.useState(0);
-  React.useEffect(() => {
-    fetchData("/api/streaks/", setStreak, token);
-    if (streak == "0") {
-      setStreakCount(0);
-    } else {
-      setStreakCount(streak.current_streak);
-    }
-  }, []);
-
   useEffect(() => {
-    const fetchProfileData = async () => {
+    const fetchProfileAndStreaks = async () => {
       try {
-        const userData = await fetchData(
-          "/api/users/current",
-          setProfileData,
-          token
-        );
+        const [profile, currentStreak, highestStreak] = await Promise.all([
+          fetchData("/api/users/current", null, token),
+          fetchData("/api/streaks/", null, token),
+          fetchData("/api/streaks/highest", null, token),
+        ]);
+
+        setProfileData(profile);
+        setStreaks({
+          current: currentStreak.current_streak || 0,
+          highest: highestStreak.highest_streak || 0,
+        });
       } catch (error) {
-        console.error("Error fetching profile data:", error);
+        console.error("Error fetching data:", error);
       }
     };
 
-    fetchProfileData();
+    fetchProfileAndStreaks();
   }, [token]);
 
   const logout = () => {
@@ -54,67 +49,54 @@ const Profile = () => {
   };
 
   if (!profileData) {
-    return <div>Loading...</div>;
+    return <div>Loading profile data...</div>;
   }
+
+  const roundedPoints = Math.floor(profileData.points);
 
   return (
     <ProfileContainer>
-      <ProfileText>
-        Hi, {profileData.first_name} {profileData.last_name}
-      </ProfileText>
-      <STR>
-        <p>Level:</p>
-        <p style={{ marginLeft: "0.5em" }}>{profileData.level}</p>
-        {/* <FontAwesomeIcon icon={faFire}/> */}
-      </STR>
-      <ProgressBarContainer>
-        <StyledProgressBar
-          bgcolor={"#6a1b9a"}
-          now={(profileData.points / (profileData.level * 100)) * 100}
-          label={`${profileData.points} XP`}
-          completed={profileData.level * 100}
-        />
-      </ProgressBarContainer>
-      <STR>
-        <p>Current streak:</p>
-        <p style={{ marginLeft: "0.5em" }}>{streakCount}</p>
-        {/* <FontAwesomeIcon icon={faFire}/> */}
-      </STR>
-      {/* <h1 style = {{marginLeft: "0.5em"}}>Account settings</h1> */}
-      <Links>
-        <Arrow>
-          <Link to="/ContactDetails" style={{ textDecoration: "none" }}>
-            Contact details
-          </Link>
-          <p>&gt;</p>
-        </Arrow>
-        <Arrow>
-          <Link to="/Friends" style={{ textDecoration: "none" }}>
-            Friends
-          </Link>
-          <p>&gt;</p>
-        </Arrow>
-        <Arrow>
-          <Link to="/FriendRequests" style={{ textDecoration: "none" }}>
-            Friend requests
-          </Link>
-          <p>&gt;</p>
-        </Arrow>
-        <button
-          onClick={logout}
-          style={{
-            width: "auto",
-            padding: "0.3em",
-            alignSelf: "flex-start",
-            borderRadius: "2em",
-            border: "none",
-            paddingLeft: "1em",
-            paddingRight: "1em",
-          }}
-        >
-          Log out
-        </button>
-      </Links>
+      <ProfileHeader>
+        <ProfileText>
+          Hi, {profileData.first_name} {profileData.last_name}
+        </ProfileText>
+      </ProfileHeader>
+      <ProfileContent>
+        <ProfileStats>
+          <STR>
+            <p>Level:</p>
+            <p>{profileData.level}</p>
+          </STR>
+          <ProgressBarContainer>
+            <StyledProgressBar
+              now={(roundedPoints / (profileData.level * 100)) * 100}
+              label={`${roundedPoints} XP`}
+              completed={profileData.level * 100}
+            />
+          </ProgressBarContainer>
+          <STR>
+            <p>🔥 Current Streak:</p>
+            <p>{streaks.current}</p>
+          </STR>
+          <STR>
+            <p>🏆 Highest Streak:</p>
+            <p>{streaks.highest}</p>
+          </STR>
+        </ProfileStats>
+        <Links>
+          {[
+            { to: "/ContactDetails", text: "Contact details" },
+            { to: "/Friends", text: "Friends" },
+            { to: "/FriendRequests", text: "Friend requests" },
+          ].map((link) => (
+            <Arrow key={link.to}>
+              <Link to={link.to}>{link.text}</Link>
+              <p>&gt;</p>
+            </Arrow>
+          ))}
+          <LogoutButton onClick={logout}>Log out</LogoutButton>
+        </Links>
+      </ProfileContent>
     </ProfileContainer>
   );
 };
