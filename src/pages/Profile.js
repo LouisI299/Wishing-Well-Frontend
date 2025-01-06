@@ -1,10 +1,7 @@
 // Profile.js
 import React, { useEffect, useState } from "react";
-import { fetchCurrentUser } from "../utils/api";
 import { fetchData } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
-import { faFire } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Link } from "react-router-dom";
 import {
   ProfileContainer,
@@ -20,26 +17,37 @@ const Profile = () => {
   const [profileData, setProfileData] = useState(null);
   const { token } = useAuth();
 
-  const [streak, setStreak] = React.useState(0);
+  const [currentStreak, setCurrentStreak] = useState(0);
+  const [highestStreak, setHighestStreak] = useState(0);
 
-  const [streakCount, setStreakCount] = React.useState(0);
-  React.useEffect(() => {
-    fetchData("/api/streaks/", setStreak, token);
-    if (streak == "0") {
-      setStreakCount(0);
-    } else {
-      setStreakCount(streak.current_streak);
-    }
-  }, []);
+  // ✅ Fetch huidige streak en hoogste streak
+  useEffect(() => {
+    const fetchStreaks = async () => {
+      try {
+        // Huidige streak ophalen
+        const currentStreakData = await fetchData("/api/streaks/", null, token);
+        setCurrentStreak(currentStreakData.current_streak || 0);
 
+        // Hoogste streak ophalen
+        const highestStreakData = await fetchData(
+          "/api/streaks/highest",
+          null,
+          token
+        );
+        setHighestStreak(highestStreakData.highest_streak || 0);
+      } catch (error) {
+        console.error("Error fetching streak data:", error);
+      }
+    };
+
+    fetchStreaks();
+  }, [token]);
+
+  // ✅ Fetch profielgegevens
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const userData = await fetchData(
-          "/api/users/current",
-          setProfileData,
-          token
-        );
+        await fetchData("/api/users/current", setProfileData, token);
       } catch (error) {
         console.error("Error fetching profile data:", error);
       }
@@ -65,7 +73,6 @@ const Profile = () => {
       <STR>
         <p>Level:</p>
         <p style={{ marginLeft: "0.5em" }}>{profileData.level}</p>
-        {/* <FontAwesomeIcon icon={faFire}/> */}
       </STR>
       <ProgressBarContainer>
         <StyledProgressBar
@@ -76,11 +83,13 @@ const Profile = () => {
         />
       </ProgressBarContainer>
       <STR>
-        <p>Current streak:</p>
-        <p style={{ marginLeft: "0.5em" }}>{streakCount}</p>
-        {/* <FontAwesomeIcon icon={faFire}/> */}
+        <p>🔥 Huidige Streak:</p>
+        <p style={{ marginLeft: "0.5em" }}>{currentStreak}</p>
       </STR>
-      {/* <h1 style = {{marginLeft: "0.5em"}}>Account settings</h1> */}
+      <STR>
+        <p>🏆 Hoogste Streak:</p>
+        <p style={{ marginLeft: "0.5em" }}>{highestStreak}</p>
+      </STR>
       <Links>
         <Arrow>
           <Link to="/ContactDetails" style={{ textDecoration: "none" }}>
