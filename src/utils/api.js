@@ -53,15 +53,15 @@ export const postDataWithToken = async (endpoint, data, token) => {
         "Content-Type": "application/json",
       },
     });
-
     return response.data;
   } catch (error) {
-    if (error.response) {
-      console.error("Error posting data with token:", error.response.data);
-    } else {
-      console.error("Error posting data with token:", error.message);
-    }
-    throw error;
+    console.log(error);
+    console.error("error: ", error);
+    console.error(
+      "postDataWithToken error:",
+      error.response?.data || error.message
+    );
+    throw error; // Ensure the error is thrown
   }
 };
 
