@@ -26,9 +26,11 @@ export const setupInterceptors = (navigate) => {
 };
 
 //Function to fetch data from the backend server
-export const fetchData = async (endpoint, callback = null, token) => {
+export const fetchData = async (endpoint, callback = null, token, method = "GET") => {
   try {
-    const response = await api.get(endpoint, {
+    const response = await api.request({
+      url: endpoint,
+      method: method, // Gebruik de opgegeven HTTP-methode
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -48,6 +50,7 @@ export const fetchData = async (endpoint, callback = null, token) => {
     throw error;
   }
 };
+
 
 
 //Function to post data with token

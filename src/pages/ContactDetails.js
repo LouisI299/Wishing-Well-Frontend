@@ -37,9 +37,9 @@ const Profile = () => {
     const confirmDelete = window.confirm(
       "Weet je zeker dat je je account wilt verwijderen? Deze actie kan niet ongedaan worden gemaakt."
     );
-
+  
     if (!confirmDelete) return;
-
+  
     try {
       await fetchData("/api/users/delete", null, token, "DELETE");
       alert("Je account is succesvol verwijderd.");
@@ -50,7 +50,7 @@ const Profile = () => {
       alert("Er is een fout opgetreden bij het verwijderen van je account.");
     }
   };
-
+  
   if (!profileData) {
     return <div>Loading...</div>;
   }
