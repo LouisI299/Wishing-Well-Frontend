@@ -26,23 +26,29 @@ export const setupInterceptors = (navigate) => {
 };
 
 //Function to fetch data from the backend server
-export const fetchData = async (endpoint, callback, token) => {
+export const fetchData = async (endpoint, callback = null, token) => {
   try {
     const response = await api.get(endpoint, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    callback(response.data);
+
+    if (callback && typeof callback === "function") {
+      callback(response.data);
+    }
+
+    return response.data;
   } catch (error) {
     if (error.response) {
       console.error("Error fetching data:", error.response.data);
     } else {
       console.error("Error fetching data:", error.message);
     }
-    return redirect("/login");
+    throw error;
   }
 };
+
 
 //Function to post data with token
 export const postDataWithToken = async (endpoint, data, token) => {
