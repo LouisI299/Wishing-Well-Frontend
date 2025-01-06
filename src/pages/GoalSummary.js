@@ -8,7 +8,11 @@ import {
   makeTransaction,
   postDataWithToken,
 } from "../utils/api";
-import { ImgContainer, SummaryContainer } from "../styles/GoalSummaryStyles";
+import {
+  ImgContainer,
+  SummaryContainer,
+  DepositBtn,
+} from "../styles/GoalSummaryStyles";
 import electronicsImg from "../images/categoryImages/electronics.jpg";
 import businessImg from "../images/categoryImages/business.jpg";
 import charityImg from "../images/categoryImages/charity.jpg";
@@ -24,7 +28,7 @@ import weddingImg from "../images/categoryImages/wedding.jpg";
 import customImg from "../images/categoryImages/custom.jpg";
 import vacationImg from "../images/categoryImages/vacation.jpg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faPiggyBank } from "@fortawesome/free-solid-svg-icons";
 import { Alert } from "react-bootstrap";
 import { parse } from "@fortawesome/fontawesome-svg-core";
 
@@ -198,7 +202,9 @@ const GoalSummary = () => {
               required
             />
           </label>
-          <button type="submit">Add Amount</button>
+          <button type="submit">
+            <DepositBtn icon={faPiggyBank} />
+          </button>
         </form>
       )}
     </SummaryContainer>
