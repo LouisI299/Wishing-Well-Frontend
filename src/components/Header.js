@@ -1,6 +1,6 @@
 import React from "react";
 import { StyledHeader } from "../styles/HeaderStyles";
-import ToggleButton from "./ToggleButton";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faFire } from "@fortawesome/free-solid-svg-icons";
 import logo from "../images/WishingWellCircle.png";
@@ -32,7 +32,7 @@ const Header = () => {
               style={{ width: "50px", height: "50px" }}
             />
           </div>
-          <ToggleButton />
+
           <div className="streaksDiv">
             <FontAwesomeIcon icon={faFire} style={{ fontSize: "2em" }} />
             <p>{streakCount}</p>
