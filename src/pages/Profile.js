@@ -65,6 +65,8 @@ const Profile = () => {
     return <div>Loading...</div>;
   }
 
+  const roundedPoints = Math.floor(profileData.points);
+
   return (
     <ProfileContainer>
       <ProfileText>
@@ -77,17 +79,17 @@ const Profile = () => {
       <ProgressBarContainer>
         <StyledProgressBar
           bgcolor={"#6a1b9a"}
-          now={(profileData.points / (profileData.level * 100)) * 100}
-          label={`${profileData.points} XP`}
+          now={(roundedPoints / (profileData.level * 100)) * 100}
+          label={`${roundedPoints} XP`}
           completed={profileData.level * 100}
         />
       </ProgressBarContainer>
       <STR>
-        <p>🔥 Huidige Streak:</p>
+        <p>🔥 Current Streak:</p>
         <p style={{ marginLeft: "0.5em" }}>{currentStreak}</p>
       </STR>
       <STR>
-        <p>🏆 Hoogste Streak:</p>
+        <p>🏆 Highest Streak:</p>
         <p style={{ marginLeft: "0.5em" }}>{highestStreak}</p>
       </STR>
       <Links>

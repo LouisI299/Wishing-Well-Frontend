@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Alert } from "react-bootstrap";
 import { useAuth } from "../contexts/AuthProvider";
+import ToggleButton from "../components/ToggleButton";
 import {
   StyledIcon,
   ButtonContainer,
@@ -187,6 +188,7 @@ const Settings = () => {
 
       {/* Display success message if email or password is updated */}
       {success && <Alert variant="success">{successMessage}</Alert>}
+      <ToggleButton />
 
       {/* Account Settings */}
       <section id="account-settings">
