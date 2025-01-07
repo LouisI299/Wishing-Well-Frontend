@@ -76,13 +76,7 @@ const Friends = () => {
       <div>
         <h1>Search Results</h1>
         <div>
-          <input
-            type="text"
-            placeholder="Search for friends..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />
-          <button onClick={handleSearch}>Search</button>
+          <h1>Friends</h1>
         </div>
         {searchResults.length === 0 && (
           <p>No results found for "{searchQuery}"</p>
