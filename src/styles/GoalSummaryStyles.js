@@ -16,6 +16,25 @@ export const ImgContainer = styled(Container)`
   }
 `;
 
+export const EditContainer = styled(Container)`
+  display: flex;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+
+  #editGoalForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1em;
+
+    input {
+      height: 2rem;
+      border-radius: 5px;
+    }
+  }
+`;
+
 export const SummaryContainer = styled(Container)`
   display: flex;
   width: 95vw;

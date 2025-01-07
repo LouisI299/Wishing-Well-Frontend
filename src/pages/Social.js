@@ -357,7 +357,9 @@ const Social = () => {
                 </StyledCard>
               ))
             ) : (
-              <p key={`no-goals-${friend.id}`}></p>
+              <p key={`no-goals-${friend.id}`}>
+                Nothing to see here yet. Add friends to see their goals!
+              </p>
             )}
           </StyledBody>
         ))}

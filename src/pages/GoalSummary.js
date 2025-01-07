@@ -14,6 +14,7 @@ import {
   ImgContainer,
   SummaryContainer,
   DepositBtn,
+  EditContainer,
 } from "../styles/GoalSummaryStyles";
 import electronicsImg from "../images/categoryImages/electronics.jpg";
 import businessImg from "../images/categoryImages/business.jpg";
@@ -125,6 +126,7 @@ const GoalSummary = () => {
             : "end_date"
         );
         setPeriodAmount(goalData.period_amount);
+        setAmount(goalData.period_amount);
       } catch (error) {
         console.error("Error fetching goal:", error);
       }
@@ -343,14 +345,14 @@ const GoalSummary = () => {
       <div className="summaryTitle">
         <h1>{goal.name}</h1>
         <button onClick={() => setIsEditing(!isEditing)}>
-          {isEditing ? "Cancel edit" : "Edit"}
+          {isEditing ? "Cancel edit " : "Edit "}
           <FontAwesomeIcon icon={faPenToSquare} />
         </button>
       </div>
 
       {isEditing ? (
-        <div>
-          <form onSubmit={handleSubmit}>
+        <EditContainer>
+          <form onSubmit={handleSubmit} id="editGoalForm">
             <label>
               Name:
               <input
@@ -444,7 +446,7 @@ const GoalSummary = () => {
               Payment: {calculatedPayment}
             </p>
           )}
-        </div>
+        </EditContainer>
       ) : (
         <>
           {goal.status === false && <p>Goal is completed!</p>}
@@ -463,7 +465,7 @@ const GoalSummary = () => {
                 )}
                 <input
                   type="number"
-                  value={period_amount}
+                  value={amount}
                   onChange={(e) => setAmount(e.target.value)}
                   required
                 />
