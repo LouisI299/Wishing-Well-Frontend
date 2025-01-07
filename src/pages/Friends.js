@@ -2,6 +2,20 @@ import React, { useEffect, useState } from "react";
 import { fetchData, postDataWithToken } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
 import { Link } from "react-router-dom";
+import {
+  FriendsPageWrapper,
+  PageTitle,
+  SearchBarContainer,
+  SearchInput,
+  SearchButton,
+  FriendsGrid,
+  FriendCard,
+  ProfileImage,
+  FriendName,
+  FriendButton,
+  EmptyMessage,
+} from "../styles/FriendsStyles";
+import emptyProfilePicture from "../images/emptyProfilePicture.jpg";
 
 const Friends = () => {
   const { token } = useAuth();
@@ -54,53 +68,62 @@ const Friends = () => {
     fetchFriends();
   }, [token]);
 
-  if (view === "main") {
+  
     return (
-      <div>
-        <h1>My Friends</h1>
-        <div>
-          <input
+      <>
+        <PageTitle>My Friends</PageTitle>
+        
+        {/* Search bar */}
+        <SearchBarContainer>
+          <SearchInput
             type="text"
             placeholder="Search for friends..."
             value={searchQuery}
             onChange={handleSearchChange}
-          />
-          <button onClick={handleSearch}>Search</button>
-        </div>
-        {friends.length === 0 && <p>You have no friends yet.</p>}
-        {friends.map((friend) => (
-          <div key={friend.id}>
-            <p>
-              {friend.first_name} {friend.last_name}
-            </p>
-            <button>Remove Friend</button>
-          </div>
-        ))}
-      </div>
-    );
-  }
+          />     
+          <SearchButton onClick={handleSearch}>Search</SearchButton>                   
+        </SearchBarContainer>
 
-  if (view === "search") {
-    return (
-      <div>
-        <h1>Search Results</h1>
-        <div>
-          <h1>Friends</h1>
-        </div>
-        {searchResults.length === 0 && (
-          <p>No results found for "{searchQuery}"</p>
+        <FriendsPageWrapper>
+
+        {/* Main view */}
+        {view === "main" && (
+          <>
+            {friends.length === 0 && <p>You have no friends yet.</p>}
+            <FriendsGrid>
+              {friends.map((friend) => (
+                <FriendCard key={friend.id}>
+                  <ProfileImage src={emptyProfilePicture} alt="Profile Picture" />
+                  <FriendName>{`${friend.first_name} ${friend.last_name}`}</FriendName>
+                  <FriendButton>Remove Friend</FriendButton>
+                </FriendCard>       
+              ))}       
+            </FriendsGrid>        
+          </>
         )}
-        {searchResults.map((user) => (
-          <div key={user.id}>
-            <p>
-              {user.first_name} {user.last_name}
-            </p>
-            <button onClick={() => handleAddFriend(user.id)}>Add Friend</button>
-          </div>
-        ))}
-      </div>
+
+
+        {/* Search results view */}
+        {view === "search" && (
+          <>
+            {searchResults.length === 0 ? (
+              <EmptyMessage>No results found for "{searchQuery}"</EmptyMessage>   
+            ) : (    
+              <FriendsGrid>
+                {searchResults.map((user) => (
+                  <FriendCard key={user.id}>
+                    <ProfileImage src={emptyProfilePicture} alt="Profile"/>
+                    <FriendName>{`${user.first_name} ${user.last_name}`}</FriendName>
+                    <FriendButton onClick={() => handleAddFriend(user.id)}>Add Friend</FriendButton>
+                  </FriendCard>
+                ))}                
+              </FriendsGrid>  
+            )} 
+          </>
+        )}
+      </FriendsPageWrapper>
+      </>
     );
-  }
 };
 
 export default Friends;
