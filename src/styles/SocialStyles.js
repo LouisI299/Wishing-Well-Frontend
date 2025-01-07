@@ -28,6 +28,7 @@ export const StyledCard = styled(Card)`
   flex-direction: column;
   align-items: center;
   max-width: 100%;
+  margin: 0.5em 0 0.5em 0;
 
   .likeCommentCount {
     display: flex;
@@ -77,12 +78,29 @@ export const CardFooter = styled(Card.Footer)`
   display: flex;
   flex-direction: row;
   padding: 0em;
+  border-bottom-left-radius: 1em;
+  border-bottom-right-radius: 1em;
+
+  .likeDiv {
+    border-bottom-left-radius: 1em;
+    button {
+      border-bottom-left-radius: 1em;
+    }
+  }
+
+  .commentDiv {
+    border-bottom-right-radius: 1em;
+    button {
+      border-bottom-right-radius: 1em;
+    }
+  }
 
   div {
     width: 50%;
     display: flex;
     justify-content: center;
     border: 1px solid ${({ theme }) => theme.text};
+    border-bottom-left-radius: 1em;
 
     button {
       width: 100%;

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { fetchData, postDataWithToken } from "../utils/api";
+import { deleteGoalData, fetchData, postDataWithToken } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
 import { Link } from "react-router-dom";
+import { Alert } from "react-bootstrap";
 import {
   FriendsPageWrapper,
   PageTitle,
@@ -23,6 +24,9 @@ const Friends = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [friends, setFriends] = useState([]);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [requestSent, setRequestSent] = useState([]);
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
@@ -48,8 +52,22 @@ const Friends = () => {
     try {
       await postDataWithToken("/api/friends/add", { friend_id }, token);
       console.log("Friend added successfully");
+      setSuccessMessage("Friend added successfully");
+      setRequestSent([friend_id]);
     } catch (error) {
       console.error("Error adding friend:", error);
+      setErrorMessage("Error adding friend. Please try again.");
+    }
+  };
+
+  const handleRemoveFriend = async (friend_id) => {
+    try {
+      await deleteGoalData(`/api/friends/decline/${friend_id}`, token);
+      console.log("Friend removed successfully");
+      setSuccessMessage("Friend removed successfully");
+    } catch (error) {
+      console.error("Error removing friend:", error);
+      setErrorMessage("Error removing friend. Please try again.");
     }
   };
 
@@ -68,24 +86,24 @@ const Friends = () => {
     fetchFriends();
   }, [token]);
 
-  
-    return (
-      <>
-        <PageTitle>My Friends</PageTitle>
-        
-        {/* Search bar */}
-        <SearchBarContainer>
-          <SearchInput
-            type="text"
-            placeholder="Search for friends..."
-            value={searchQuery}
-            onChange={handleSearchChange}
-          />     
-          <SearchButton onClick={handleSearch}>Search</SearchButton>                   
-        </SearchBarContainer>
+  return (
+    <>
+      {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
+      {successMessage && <Alert variant="success">{successMessage}</Alert>}
+      <PageTitle>My Friends</PageTitle>
 
-        <FriendsPageWrapper>
+      {/* Search bar */}
+      <SearchBarContainer>
+        <SearchInput
+          type="text"
+          placeholder="Search for friends..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+        />
+        <SearchButton onClick={handleSearch}>Search</SearchButton>
+      </SearchBarContainer>
 
+      <FriendsPageWrapper>
         {/* Main view */}
         {view === "main" && (
           <>
@@ -93,37 +111,46 @@ const Friends = () => {
             <FriendsGrid>
               {friends.map((friend) => (
                 <FriendCard key={friend.id}>
-                  <ProfileImage src={emptyProfilePicture} alt="Profile Picture" />
+                  <ProfileImage
+                    src={emptyProfilePicture}
+                    alt="Profile Picture"
+                  />
                   <FriendName>{`${friend.first_name} ${friend.last_name}`}</FriendName>
-                  <FriendButton>Remove Friend</FriendButton>
-                </FriendCard>       
-              ))}       
-            </FriendsGrid>        
+                  <FriendButton onClick={() => handleRemoveFriend(friend.id)}>
+                    Remove Friend
+                  </FriendButton>
+                </FriendCard>
+              ))}
+            </FriendsGrid>
           </>
         )}
-
 
         {/* Search results view */}
         {view === "search" && (
           <>
             {searchResults.length === 0 ? (
-              <EmptyMessage>No results found for "{searchQuery}"</EmptyMessage>   
-            ) : (    
+              <EmptyMessage>No results found for "{searchQuery}"</EmptyMessage>
+            ) : (
               <FriendsGrid>
                 {searchResults.map((user) => (
                   <FriendCard key={user.id}>
-                    <ProfileImage src={emptyProfilePicture} alt="Profile"/>
+                    <ProfileImage src={emptyProfilePicture} alt="Profile" />
                     <FriendName>{`${user.first_name} ${user.last_name}`}</FriendName>
-                    <FriendButton onClick={() => handleAddFriend(user.id)}>Add Friend</FriendButton>
+                    <FriendButton
+                      onClick={() => handleAddFriend(user.id)}
+                      disabled={requestSent.includes(user.id)}
+                    >
+                      Add Friend
+                    </FriendButton>
                   </FriendCard>
-                ))}                
-              </FriendsGrid>  
-            )} 
+                ))}
+              </FriendsGrid>
+            )}
           </>
         )}
       </FriendsPageWrapper>
-      </>
-    );
+    </>
+  );
 };
 
 export default Friends;
