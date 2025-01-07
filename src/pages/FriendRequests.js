@@ -1,6 +1,19 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "../contexts/AuthProvider";
 import { fetchData, postDataWithToken, putDataWithToken } from "../utils/api";
+import {
+  FriendRequestsContainer,
+  Title,
+  RequestList,
+  RequestItem,
+  UserInfo,
+  ProfileImage,
+  UserName,
+  ButtonContainer,
+  AcceptButton,
+  DeclineButton,
+} from "../styles/FriendRequestsStyles";
+import emptyProfilePicture from "../images/emptyProfilePicture.jpg";
 
 const FriendRequests = () => {
   const { token } = useAuth();
@@ -66,28 +79,39 @@ const FriendRequests = () => {
   }, [GetFriendRequests]);
 
   return (
-    <div>
-      <h1>Friend requests</h1>
-      {friendRequests.length === 0 && (
+    <FriendRequestsContainer>
+      <Title>Friend requests</Title>
+
+      {friendRequests.length === 0 ? (
         <p>You have no friend requests at the moment.</p>
+      ) : (
+        <RequestList>
+          {friendRequests.map((request) => (
+            <RequestItem key={request.id}>
+              {request.user ? (
+                <>
+                  <UserInfo>
+                    <ProfileImage
+                      src={request.user.profile_picture || emptyProfilePicture}
+                      alt="Profile"
+                    />
+                    <UserName>
+                      {request.user.first_name} {request.user.last_name}                      
+                    </UserName>
+                  </UserInfo>
+                  <ButtonContainer>
+                    <AcceptButton onClick={() => handleAccept(request.id)}>✔</AcceptButton>
+                    <DeclineButton onClick={() => handleDecline(request.id)}>✖</DeclineButton>                    
+                  </ButtonContainer>
+                </>
+              ) : (
+                <p>User information not available</p>
+              )}   
+            </RequestItem>   
+          ))}
+        </RequestList>
       )}
-      {friendRequests.map((request) => (
-        <div key={request.id}>
-          {request.user ? (
-            <>
-              <p>
-                {request.user.first_name} {request.user.last_name} wants to be
-                your friend
-              </p>
-              <button onClick={() => handleAccept(request.id)}>Accept</button>
-              <button onClick={() => handleDecline(request.id)}>Decline</button>
-            </>
-          ) : (
-            <p>User information not available</p>
-          )}
-        </div>
-      ))}
-    </div>
+    </FriendRequestsContainer>
   );
 };
 
