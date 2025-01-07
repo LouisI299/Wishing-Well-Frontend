@@ -58,6 +58,15 @@ const Friends = () => {
     return (
       <div>
         <h1>My Friends</h1>
+        <div>
+          <input
+            type="text"
+            placeholder="Search for friends..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <button onClick={handleSearch}>Search</button>
+        </div>
         {friends.length === 0 && <p>You have no friends yet.</p>}
         {friends.map((friend) => (
           <div key={friend.id}>
