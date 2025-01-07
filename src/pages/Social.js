@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchData } from "../utils/api";
+import { fetchData, postDataWithToken } from "../utils/api";
 import { useAuth } from "../contexts/AuthProvider";
 import { Link } from "react-router-dom";
 import { StyledCard } from "../styles/SocialStyles";
@@ -10,14 +10,42 @@ const Social = () => {
   const { token } = useAuth();
   const [friends, setFriends] = useState([]);
   const [friendGoals, setFriendGoals] = useState({});
+  const [goalLikes, setGoalLikes] = useState({});
+  const [goalComments, setGoalComments] = useState({});
+
+  const handleLike = async (goal_id) => {
+    try {
+      const response = await postDataWithToken(
+        `/api/likes/${goal_id}`,
+        null,
+        token
+      );
+      if (response.message === "Liked") {
+        setGoalLikes((prevLikes) => ({
+          ...prevLikes,
+          [goal_id]: prevLikes[goal_id] + 1,
+        }));
+      }
+
+      if (response.message === "Unliked") {
+        setGoalLikes((prevLikes) => ({
+          ...prevLikes,
+          [goal_id]: prevLikes[goal_id] - 1,
+        }));
+      }
+      console.log("Like response:", response);
+    } catch (error) {
+      console.error("Error liking goal:", error);
+    }
+  };
 
   useEffect(() => {
     // Fetch friends list
     const fetchFriends = async () => {
       try {
         const response = await fetchData("/api/friends/all", null, token);
-        console.log("Friends response:", response);
-        setFriends(response || []); // Ensure response is an array
+
+        setFriends(response || []);
       } catch (error) {
         console.error("Error fetching friends:", error);
       }
@@ -29,6 +57,8 @@ const Social = () => {
   useEffect(() => {
     const fetchFriendGoals = async () => {
       const goals = {};
+      const likes = {};
+      const comments = {};
       for (let friend of friends) {
         try {
           const response = await fetchData(
@@ -36,12 +66,30 @@ const Social = () => {
             null,
             token
           );
-          goals[friend.id] = response || []; // Ensure response is an array
+          goals[friend.id] = response || [];
+
+          for (let goal of goals[friend.id]) {
+            const likesResponse = await fetchData(
+              `/api/likes/${goal.id}`,
+              null,
+              token
+            );
+            likes[goal.id] = likesResponse.total_likes || 0;
+
+            const commentsResponse = await fetchData(
+              `/api/comments/${goal.id}`,
+              null,
+              token
+            );
+            comments[goal.id] = commentsResponse || [];
+          }
         } catch (error) {
           console.error(`Error fetching goals for friend ${friend.id}:`, error);
         }
       }
       setFriendGoals(goals);
+      setGoalLikes(likes);
+      setGoalComments(comments);
     };
 
     if (friends.length > 0) {
@@ -78,6 +126,18 @@ const Social = () => {
                   <p>Goal: {goal.name}</p>
                   <p>Target Amount: {goal.target_amount}</p>
                   <p>Current Amount: {goal.current_amount}</p>
+                  <button onClick={() => handleLike(goal.id)}>Like</button>
+                  <p>Likes: {goalLikes[goal.id]}</p>
+                  <p>Comments:</p>
+                  {goalComments[goal.id] && goalComments[goal.id].length > 0 ? (
+                    goalComments[goal.id].map((comment) => (
+                      <div key={comment.id}>
+                        <p>{comment.text}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No comments found for this goal.</p>
+                  )}
                 </StyledCard>
               ))
             ) : (
