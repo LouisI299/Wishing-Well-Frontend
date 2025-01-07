@@ -12,6 +12,7 @@ const Social = () => {
   const [friendGoals, setFriendGoals] = useState({});
   const [goalLikes, setGoalLikes] = useState({});
   const [goalComments, setGoalComments] = useState({});
+  const [commentText, setCommentText] = useState({});
 
   const handleLike = async (goal_id) => {
     try {
@@ -20,22 +21,62 @@ const Social = () => {
         null,
         token
       );
-      if (response.message === "Liked") {
-        setGoalLikes((prevLikes) => ({
-          ...prevLikes,
-          [goal_id]: prevLikes[goal_id] + 1,
-        }));
-      }
-
-      if (response.message === "Unliked") {
-        setGoalLikes((prevLikes) => ({
-          ...prevLikes,
-          [goal_id]: prevLikes[goal_id] - 1,
-        }));
-      }
-      console.log("Like response:", response);
+      setGoalLikes((prevLikes) => ({
+        ...prevLikes,
+        [goal_id]:
+          response.message === "Liked"
+            ? prevLikes[goal_id] + 1
+            : prevLikes[goal_id] - 1,
+      }));
     } catch (error) {
       console.error("Error liking goal:", error);
+    }
+  };
+
+  const handleCommentChange = (goal_id, text) => {
+    setCommentText((PrevText) => ({
+      ...PrevText,
+      [goal_id]: text,
+    }));
+  };
+
+  const handleCommentSubmit = async (goal_id) => {
+    if (!commentText[goal_id]?.trim()) {
+      alert("Comment cannot be empty.");
+      return;
+    }
+
+    try {
+      const response = await postDataWithToken(
+        `/api/comments/${goal_id}`,
+        { text: commentText[goal_id] },
+        token
+      );
+
+      if (!response.id || !response.text || !response.goal_id) {
+        console.error("Invalid comment response:", response);
+        return;
+      }
+
+      const newComment = {
+        id: response.id,
+        text: response.text,
+        user_id: response.user_id,
+        goal_id: response.goal_id,
+        created_at: response.created_at,
+      };
+
+      setGoalComments((prevComments) => ({
+        ...prevComments,
+        [goal_id]: [...(prevComments[goal_id] || []), newComment],
+      }));
+
+      setCommentText((prevText) => ({
+        ...prevText,
+        [goal_id]: "",
+      }));
+    } catch (error) {
+      console.error("Error commenting on goal:", error);
     }
   };
 
@@ -111,15 +152,14 @@ const Social = () => {
         <button>My Friends</button>
       </Link>
       <div>
-        {friends.length === 0 && <p>You have no friends yet.</p>}
+        {friends.length === 0 && (
+          <p key="no-friends">You have no friends yet.</p>
+        )}
         {friends.map((friend) => (
           <div key={friend.id}>
-            {console.log("friend id: " + friend.id)}
-            {console.log("goals for friend: " + friendGoals[friend.id])}
-
             {friendGoals[friend.id] && friendGoals[friend.id].length > 0 ? (
-              friendGoals[friend.id].map((goal) => (
-                <StyledCard key={goal.id}>
+              friendGoals[friend.id].map((goal, index) => (
+                <StyledCard key={goal.id || index}>
                   <h2>
                     {friend.first_name} {friend.last_name}
                   </h2>
@@ -127,17 +167,35 @@ const Social = () => {
                   <p>Target Amount: {goal.target_amount}</p>
                   <p>Current Amount: {goal.current_amount}</p>
                   <button onClick={() => handleLike(goal.id)}>Like</button>
+
                   <p>Likes: {goalLikes[goal.id]}</p>
                   <p>Comments:</p>
                   {goalComments[goal.id] && goalComments[goal.id].length > 0 ? (
-                    goalComments[goal.id].map((comment) => (
-                      <div key={comment.id}>
-                        <p>{comment.text}</p>
-                      </div>
-                    ))
+                    goalComments[goal.id].map((comment, commentIndex) => {
+                      if (!comment.id || !comment.text) {
+                        console.error("Invalid comment detected:", comment);
+                      }
+
+                      return (
+                        <div key={comment.id || `${goal.id}-${commentIndex}`}>
+                          <p>{comment.text}</p>
+                        </div>
+                      );
+                    })
                   ) : (
                     <p>No comments found for this goal.</p>
                   )}
+                  <input
+                    type="text"
+                    value={commentText[goal.id] || ""}
+                    onChange={(e) =>
+                      handleCommentChange(goal.id, e.target.value)
+                    }
+                    placeholder="Add a comment"
+                  />
+                  <button onClick={() => handleCommentSubmit(goal.id)}>
+                    Comment
+                  </button>
                 </StyledCard>
               ))
             ) : (
