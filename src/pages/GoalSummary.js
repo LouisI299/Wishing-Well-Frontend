@@ -336,148 +336,151 @@ const GoalSummary = () => {
   const endDate = new Date(goal.end_date).toLocaleDateString();
   const NextDueDate = new Date(goal.next_due_date).toLocaleDateString();
   return (
-    <SummaryContainer>
+    <>
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
-      <ImgContainer>
-        <img src={getImageByCategory(goal.category)} alt={goal.category} />
-      </ImgContainer>
-      <div className="summaryTitle">
-        <h1>{goal.name}</h1>
-        <button onClick={() => setIsEditing(!isEditing)}>
-          {isEditing ? "Cancel edit " : "Edit "}
-          <FontAwesomeIcon icon={faPenToSquare} />
-        </button>
-      </div>
+      <SummaryContainer>
+        <ImgContainer>
+          <img src={getImageByCategory(goal.category)} alt={goal.category} />
+        </ImgContainer>
+        <div className="summaryTitle">
+          <h1>{goal.name}</h1>
+          <button onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? "Cancel edit " : "Edit "}
+            <FontAwesomeIcon icon={faPenToSquare} />
+          </button>
+        </div>
 
-      {isEditing ? (
-        <EditContainer>
-          <form onSubmit={handleSubmit} id="editGoalForm">
-            <label>
-              Name:
-              <input
-                type="text"
-                value={goal.name}
-                onChange={(e) => setGoal({ ...goal, name: e.target.value })}
-              />
-            </label>
-            <label>
-              Target Amount:
-              <input
-                type="number"
-                value={goal.target_amount}
-                onChange={(e) =>
-                  setGoal({ ...goal, target_amount: e.target.value })
-                }
-              />
-            </label>
-            <label>
-              Current Amount:
-              <input
-                type="number"
-                value={goal.current_amount}
-                onChange={(e) =>
-                  setGoal({ ...goal, current_amount: e.target.value })
-                }
-              />
-            </label>
-            <label>
-              Saving Method:
-              <select
-                value={saving_method}
-                onChange={(e) => setSavingMethod(e.target.value)}
-              >
-                <option value="">Select a method</option>
-                <option value="true">Monthly Amount</option>
-                <option value="false">Weekly Amount</option>
-                <option value="end_date">End Date</option>
-              </select>
-            </label>
-            {saving_method === "end_date" && (
-              <>
+        {isEditing ? (
+          <EditContainer>
+            <form onSubmit={handleSubmit} id="editGoalForm">
+              <label>
+                Name:
+                <input
+                  type="text"
+                  value={goal.name}
+                  onChange={(e) => setGoal({ ...goal, name: e.target.value })}
+                />
+              </label>
+              <label>
+                Target Amount:
+                <input
+                  type="number"
+                  value={goal.target_amount}
+                  onChange={(e) =>
+                    setGoal({ ...goal, target_amount: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Current Amount:
+                <input
+                  type="number"
+                  value={goal.current_amount}
+                  onChange={(e) =>
+                    setGoal({ ...goal, current_amount: e.target.value })
+                  }
+                />
+              </label>
+              <label>
+                Saving Method:
+                <select
+                  value={saving_method}
+                  onChange={(e) => setSavingMethod(e.target.value)}
+                >
+                  <option value="">Select a method</option>
+                  <option value="true">Monthly Amount</option>
+                  <option value="false">Weekly Amount</option>
+                  <option value="end_date">End Date</option>
+                </select>
+              </label>
+              {saving_method === "end_date" && (
+                <>
+                  <label>
+                    End Date:
+                    <input
+                      type="date"
+                      value={endDateInput} // Use endDateInput for input
+                      onChange={(e) => setEndDateInput(e.target.value)}
+                    />
+                  </label>
+                  <label>
+                    Payment Frequency:
+                    <select
+                      value={paymentFrequency}
+                      onChange={(e) => setPaymentFrequency(e.target.value)}
+                    >
+                      <option value="monthly">Monthly</option>
+                      <option value="weekly">Weekly</option>
+                    </select>
+                  </label>
+                </>
+              )}
+              {(saving_method === "true" || saving_method === "false") && (
                 <label>
-                  End Date:
+                  {saving_method === "true"
+                    ? "Monthly Payment"
+                    : "Weekly Payment"}
+                  :
                   <input
-                    type="date"
-                    value={endDateInput} // Use endDateInput for input
-                    onChange={(e) => setEndDateInput(e.target.value)}
+                    type="number"
+                    value={period_amount}
+                    onChange={(e) => setPeriodAmount(e.target.value)}
                   />
                 </label>
-                <label>
-                  Payment Frequency:
-                  <select
-                    value={paymentFrequency}
-                    onChange={(e) => setPaymentFrequency(e.target.value)}
-                  >
-                    <option value="monthly">Monthly</option>
-                    <option value="weekly">Weekly</option>
-                  </select>
-                </label>
-              </>
-            )}
-            {(saving_method === "true" || saving_method === "false") && (
-              <label>
-                {saving_method === "true"
-                  ? "Monthly Payment"
-                  : "Weekly Payment"}
-                :
-                <input
-                  type="number"
-                  value={period_amount}
-                  onChange={(e) => setPeriodAmount(e.target.value)}
-                />
-              </label>
-            )}
-            <button type="submit">Update Goal</button>
-            <button
-              type="button"
-              onClick={handleDelete}
-              style={{ backgroundColor: confirmDelete ? "red" : "initial" }}
-            >
-              {confirmDelete ? "Confirm Delete" : "Delete Goal"}
-            </button>
-          </form>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-          {(saving_method === "true" || saving_method === "false") &&
-            timeNeeded && <p>Time Needed: {timeNeeded}</p>}
-          {saving_method === "end_date" && calculatedPayment && (
-            <p>
-              Calculated {paymentFrequency === "monthly" ? "Monthly" : "Weekly"}{" "}
-              Payment: {calculatedPayment}
-            </p>
-          )}
-        </EditContainer>
-      ) : (
-        <>
-          {goal.status === false && <p>Goal is completed!</p>}
-          <p>Target Amount: {goal.target_amount}</p>
-          <p>Current Amount: {goal.current_amount}</p>
-          <p>Start Date: {startDate}</p>
-          <p>End Date: {endDate}</p>
-          <p>Next Due Date: {NextDueDate}</p>
-          {goal.status === true && (
-            <form onSubmit={handleTransaction(amount, goalId, token)}>
-              <label>
-                {goal.saving_method === true ? (
-                  <>Add Monthly Amount:</>
-                ) : (
-                  <>Add Weekly Amount</>
-                )}
-                <input
-                  type="number"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  required
-                />
-              </label>
-              <button type="submit">
-                <DepositBtn icon={faPiggyBank} />
+              )}
+              <button type="submit">Update Goal</button>
+              <button
+                type="button"
+                onClick={handleDelete}
+                style={{ backgroundColor: confirmDelete ? "red" : "initial" }}
+              >
+                {confirmDelete ? "Confirm Delete" : "Delete Goal"}
               </button>
             </form>
-          )}
-        </>
-      )}
-    </SummaryContainer>
+            {error && <p style={{ color: "red" }}>{error}</p>}
+            {(saving_method === "true" || saving_method === "false") &&
+              timeNeeded && <p>Time Needed: {timeNeeded}</p>}
+            {saving_method === "end_date" && calculatedPayment && (
+              <p>
+                Calculated{" "}
+                {paymentFrequency === "monthly" ? "Monthly" : "Weekly"} Payment:{" "}
+                {calculatedPayment}
+              </p>
+            )}
+          </EditContainer>
+        ) : (
+          <>
+            {goal.status === false && <p>Goal is completed!</p>}
+            <p>Target Amount: {goal.target_amount}</p>
+            <p>Current Amount: {goal.current_amount}</p>
+            <p>Start Date: {startDate}</p>
+            <p>End Date: {endDate}</p>
+            <p>Next Due Date: {NextDueDate}</p>
+            {goal.status === true && (
+              <form onSubmit={handleTransaction(amount, goalId, token)}>
+                <label>
+                  {goal.saving_method === true ? (
+                    <>Add Monthly Amount:</>
+                  ) : (
+                    <>Add Weekly Amount</>
+                  )}
+                  <input
+                    type="number"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    required
+                  />
+                </label>
+                <button type="submit">
+                  <DepositBtn icon={faPiggyBank} />
+                </button>
+              </form>
+            )}
+          </>
+        )}
+      </SummaryContainer>
+    </>
   );
 };
 

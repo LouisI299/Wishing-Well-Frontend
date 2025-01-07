@@ -28,6 +28,7 @@ export const StyledCard = styled(Card)`
   flex-direction: column;
   align-items: center;
   max-width: 100%;
+  margin: 0.5em 0 0.5em 0;
 
   .likeCommentCount {
     display: flex;
