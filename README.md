@@ -2,6 +2,8 @@
 
 ## - Clone the frontend repository into a folder of your choice
 
+## - Make sure you are on the release or development branch.
+
 ## - Navigate to the cloned folder (Wishing-Well-Frontend)
 
 ## - Run "npm install" to install dependencies
