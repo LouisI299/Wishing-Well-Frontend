@@ -64,7 +64,7 @@ const Social = () => {
         return drivingLessonsImg;
       case "car":
         return carImg;
-      case "emergency-fund":
+      case "emergency_fund":
         return emergencyFundImg;
       case "festival":
         return festivalImg;

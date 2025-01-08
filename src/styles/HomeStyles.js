@@ -177,6 +177,7 @@ export const HomeContainer = styled.div`
   flex-direction: column;
   min-height: fit-content;
   padding-bottom: 1em;
+  overflow: auto;
 
   a {
     width: 90%;
