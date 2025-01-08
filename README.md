@@ -1,3 +1,26 @@
+# Instructions for running the Wishing Well App on your computer
+
+## - Clone the frontend repository into a folder of your choice
+
+## - Navigate to the cloned folder (Wishing-Well-Frontend)
+
+## - Run "npm install" to install dependencies
+
+## - Make sure you are connected to the EHB school network or VPN
+
+## - Run "npm start" to run the frontend
+
+## - Navigate to "localhost:3000" to use the Wishing Well app
+
+
+
+
+
+
+
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
